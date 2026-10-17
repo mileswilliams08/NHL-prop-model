@@ -1,10 +1,14 @@
 {
- "generated_at": "2026-10-17T04:21:00.435525+00:00",
+ "generated_at": "2026-10-17T04:30:26.556431+00:00",
  "picks": [],
  "voids": 0,
  "excluded": 0,
  "labels": {
   "sog": "Shots On Goal",
-  "saves": "Goalie Saves"
+  "hits": "Hits",
+  "blocks": "Blocked Shots",
+  "toi": "Time On Ice",
+  "saves": "Goalie Saves",
+  "faceoffs": "Faceoffs Won (lines recorded, not priced yet)"
  }
 }
