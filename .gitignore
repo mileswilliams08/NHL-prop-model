@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# raw API cache and local probe output stay local
+data/raw/
+probe_out/
+*.tmp

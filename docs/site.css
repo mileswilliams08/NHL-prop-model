@@ -1,0 +1,35 @@
+:root {
+  --bg: #0f1720; --panel: #1c2733; --line: #263140; --text: #e6edf3; --muted: #8b98a5;
+  --good: #3fb950; --bad: #f85149; --warn: #d4a72c; --accent: #58a6ff;
+}
+* { box-sizing: border-box; }
+body { font-family: -apple-system, "Segoe UI", Arial, sans-serif; background: var(--bg); color: var(--text);
+       max-width: 1150px; margin: 0 auto; padding: 24px 16px; }
+h1 { font-size: 22px; margin: 0 0 4px; }
+h2 { font-size: 16px; color: var(--muted); font-weight: 600; margin: 28px 0 10px; }
+.tag { font-size: 12px; color: var(--muted); }
+nav { margin: 12px 0 20px; }
+nav a { color: var(--muted); text-decoration: none; font-size: 14px; margin-right: 16px; padding-bottom: 4px; }
+nav a.active { color: var(--text); border-bottom: 2px solid var(--good); }
+.meta { color: var(--muted); margin-bottom: 16px; font-size: 13px; }
+.panel { background: var(--panel); border-radius: 6px; padding: 14px 16px; margin-bottom: 12px; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 12px; font-size: 13px; color: var(--muted); }
+select, input { background: var(--panel); color: var(--text); border: 1px solid #33414f; padding: 4px 6px;
+                border-radius: 4px; font-size: 13px; }
+.cards { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+.card { background: var(--panel); border-radius: 6px; padding: 12px 16px; min-width: 150px; }
+.card .big { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.card .sub { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 8px; }
+th, td { padding: 7px 9px; text-align: left; border-bottom: 1px solid var(--line); white-space: nowrap; }
+th { color: var(--muted); font-weight: 600; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.pill { padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+.h { background: #1a4620; color: var(--good); } .m { background: #2d1a1a; color: var(--bad); }
+.p { background: #2d2a1a; color: var(--warn); }
+.over { color: var(--good); } .under { color: var(--accent); }
+.note { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.warn { color: var(--warn); }
+.empty { color: var(--muted); text-align: center; padding: 20px; }
+.section { border-top: 1px solid var(--line); margin-top: 28px; padding-top: 4px; }

@@ -1,0 +1,60 @@
+name: Update NHL props
+
+on:
+  schedule:
+    # 15:00 UTC = 10am CDT / 9am CST: after the previous night's late games are final and
+    # before the earliest regular puck drop (weekend matinees ~12:30pm ET = 16:30 UTC).
+    # predict.py also skips any game starting within 10 minutes, so a late or manual run
+    # can never price a game in progress.
+    - cron: "0 15 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nhl-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Add the last week of finished games to history
+        # Only OFF/FINAL games are written, and rows merge into the committed CSVs.
+        run: python nhl_backfill.py --start "$(date -u -d '7 days ago' +%F)" --sleep 0.1
+
+      - name: Grade archived picks
+        run: python grade.py || echo "Grading failed - see log. Continuing."
+
+      - name: Price today's board
+        # Writes nothing (keeps the site's last data, archives no snapshot) if there are no real lines.
+        run: python predict.py
+
+      - name: Build results page data
+        run: python build_results.py || echo "Results build failed - see log. Continuing."
+
+      - name: Commit updated data
+        run: |
+          git config user.name "props-bot"
+          git config user.email "props-bot@users.noreply.github.com"
+          for f in data/history/games.csv data/history/skater_games.csv data/history/goalie_games.csv \
+                   data/history/players.csv data/player_map.csv data/graded_results.csv \
+                   docs/data/props.json docs/data/results.json; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
+          if ls data/snapshots/*.json >/dev/null 2>&1; then git add data/snapshots/*.json; fi
+          if git diff --cached --quiet; then echo "No changes."; exit 0; fi
+          git commit -m "Auto-update NHL props, history and results"
+          git pull --rebase
+          git push

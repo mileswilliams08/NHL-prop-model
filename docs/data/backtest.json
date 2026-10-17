@@ -1,0 +1,484 @@
+{
+ "generated_at": "2026-10-17T03:34:48.448425+00:00",
+ "model_version": "sog-baseline-1",
+ "params": {
+  "halflife_games": 40,
+  "prior_toi_sec": 7200,
+  "season_carry": 0.5,
+  "toi_halflife_games": 5,
+  "toi_prior_games": 3,
+  "opp_halflife_games": 20,
+  "opp_prior_games": 10,
+  "opp_beta": 1.0,
+  "nb_r": 14.05,
+  "min_prior_games": 5
+ },
+ "split": {
+  "train": "2024-11-01 .. 2025-06-17 (43210 player-games)",
+  "evaluated_on": "test",
+  "eval": "2025-10-07 .. 2026-10-15 (53560 player-games)"
+ },
+ "metrics": {
+  "model": {
+   "ll_nb": -1.53644,
+   "ll_poisson": -1.53904,
+   "mae": 1.0199,
+   "bias": 0.0309
+  },
+  "season-to-date avg": {
+   "ll_nb": -1.55615,
+   "ll_poisson": -1.56119,
+   "mae": 1.042,
+   "bias": 0.0289
+  },
+  "last-10 avg": {
+   "ll_nb": -1.56141,
+   "ll_poisson": -1.56739,
+   "mae": 1.0467,
+   "bias": 0.0104
+  }
+ },
+ "by_position": {
+  "D": {
+   "ll_nb": -1.41589,
+   "ll_poisson": -1.4167,
+   "mae": 0.9072,
+   "bias": 0.0392
+  },
+  "F": {
+   "ll_nb": -1.59744,
+   "ll_poisson": -1.60093,
+   "mae": 1.0769,
+   "bias": 0.0267
+  }
+ },
+ "calibration": {
+  "0.5": {
+   "rows": [
+    {
+     "bucket": "30-40%",
+     "n": 120,
+     "pred": 0.3645,
+     "actual": 0.35
+    },
+    {
+     "bucket": "40-50%",
+     "n": 1387,
+     "pred": 0.4687,
+     "actual": 0.4809
+    },
+    {
+     "bucket": "50-60%",
+     "n": 6054,
+     "pred": 0.558,
+     "actual": 0.5251
+    },
+    {
+     "bucket": "60-70%",
+     "n": 12359,
+     "pred": 0.6534,
+     "actual": 0.627
+    },
+    {
+     "bucket": "70-80%",
+     "n": 14380,
+     "pred": 0.7493,
+     "actual": 0.7332
+    },
+    {
+     "bucket": "80-90%",
+     "n": 14147,
+     "pred": 0.85,
+     "actual": 0.8546
+    },
+    {
+     "bucket": "90-100%",
+     "n": 5111,
+     "pred": 0.9274,
+     "actual": 0.9341
+    }
+   ],
+   "n": 53560,
+   "pred_mean": 0.741,
+   "actual_mean": 0.729
+  },
+  "1.5": {
+   "rows": [
+    {
+     "bucket": "0-10%",
+     "n": 132,
+     "pred": 0.0823,
+     "actual": 0.0758
+    },
+    {
+     "bucket": "10-20%",
+     "n": 3600,
+     "pred": 0.1665,
+     "actual": 0.1486
+    },
+    {
+     "bucket": "20-30%",
+     "n": 9851,
+     "pred": 0.254,
+     "actual": 0.2309
+    },
+    {
+     "bucket": "30-40%",
+     "n": 11552,
+     "pred": 0.3491,
+     "actual": 0.3245
+    },
+    {
+     "bucket": "40-50%",
+     "n": 9516,
+     "pred": 0.4478,
+     "actual": 0.4315
+    },
+    {
+     "bucket": "50-60%",
+     "n": 7901,
+     "pred": 0.5492,
+     "actual": 0.5535
+    },
+    {
+     "bucket": "60-70%",
+     "n": 6509,
+     "pred": 0.646,
+     "actual": 0.6522
+    },
+    {
+     "bucket": "70-80%",
+     "n": 3439,
+     "pred": 0.7438,
+     "actual": 0.7726
+    },
+    {
+     "bucket": "80-90%",
+     "n": 1038,
+     "pred": 0.8296,
+     "actual": 0.8478
+    }
+   ],
+   "n": 53560,
+   "pred_mean": 0.4367,
+   "actual_mean": 0.4266
+  },
+  "2.5": {
+   "rows": [
+    {
+     "bucket": "0-10%",
+     "n": 12260,
+     "pred": 0.0669,
+     "actual": 0.058
+    },
+    {
+     "bucket": "10-20%",
+     "n": 16756,
+     "pred": 0.1459,
+     "actual": 0.1341
+    },
+    {
+     "bucket": "20-30%",
+     "n": 9880,
+     "pred": 0.2465,
+     "actual": 0.236
+    },
+    {
+     "bucket": "30-40%",
+     "n": 7185,
+     "pred": 0.3476,
+     "actual": 0.3589
+    },
+    {
+     "bucket": "40-50%",
+     "n": 4336,
+     "pred": 0.4444,
+     "actual": 0.4504
+    },
+    {
+     "bucket": "50-60%",
+     "n": 2118,
+     "pred": 0.5452,
+     "actual": 0.5793
+    },
+    {
+     "bucket": "60-70%",
+     "n": 901,
+     "pred": 0.6363,
+     "actual": 0.6604
+    },
+    {
+     "bucket": "70-80%",
+     "n": 122,
+     "pred": 0.7338,
+     "actual": 0.6721
+    }
+   ],
+   "n": 53560,
+   "pred_mean": 0.223,
+   "actual_mean": 0.219
+  },
+  "3.5": {
+   "rows": [
+    {
+     "bucket": "0-10%",
+     "n": 33538,
+     "pred": 0.0426,
+     "actual": 0.0383
+    },
+    {
+     "bucket": "10-20%",
+     "n": 11602,
+     "pred": 0.1447,
+     "actual": 0.143
+    },
+    {
+     "bucket": "20-30%",
+     "n": 5316,
+     "pred": 0.2424,
+     "actual": 0.2462
+    },
+    {
+     "bucket": "30-40%",
+     "n": 2105,
+     "pred": 0.3442,
+     "actual": 0.3577
+    },
+    {
+     "bucket": "40-50%",
+     "n": 842,
+     "pred": 0.4368,
+     "actual": 0.4537
+    },
+    {
+     "bucket": "50-60%",
+     "n": 140,
+     "pred": 0.5366,
+     "actual": 0.4857
+    }
+   ],
+   "n": 53560,
+   "pred_mean": 0.1041,
+   "actual_mean": 0.1021
+  },
+  "4.5": {
+   "rows": [
+    {
+     "bucket": "0-10%",
+     "n": 46122,
+     "pred": 0.0264,
+     "actual": 0.0255
+    },
+    {
+     "bucket": "10-20%",
+     "n": 5621,
+     "pred": 0.1373,
+     "actual": 0.1322
+    },
+    {
+     "bucket": "20-30%",
+     "n": 1542,
+     "pred": 0.2398,
+     "actual": 0.2516
+    },
+    {
+     "bucket": "30-40%",
+     "n": 239,
+     "pred": 0.3352,
+     "actual": 0.3222
+    },
+    {
+     "bucket": "40-50%",
+     "n": 35,
+     "pred": 0.4316,
+     "actual": 0.4286
+    }
+   ],
+   "n": 53560,
+   "pred_mean": 0.0458,
+   "actual_mean": 0.0448
+  }
+ },
+ "grid": [
+  {
+   "params": {
+    "halflife_games": 10,
+    "prior_toi_sec": 1800,
+    "season_carry": 0.5
+   },
+   "nb_r": 13.08,
+   "train_ll": -1.5558,
+   "test_ll": -1.54255
+  },
+  {
+   "params": {
+    "halflife_games": 10,
+    "prior_toi_sec": 1800,
+    "season_carry": 0.8
+   },
+   "nb_r": 13.08,
+   "train_ll": -1.5558,
+   "test_ll": -1.5416
+  },
+  {
+   "params": {
+    "halflife_games": 10,
+    "prior_toi_sec": 3600,
+    "season_carry": 0.5
+   },
+   "nb_r": 13.41,
+   "train_ll": -1.55434,
+   "test_ll": -1.54127
+  },
+  {
+   "params": {
+    "halflife_games": 10,
+    "prior_toi_sec": 3600,
+    "season_carry": 0.8
+   },
+   "nb_r": 13.41,
+   "train_ll": -1.55434,
+   "test_ll": -1.54046
+  },
+  {
+   "params": {
+    "halflife_games": 10,
+    "prior_toi_sec": 7200,
+    "season_carry": 0.5
+   },
+   "nb_r": 13.27,
+   "train_ll": -1.55506,
+   "test_ll": -1.54197
+  },
+  {
+   "params": {
+    "halflife_games": 10,
+    "prior_toi_sec": 7200,
+    "season_carry": 0.8
+   },
+   "nb_r": 13.27,
+   "train_ll": -1.55506,
+   "test_ll": -1.54111
+  },
+  {
+   "params": {
+    "halflife_games": 20,
+    "prior_toi_sec": 1800,
+    "season_carry": 0.5
+   },
+   "nb_r": 13.58,
+   "train_ll": -1.55384,
+   "test_ll": -1.53844
+  },
+  {
+   "params": {
+    "halflife_games": 20,
+    "prior_toi_sec": 1800,
+    "season_carry": 0.8
+   },
+   "nb_r": 13.58,
+   "train_ll": -1.55384,
+   "test_ll": -1.53764
+  },
+  {
+   "params": {
+    "halflife_games": 20,
+    "prior_toi_sec": 3600,
+    "season_carry": 0.5
+   },
+   "nb_r": 13.88,
+   "train_ll": -1.55259,
+   "test_ll": -1.53777
+  },
+  {
+   "params": {
+    "halflife_games": 20,
+    "prior_toi_sec": 3600,
+    "season_carry": 0.8
+   },
+   "nb_r": 13.88,
+   "train_ll": -1.55259,
+   "test_ll": -1.53706
+  },
+  {
+   "params": {
+    "halflife_games": 20,
+    "prior_toi_sec": 7200,
+    "season_carry": 0.5
+   },
+   "nb_r": 13.9,
+   "train_ll": -1.55267,
+   "test_ll": -1.53815
+  },
+  {
+   "params": {
+    "halflife_games": 20,
+    "prior_toi_sec": 7200,
+    "season_carry": 0.8
+   },
+   "nb_r": 13.9,
+   "train_ll": -1.55267,
+   "test_ll": -1.53732
+  },
+  {
+   "params": {
+    "halflife_games": 40,
+    "prior_toi_sec": 1800,
+    "season_carry": 0.5
+   },
+   "nb_r": 13.64,
+   "train_ll": -1.55364,
+   "test_ll": -1.5368
+  },
+  {
+   "params": {
+    "halflife_games": 40,
+    "prior_toi_sec": 1800,
+    "season_carry": 0.8
+   },
+   "nb_r": 13.64,
+   "train_ll": -1.55364,
+   "test_ll": -1.53638
+  },
+  {
+   "params": {
+    "halflife_games": 40,
+    "prior_toi_sec": 3600,
+    "season_carry": 0.5
+   },
+   "nb_r": 13.93,
+   "train_ll": -1.5524,
+   "test_ll": -1.53632
+  },
+  {
+   "params": {
+    "halflife_games": 40,
+    "prior_toi_sec": 3600,
+    "season_carry": 0.8
+   },
+   "nb_r": 13.93,
+   "train_ll": -1.5524,
+   "test_ll": -1.53594
+  },
+  {
+   "params": {
+    "halflife_games": 40,
+    "prior_toi_sec": 7200,
+    "season_carry": 0.5
+   },
+   "nb_r": 14.05,
+   "train_ll": -1.5521,
+   "test_ll": -1.53644
+  },
+  {
+   "params": {
+    "halflife_games": 40,
+    "prior_toi_sec": 7200,
+    "season_carry": 0.8
+   },
+   "nb_r": 14.05,
+   "train_ll": -1.5521,
+   "test_ll": -1.53594
+  }
+ ]
+}
