@@ -5,72 +5,100 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NHL Prop Tracker</title>
 <link rel="stylesheet" href="site.css">
+<style>
+  .breakeven { margin-bottom: 16px; padding: 12px; background: #1c2733; border-radius: 6px; font-size: 16px; }
+  .breakeven input { width: 60px; background: #fff; color: #000; border: 1px solid #33414f; border-radius: 3px; padding: 2px 4px; font-size: 14px; }
+  .breakeven .hint { color: #8b98a5; font-size: 12px; margin-left: 10px; }
+  .propsel { font-size: 16px; margin-bottom: 4px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .propsel select { font-size: 14px; padding: 4px 8px; }
+  .bet-tag { padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .bet-yes { background: #1a4620; color: #3fb950; }
+  .bet-no { background: #2d1a1a; color: #f85149; }
+  td.src { color: #8b98a5; font-size: 11px; }
+</style>
 </head>
 <body>
 <h1>NHL Prop Tracker</h1>
-<div class="tag">Tracking only: does a model beat the PrizePicks line? Not betting advice.</div>
 <nav>
-  <a href="index.html" class="active">Today's lines</a>
+  <a href="index.html" class="active">Props</a>
   <a href="results.html">Results</a>
   <a href="backtest.html">Backtest</a>
 </nav>
 <div class="meta" id="meta">Loading...</div>
-<div class="filters" id="filters"></div>
-<div class="table-wrap" id="table"></div>
-<div id="skipped"></div>
+
+<div class="breakeven">
+  <label>My breakeven hit-rate for this pick size:
+    <input id="breakeven" type="number" value="58" min="1" max="99"> %
+  </label>
+  <span class="hint">(PrizePicks pays a fixed multiplier per pick count, not per-leg odds — set this to whatever
+    hit-rate your specific entry size needs to break even. Tracking only: this marks lines, it isn't advice.)</span>
+</div>
+
+<div class="propsel">
+  <label>Prop: <select id="propSelect"></select></label>
+  <label><select id="dateSelect"></select></label>
+</div>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>Player</th><th>Matchup</th><th>Start</th><th>Line</th><th class="num">Model mean</th>
+    <th class="num">Model P(Side)</th><th>Side</th><th></th></tr></thead>
+  <tbody id="propsBody"></tbody>
+</table>
+</div>
+<div class="note" id="notes"></div>
 
 <script>
+let DATA = null;
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const pct = x => x == null ? "—" : (x * 100).toFixed(1) + "%";
 const time = iso => new Date(iso).toLocaleString([], {weekday: "short", hour: "numeric", minute: "2-digit"});
 
-fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(data => {
-  const labels = data.labels || {};
-  document.getElementById("meta").textContent =
-    `Board pulled ${new Date(data.generated_at).toLocaleString()} · slate ${data.slate_dates.join(", ")} · ` +
-    `model ${data.model_version} · history through ${data.history_through}`;
-  const modeled = data.picks.filter(p => !p.skip_reason);
-  const cats = [...new Set(modeled.map(p => p.category))];
-  const dates = [...new Set(modeled.map(p => p.game_date))].sort();
-  document.getElementById("filters").innerHTML = `
-    <select id="f-date"><option value="">All dates</option>${dates.map(d => `<option>${d}</option>`).join("")}</select>
-    <select id="f-cat"><option value="">All props</option>${cats.map(c => `<option value="${c}">${esc(labels[c] || c)}</option>`).join("")}</select>
-    <select id="f-side"><option value="">Over and Under</option><option value="over">Over picks</option><option value="under">Under picks</option></select>
-    <select id="f-group"><option value="">All lines</option><option value="hd">Headline only</option><option value="exp">Experimental only</option></select>
-    <select id="f-sort"><option value="prob">Sort: model prob</option><option value="time">Sort: start time</option><option value="edge">Sort: mean − line</option></select>`;
-  const draw = () => {
-    const v = id => document.getElementById(id).value;
-    let rows = modeled.filter(p => (!v("f-date") || p.game_date === v("f-date")) && (!v("f-cat") || p.category === v("f-cat"))
-      && (!v("f-side") || p.side === v("f-side"))
-      && (v("f-group") === "" || (v("f-group") === "hd" ? p.headline : !p.headline)));
-    const s = v("f-sort");
-    rows.sort((a, b) => s === "time" ? a.start_time.localeCompare(b.start_time)
-      : s === "edge" ? Math.abs(b.model_mean - b.line) - Math.abs(a.model_mean - a.line) : b.prob - a.prob);
-    if (!rows.length) { document.getElementById("table").innerHTML = `<div class="empty">No lines for this selection.</div>`; return; }
-    document.getElementById("table").innerHTML = `<table><thead><tr>
-      <th>Start</th><th>Player</th><th>Matchup</th><th>Prop</th><th class="num">Line</th><th class="num">Model mean</th>
-      <th class="num">P(over)</th><th class="num">P(under)</th><th>Pick</th><th class="num">Prob</th><th>Line type</th></tr></thead><tbody>
-      ${rows.map(p => `<tr><td>${time(p.start_time)}</td><td>${esc(p.player)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td>
-        <td>${esc(labels[p.category] || p.category)}</td><td class="num">${p.line}</td><td class="num">${p.model_mean.toFixed(2)}</td>
-        <td class="num">${pct(p.p_over)}</td><td class="num">${pct(p.p_under)}</td>
-        <td class="${p.side}">${p.side}</td><td class="num">${pct(p.prob)}</td>
-        <td class="note">${p.headline ? "standard" : (p.adjusted_odds ? "standard, adjusted payout (experimental)" : "experimental")}</td></tr>`).join("")}
-      </tbody></table>
-      <div class="note">${rows.length} lines. Prob is the model's chance its side wins, ignoring pushes. Goblin/demon lines (Over-only) are never priced.</div>`;
-  };
-  document.querySelectorAll("#filters select").forEach(el => el.addEventListener("change", draw));
-  draw();
+function renderTable() {
+  const cat = document.getElementById("propSelect").value;
+  const day = document.getElementById("dateSelect").value;
+  const breakeven = Number(document.getElementById("breakeven").value) / 100;
+  const tbody = document.getElementById("propsBody");
+  // Ranked by the model's own confidence (highest P(side) first) so the most lopsided lines float to the top.
+  const rows = DATA.picks.filter(p => !p.skip_reason && p.category === cat && (!day || p.game_date === day))
+    .sort((a, b) => b.prob - a.prob);
+  tbody.innerHTML = rows.length ? rows.map(p => `<tr>
+      <td>${esc(p.player)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
+      <td>${p.line} <span class="src">(prizepicks)</span></td>
+      <td class="num">${p.model_mean.toFixed(2)}</td>
+      <td class="num">${(p.prob * 100).toFixed(1)}%</td>
+      <td class="${p.side}">${p.side === "over" ? "Over" : "Under"}</td>
+      <td>${p.prob >= breakeven ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
+    </tr>`).join("")
+    : `<tr><td colspan="8" class="empty">No priced PrizePicks lines for this prop right now.</td></tr>`;
 
-  const skipped = data.picks.filter(p => p.skip_reason);
-  if (skipped.length) {
-    const by = {};
-    skipped.forEach(p => (by[p.skip_reason] ||= []).push(p));
-    document.getElementById("skipped").innerHTML = `<h2>Not priced (${skipped.length})</h2>` +
-      Object.entries(by).map(([r, ps]) => `<div class="note"><b>${esc(r.replace(/_/g, " "))}</b> (${ps.length}): ` +
-        [...new Set(ps.map(p => `${p.player} (${p.team}, ${labels[p.category] || p.category})`))].slice(0, 60).map(esc).join(", ")
-        + (ps.length > 60 ? " …" : "") + `</div>`).join("");
-  }
-}).catch(() => { document.getElementById("meta").textContent = "No board data yet."; });
+  const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day));
+  const why = {};
+  skipped.forEach(p => (why[p.skip_reason] ||= new Set()).add(`${p.player} (${p.team})`));
+  document.getElementById("notes").innerHTML = (rows.length ? `${rows.length} lines. Model P(Side) is the model's chance its side wins, ignoring pushes. ` : "")
+    + `Only standard two-way lines are priced; goblins and demons (Over-only) never are.`
+    + Object.entries(why).map(([r, s]) => `<br><b>Not priced: ${esc(r.replace(/_/g, " "))}</b> — ${[...s].slice(0, 40).map(esc).join(", ")}${s.size > 40 ? " …" : ""}`).join("");
+}
+
+fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(json => {
+  DATA = json;
+  const labels = json.labels || {};
+  document.getElementById("meta").textContent =
+    `Slate ${json.slate_dates.join(", ")} — updated ${new Date(json.generated_at).toLocaleString()} · history through ${json.history_through}`;
+  // headline props first, then experimental, then anything recorded but not priced
+  const cats = [...new Set(json.picks.map(p => p.category))];
+  const priced = c => json.picks.some(p => p.category === c && !p.skip_reason);
+  const headline = c => json.picks.some(p => p.category === c && p.headline);
+  cats.sort((a, b) => (priced(b) - priced(a)) || (headline(b) - headline(a)) || (labels[a] || a).localeCompare(labels[b] || b));
+  document.getElementById("propSelect").innerHTML = cats.map(c =>
+    `<option value="${c}">${esc(labels[c] || c)}${priced(c) && !headline(c) ? " (experimental)" : ""}</option>`).join("");
+  const dates = [...new Set(json.picks.map(p => p.game_date))].sort();
+  document.getElementById("dateSelect").innerHTML = (dates.length > 1 ? `<option value="">All dates</option>` : "") +
+    dates.map(d => `<option value="${d}">${d}</option>`).join("");
+  renderTable();
+}).catch(() => { document.getElementById("meta").textContent = "Couldn't load props.json yet — run the Action."; });
+
+["propSelect", "dateSelect"].forEach(id => document.getElementById(id).addEventListener("change", renderTable));
+document.getElementById("breakeven").addEventListener("input", renderTable);
 </script>
 </body>
 </html>
