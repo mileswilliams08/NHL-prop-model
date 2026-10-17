@@ -28,7 +28,15 @@ def load_graded():
     df = pd.read_csv(GRADED_PATH, dtype={"nhl_id": str, "nhl_game_id": str})
     for c in ("line", "model_mean", "p_over", "p_under", "prob", "actual"):
         df[c] = pd.to_numeric(df[c], errors="coerce")
-    df["headline"] = df["headline"].astype(str).str.lower().eq("true")
+    return df
+
+
+def classify(df, cfg):
+    """Headline vs experimental is decided from config.json at build time (not the value stored
+    when the pick was made), so changing the rule re-sorts every past pick consistently."""
+    adj = df["adjusted_odds"].astype(str).str.lower().eq("true")
+    head_prop = df["category"].map(lambda c: bool(cfg["props"].get(c, {}).get("headline")))
+    df["headline"] = head_prop & ~(adj & bool(cfg.get("headline_requires_unadjusted")))
     return df
 
 
@@ -88,6 +96,7 @@ def main():
                     "labels": {c: v["label"] for c, v in cfg["props"].items()}})
         print("no graded picks yet; wrote an empty results.json")
         return 0
+    df = classify(df, cfg)
     voids = int((df["result"] == "void").sum())
     df = df[df["result"] != "void"]
     df, n_ex = apply_exclusions(df)

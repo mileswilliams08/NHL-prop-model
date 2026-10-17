@@ -18,7 +18,7 @@
     "Goalie Saves": "saves",
     "Saves": "saves"
   },
-  "headline_requires_unadjusted": true,
+  "headline_requires_unadjusted": false,
   "team_map": {
     "LA": "LAK",
     "TB": "TBL",
