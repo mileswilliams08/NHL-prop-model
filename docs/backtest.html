@@ -15,35 +15,50 @@
   <a href="backtest.html" class="active">Backtest</a>
 </nav>
 <div class="meta" id="meta">Loading...</div>
+<div class="filters" id="tabs"></div>
 <div id="out"></div>
 
 <script>
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pct = x => x == null ? "—" : (x * 100).toFixed(1) + "%";
+const NAMES = {sog: "Shots On Goal", hits: "Hits", blocks: "Blocked Shots", toi: "Time On Ice", saves: "Goalie Saves"};
+
 fetch("data/backtest.json", {cache: "no-store"}).then(r => r.json()).then(b => {
   document.getElementById("meta").textContent = `Run ${new Date(b.generated_at).toLocaleString()} · model ${b.model_version}`;
-  let h = `<div class="panel note">
-      <b>Trained on:</b> ${esc(b.split.train)}<br><b>Scored on (${esc(b.split.evaluated_on)}):</b> ${esc(b.split.eval)}<br>
-      Parameters and dispersion were picked on the training period only. Every prediction uses only games before that date.<br>
-      <b>Parameters:</b> ${esc(Object.entries(b.params).map(([k, v]) => `${k}=${v}`).join(", "))}</div>
-    <h2>Shots on goal: model vs naive baselines</h2><div class="table-wrap"><table><thead><tr>
-      <th>Projection</th><th class="num">Log-lik / game (NB)</th><th class="num">Log-lik (Poisson)</th><th class="num">MAE</th><th class="num">Bias</th></tr></thead><tbody>
-      ${Object.entries(b.metrics).map(([k, m]) => `<tr><td>${esc(k)}</td><td class="num">${m.ll_nb.toFixed(4)}</td>
-        <td class="num">${m.ll_poisson.toFixed(4)}</td><td class="num">${m.mae.toFixed(3)}</td><td class="num">${m.bias.toFixed(3)}</td></tr>`).join("")}
-    </tbody></table></div>
-    <div class="note">Higher log-likelihood is better (it rewards getting the whole distribution right, not just the average). Bias = mean predicted − mean actual.</div>
-    <h2>Calibration by line</h2><div class="note">For each line, games grouped by the model's P(over); a calibrated model's actual over rate matches its prediction.</div>`;
-  for (const [line, t] of Object.entries(b.calibration)) {
-    h += `<h2>Line ${line} · overall predicted ${pct(t.pred_mean)} vs actual ${pct(t.actual_mean)}</h2><div class="table-wrap"><table><thead><tr>
-      <th>P(over) bucket</th><th class="num">Games</th><th class="num">Predicted</th><th class="num">Actual</th><th class="num">Gap</th></tr></thead><tbody>
-      ${t.rows.map(r => `<tr><td>${r.bucket}</td><td class="num">${r.n}</td><td class="num">${pct(r.pred)}</td><td class="num">${pct(r.actual)}</td>
-        <td class="num">${((r.actual - r.pred) * 100).toFixed(1)} pts</td></tr>`).join("")}</tbody></table></div>`;
-  }
-  h += `<h2>Parameter grid (chosen by training log-likelihood)</h2><div class="table-wrap"><table><thead><tr><th>Parameters</th><th class="num">NB r</th>
-    <th class="num">Train LL</th><th class="num">Test LL</th></tr></thead><tbody>
-    ${b.grid.map(g => `<tr><td>${esc(JSON.stringify(g.params))}</td><td class="num">${g.nb_r}</td><td class="num">${g.train_ll}</td>
-      <td class="num">${g.test_ll ?? "—"}</td></tr>`).join("")}</tbody></table></div>`;
-  document.getElementById("out").innerHTML = h;
+  // older single-prop reports had metrics/calibration at the top level
+  const props = b.props || {sog: {metrics: b.metrics, calibration: b.calibration, dist: {nb_r: b.params.nb_r}}};
+  const keys = Object.keys(props);
+  document.getElementById("tabs").innerHTML = `<select id="prop">${keys.map(k => `<option value="${k}">${esc(NAMES[k] || k)}</option>`).join("")}</select>`;
+  const draw = () => {
+    const k = document.getElementById("prop").value, p = props[k];
+    const ll = k === "toi" ? "ll_normal" : "ll_nb";
+    let h = `<div class="panel note">
+        <b>Trained on:</b> ${esc(b.split.train)}<br><b>Scored on (${esc(b.split.evaluated_on)}):</b> ${esc(b.split.eval)}<br>
+        Parameters and distributions were picked on the training period only; every prediction uses only earlier games.<br>
+        <b>Distribution:</b> ${esc(JSON.stringify(p.dist))}${p.note ? ` · ${esc(p.note)}` : ""}${p.units ? ` · in ${esc(p.units)}` : ""}<br>
+        <b>Shared parameters:</b> ${esc(Object.entries(b.params).map(([a, v]) => `${a}=${v}`).join(", "))}</div>
+      <h2>${esc(NAMES[k] || k)}: model vs naive baselines${p.n_test ? ` (${p.n_test} games)` : ""}</h2><div class="table-wrap"><table><thead><tr>
+        <th>Projection</th><th class="num">Log-lik / game</th><th class="num">MAE</th><th class="num">Bias</th></tr></thead><tbody>
+        ${Object.entries(p.metrics).map(([n, m]) => `<tr><td>${esc(n)}</td><td class="num">${(m[ll] ?? m.ll_nb).toFixed(4)}</td>
+          <td class="num">${m.mae.toFixed(3)}</td><td class="num">${m.bias.toFixed(3)}</td></tr>`).join("")}
+      </tbody></table></div>
+      <div class="note">Higher log-likelihood is better (it rewards getting the whole distribution right). Bias = mean predicted − mean actual.</div>`;
+    for (const [line, t] of Object.entries(p.calibration)) {
+      h += `<h2>Line ${line} · predicted ${pct(t.pred_mean)} over vs actual ${pct(t.actual_mean)}</h2><div class="table-wrap"><table><thead><tr>
+        <th>P(over) bucket</th><th class="num">Games</th><th class="num">Predicted</th><th class="num">Actual</th><th class="num">Gap</th></tr></thead><tbody>
+        ${t.rows.map(r => `<tr><td>${r.bucket}</td><td class="num">${r.n}</td><td class="num">${pct(r.pred)}</td><td class="num">${pct(r.actual)}</td>
+          <td class="num">${((r.actual - r.pred) * 100).toFixed(1)} pts</td></tr>`).join("")}</tbody></table></div>`;
+    }
+    if (k === "sog" && b.grid) {
+      h += `<h2>Parameter grid (chosen by shots-on-goal training log-likelihood)</h2><div class="table-wrap"><table><thead><tr><th>Parameters</th>
+        <th class="num">NB r</th><th class="num">Train LL</th><th class="num">Test LL</th></tr></thead><tbody>
+        ${b.grid.map(g => `<tr><td>${esc(JSON.stringify(g.params))}</td><td class="num">${g.nb_r}</td><td class="num">${g.train_ll}</td>
+          <td class="num">${g.test_ll ?? "—"}</td></tr>`).join("")}</tbody></table></div>`;
+    }
+    document.getElementById("out").innerHTML = h;
+  };
+  document.getElementById("prop").addEventListener("change", draw);
+  draw();
 }).catch(() => { document.getElementById("meta").textContent = "No backtest yet. Run python backtest.py locally and push docs/data/backtest.json."; });
 </script>
 </body>

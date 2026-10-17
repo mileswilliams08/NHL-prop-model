@@ -104,7 +104,7 @@ def main():
     code = {"hit": "h", "miss": "m", "push": "p"}
     picks = [{"d": r.game_date, "pl": r.player, "tm": r.team, "op": r.opp, "c": r.category,
               "l": r.line, "m": round(r.model_mean, 3), "s": r.side, "p": round(r.prob, 4),
-              "a": int(r.actual), "x": code[r.result], "ox": code[r.blind_over], "ux": code[r.blind_under],
+              "a": round(float(r.actual), 2), "x": code[r.result], "ox": code[r.blind_over], "ux": code[r.blind_under],
               "hd": 1 if r.headline else 0, "adj": 1 if str(r.adjusted_odds).lower() == "true" else 0,
               "v": r.model_version}
              for r in df.itertuples()]
@@ -113,7 +113,8 @@ def main():
                 "labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks})
     print(f"results.json: {len(picks)} graded picks ({voids} voids, {n_ex} excluded not shown)")
     print_summary("HEADLINE", df[df["headline"]])
-    print_summary("EXPERIMENTAL", df[~df["headline"]])
+    for cat, sub in df[~df["headline"]].groupby("category"):
+        print_summary(f"EXPERIMENTAL {cat}", sub)
     return 0
 
 

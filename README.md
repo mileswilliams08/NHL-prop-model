@@ -1,7 +1,9 @@
 # NHL Prop Tracker
 
 A free, self-updating tracker that asks one question: **does a model beat the PrizePicks line?**
-Tracking only, no betting. Starts with Shots On Goal; Goalie Saves is wired in but switched off.
+Tracking only, no betting. Shots On Goal is the headline prop. Hits, Blocked Shots, Time On Ice and Goalie Saves are priced
+under **Experimental** until each has ~100+ graded picks. Faceoffs Won lines are recorded every night but not priced yet
+(the boxscore only has faceoff %, not counts; counts would need a play-by-play backfill).
 
 Site: GitHub Pages from `/docs` (Today's lines · Results · Backtest).
 
@@ -21,9 +23,13 @@ Site: GitHub Pages from `/docs` (Today's lines · Results · Backtest).
 - **Grading.** Dedup key `(game_date, nhl_game_id, nhl_id, category)`; the earliest snapshot's line wins. Games still unplayed 3 days later are voided (postponements).
 - **Experimental section.** Unproven props and adjusted-payout lines live there so they never move the headline numbers.
 
-## The model (`model.py`, version in `config.json`)
+## The models (`model.py`, version in `config.json`)
 
-Expected SOG = decayed shot rate per second (shrunk toward the position average) × projected TOI × opponent shots-allowed factor, with a negative binomial distribution. `walk()` replays history date by date so every prediction uses only earlier games; the backtest and the live run share that code.
+- **Shots, hits, blocks:** decayed per-second rate (shrunk toward the position average) × projected TOI (× opponent shots-allowed factor for SOG), negative binomial with a per-prop dispersion.
+- **Time on ice:** projected TOI in minutes, normal distribution with a fitted sd.
+- **Goalie saves:** league shots × opponent's shots-for factor × own team's shots-allowed factor × the goalie's shrunk save rate; negative binomial.
+
+Per-prop distribution parameters live under `dist` in `config.json`; `python backtest.py --apply` fits them. `walk()` replays history date by date so every prediction uses only earlier games; the backtest and the live run share that code.
 
 ## Running things locally (Windows PowerShell)
 

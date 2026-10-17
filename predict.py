@@ -22,6 +22,8 @@ import model
 import player_map
 import prizepicks
 
+MODELED = {"sog", "hits", "blocks", "toi", "saves"}
+
 
 def nhl_games_by_team(dates):
     """{(date, team): {game_id, start_utc, home, away}} from the NHL schedule for those dates."""
@@ -74,9 +76,9 @@ def main():
     slate_dates = sorted({r["start_time"][:10] for r in elig})   # PrizePicks times are US Eastern
     games = nhl_games_by_team(slate_dates)
 
-    sk, gm = model.load_history(cfg)
+    sk, gm, gk = model.load_history(cfg)
     params = cfg["model"]
-    _, walker = model.walk(sk, gm, params, collect=False)
+    _, _, walker = model.walk(sk, gm, params, gk=gk, collect=False)
     hist_through = str(sk["date"].max())
 
     picks, reasons = [], Counter()
@@ -100,15 +102,26 @@ def main():
             reason = "unmatched_player"
         elif not g:
             reason = "no_nhl_game"
-        elif r["category"] != "sog":
+        elif r["category"] not in MODELED:
             reason = "no_model_yet"
         else:
-            mu, n = walker.player_mu(nhl_id, opp)
+            cat = r["category"]
+            if cat == "saves":
+                mu, n = walker.goalie_mu(nhl_id, team, opp)
+                min_n = params.get("min_prior_starts", 3)
+            elif cat == "toi":
+                toi, n = walker.player_toi(nhl_id)
+                mu, min_n = (toi / 60 if toi is not None else None), params["min_prior_games"]
+            else:
+                mu, n = walker.player_mu(nhl_id, opp, cat)
+                min_n = params["min_prior_games"]
             pick["n_prior"] = n
-            if mu is None or n < params["min_prior_games"]:
+            if mu is None or n < min_n:
                 reason = "insufficient_history"
             else:
-                po, pu, pp = model.line_probs(mu, r["line"], params["nb_r"])
+                d = model.dist_for(cfg, cat)
+                po, pu, pp = (model.normal_probs(mu, r["line"], d) if cat == "toi"
+                              else model.line_probs(mu, r["line"], d))
                 side, prob = model.pick_side(po, pu)
                 pick.update(model_mean=round(mu, 4), p_over=round(po, 4), p_under=round(pu, 4),
                             p_push=round(pp, 4), side=side, prob=round(prob, 4))

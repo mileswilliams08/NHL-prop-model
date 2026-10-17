@@ -1,44 +1,55 @@
 """
-Baseline shots-on-goal model.
+Baseline projection models for skater counting stats, time on ice and goalie saves.
 
-    expected SOG = shot rate per second  x  projected TOI  x  opponent factor ^ opp_beta
+Skater count props (sog, hits, blocks):
+    expected = per-second rate (decayed, shrunk toward the position average) x projected TOI
+               x opponent factor (sog only: opponent's shots allowed vs league average)
+    distribution: negative binomial, dispersion r per prop (config "dist")
 
-  shot rate      exponentially decayed SOG / decayed TOI over the player's games
-                 (halflife_games), shrunk toward the league rate for his position group with
-                 prior_toi_sec seconds of "average" ice time. At a new season the decayed sums
-                 are multiplied by season_carry.
-  projected TOI  decayed average TOI (toi_halflife_games), shrunk toward the position average
-                 for players with few games (toi_prior_games).
-  opponent       opponent's decayed shots-against per game relative to the league average,
-                 shrunk with opp_prior_games of league-average games.
-  distribution   negative binomial with dispersion nb_r (variance = mu + mu^2 / r).
+Time on ice (toi): projected TOI in minutes, normal distribution with a fitted sd.
 
-walk() replays history one date at a time: every game on a date is predicted from state built
-ONLY from earlier dates, then the state is updated. The backtest and the live prediction use
-the same walk, so there is no separate "live" code path that could leak or drift.
+Goalie saves (saves):
+    expected shots against = league avg x opponent's shots-for factor x own team's shots-allowed factor
+    save rate              = goalie's decayed saves / shots against, shrunk toward the league rate
+    expected saves = expected shots against x save rate; negative binomial.
+
+walk() replays history one date at a time: every game on a date is predicted from state built ONLY
+from earlier dates, then state is updated. The backtest and the live prediction use the same walk.
 """
 import math
 import os
 
 import numpy as np
 import pandas as pd
-from scipy.stats import nbinom, poisson
+from scipy.stats import nbinom, norm, poisson
 
 from common import HIST_DIR
 
 POS_GROUP = {"C": "F", "L": "F", "R": "F", "F": "F", "D": "D"}
-FALLBACK_RATE = {"F": 2.0 / 960, "D": 1.4 / 1260}   # shots per second, only before any data
+SKATER_STATS = {"sog": "sog", "hits": "hits", "blocks": "blocked"}   # prop -> history column
+FALLBACK_RATE = {"F": {"sog": 2.0 / 960, "hits": 1.2 / 960, "blocks": 0.5 / 960},
+                 "D": {"sog": 1.4 / 1260, "hits": 1.3 / 1260, "blocks": 1.4 / 1260}}
 FALLBACK_TOI = {"F": 960.0, "D": 1260.0}
-LEAGUE_DECAY = 0.99                                  # per game date, for league-wide baselines
+LEAGUE_DECAY = 0.99      # per game date, for league-wide baselines
+SV_PRIOR_SHOTS = 300.0   # shrink a goalie's save rate toward the league with this many average shots
+FALLBACK_SV = 0.900
 
 
 def load_history(cfg=None):
     sk = pd.read_csv(os.path.join(HIST_DIR, "skater_games.csv"))
     gm = pd.read_csv(os.path.join(HIST_DIR, "games.csv"))
+    gk = pd.read_csv(os.path.join(HIST_DIR, "goalie_games.csv"))
     types = (cfg or {}).get("history_game_types", [2, 3])
-    sk = sk[sk["game_type"].isin(types)]
-    gm = gm[gm["game_type"].isin(types)]
-    return sk, gm
+    sk, gm, gk = (d[d["game_type"].isin(types)] for d in (sk, gm, gk))
+    for c in ("hits", "blocked"):
+        sk[c] = pd.to_numeric(sk[c], errors="coerce").fillna(0)
+    for c in ("saves", "shots_against"):
+        gk[c] = pd.to_numeric(gk[c], errors="coerce").fillna(0)
+    return sk, gm, gk
+
+
+def _zero():
+    return {s: 0.0 for s in SKATER_STATS}
 
 
 class Walker:
@@ -47,122 +58,182 @@ class Walker:
         self.d = 0.5 ** (1.0 / params["halflife_games"])
         self.dt = 0.5 ** (1.0 / params["toi_halflife_games"])
         self.do = 0.5 ** (1.0 / params["opp_halflife_games"])
-        self.players = {}
-        self.teams = {}
-        self.lg_rate = {"F": [0.0, 0.0], "D": [0.0, 0.0]}   # decayed [sog, toi_sec]
-        self.lg_toi = {"F": [0.0, 0.0], "D": [0.0, 0.0]}    # decayed [toi_sec, games]
-        self.lg_sa = [0.0, 0.0]                             # decayed [shots against, team-games]
+        self.players, self.teams, self.goalies = {}, {}, {}
+        self.lg_rate = {g: {"S": _zero(), "T": 0.0} for g in ("F", "D")}
+        self.lg_toi = {g: [0.0, 0.0] for g in ("F", "D")}
+        self.lg_shots = [0.0, 0.0]     # decayed [shots, team-games] (shots for == shots against league-wide)
+        self.lg_sv = [0.0, 0.0]        # decayed [saves, shots against] for goalies
 
     # ---------------------------------------------------------------- baselines
-    def rate_prior(self, g):
-        s, t = self.lg_rate[g]
-        return s / t if t > 0 else FALLBACK_RATE[g]
+    def rate_prior(self, g, stat):
+        lg = self.lg_rate[g]
+        return lg["S"][stat] / lg["T"] if lg["T"] > 0 else FALLBACK_RATE[g][stat]
 
     def toi_prior(self, g):
         s, n = self.lg_toi[g]
         return s / n if n > 0 else FALLBACK_TOI[g]
 
-    def opp_factor(self, team):
-        sa, n = self.lg_sa
-        if n <= 0:
-            return 1.0
-        lg = sa / n
+    def lg_avg_shots(self):
+        s, n = self.lg_shots
+        return s / n if n > 0 else None
+
+    def _team_factor(self, team, key):
+        lg = self.lg_avg_shots()
         t = self.teams.get(team)
-        if not t:
+        if not lg or not t:
             return 1.0
         k = self.p["opp_prior_games"]
-        return ((t["SA"] + k * lg) / (t["N"] + k)) / lg
+        return ((t[key] + k * lg) / (t["N"] + k)) / lg
 
-    # ---------------------------------------------------------------- prediction
-    def player_mu(self, pid, opp):
-        """(expected SOG, games of history) or (None, 0) for an unknown player."""
+    def opp_factor(self, team):
+        """How many shots `team` allows, relative to league average."""
+        return self._team_factor(team, "SA")
+
+    def off_factor(self, team):
+        """How many shots `team` takes, relative to league average."""
+        return self._team_factor(team, "SF")
+
+    # ---------------------------------------------------------------- skater prediction
+    def player_toi(self, pid):
+        """(projected TOI seconds, games of history) or (None, 0)."""
         st = self.players.get(int(pid)) if pid not in (None, "") else None
         if not st:
             return None, 0
-        g, m = st["pos"], self.p["prior_toi_sec"]
-        rate = (st["S"] + m * self.rate_prior(g)) / (st["T"] + m)
         k, n = self.p["toi_prior_games"], st["n"]
-        toi = (n * st["toi"] + k * self.toi_prior(g)) / (n + k)
-        mu = rate * toi * self.opp_factor(opp) ** self.p["opp_beta"]
+        return (n * st["toi"] + k * self.toi_prior(st["pos"])) / (n + k), n
+
+    def player_mu(self, pid, opp, stat="sog"):
+        """(expected count, games of history) or (None, 0) for an unknown player."""
+        st = self.players.get(int(pid)) if pid not in (None, "") else None
+        if not st:
+            return None, 0
+        toi, n = self.player_toi(pid)
+        m = self.p["prior_toi_sec"]
+        rate = (st["S"][stat] + m * self.rate_prior(st["pos"], stat)) / (st["T"] + m)
+        mu = rate * toi
+        if stat == "sog":
+            mu *= self.opp_factor(opp) ** self.p["opp_beta"]
         return mu, n
 
+    # ---------------------------------------------------------------- goalie prediction
+    def goalie_mu(self, gid, team, opp):
+        """(expected saves, starts of history) or (None, 0)."""
+        g = self.goalies.get(int(gid)) if gid not in (None, "") else None
+        lg = self.lg_avg_shots()
+        if not g or not lg:
+            return None, 0
+        esa = lg * self.off_factor(opp) * self.opp_factor(team)
+        lg_sv = self.lg_sv[0] / self.lg_sv[1] if self.lg_sv[1] > 0 else FALLBACK_SV
+        sv = (g["SV"] + SV_PRIOR_SHOTS * lg_sv) / (g["SA"] + SV_PRIOR_SHOTS)
+        return esa * sv, g["n"]
+
     # ---------------------------------------------------------------- update
-    def update(self, sk_rows, game_rows):
+    def update(self, sk_rows, game_rows, gk_rows):
         for g in ("F", "D"):
-            self.lg_rate[g] = [x * LEAGUE_DECAY for x in self.lg_rate[g]]
+            lg = self.lg_rate[g]
+            lg["S"] = {s: v * LEAGUE_DECAY for s, v in lg["S"].items()}
+            lg["T"] *= LEAGUE_DECAY
             self.lg_toi[g] = [x * LEAGUE_DECAY for x in self.lg_toi[g]]
-        self.lg_sa = [x * LEAGUE_DECAY for x in self.lg_sa]
+        self.lg_shots = [x * LEAGUE_DECAY for x in self.lg_shots]
+        self.lg_sv = [x * LEAGUE_DECAY for x in self.lg_sv]
         carry = self.p["season_carry"]
 
-        for pid, pos, season, toi, sog in sk_rows:
+        for pid, pos, season, toi, vals in sk_rows:
             if toi <= 0:
                 continue
             g = POS_GROUP.get(pos, "F")
             st = self.players.get(pid)
             if st is None:
-                st = self.players[pid] = {"S": 0.0, "T": 0.0, "toi": float(toi), "n": 0, "season": season, "pos": g}
+                st = self.players[pid] = {"S": _zero(), "T": 0.0, "toi": float(toi), "n": 0, "season": season, "pos": g}
             elif st["season"] != season:
-                st["S"] *= carry
+                st["S"] = {s: v * carry for s, v in st["S"].items()}
                 st["T"] *= carry
                 st["season"] = season
-            st["S"] = self.d * st["S"] + sog
+            for s, v in vals.items():
+                st["S"][s] = self.d * st["S"][s] + v
+                self.lg_rate[g]["S"][s] += v
             st["T"] = self.d * st["T"] + toi
             st["toi"] = self.dt * st["toi"] + (1 - self.dt) * toi if st["n"] else float(toi)
             st["n"] += 1
             st["pos"] = g
-            self.lg_rate[g][0] += sog
-            self.lg_rate[g][1] += toi
+            self.lg_rate[g]["T"] += toi
             self.lg_toi[g][0] += toi
             self.lg_toi[g][1] += 1
 
-        for team, sa, season in game_rows:
-            if sa is None or (isinstance(sa, float) and math.isnan(sa)):
+        for team, sf, sa, season in game_rows:
+            if any(v is None or (isinstance(v, float) and math.isnan(v)) for v in (sf, sa)):
                 continue
             t = self.teams.get(team)
             if t is None:
-                t = self.teams[team] = {"SA": 0.0, "N": 0.0, "season": season}
+                t = self.teams[team] = {"SA": 0.0, "SF": 0.0, "N": 0.0, "season": season}
             elif t["season"] != season:
-                t["SA"] *= carry
-                t["N"] *= carry
+                for k in ("SA", "SF", "N"):
+                    t[k] *= carry
                 t["season"] = season
             t["SA"] = self.do * t["SA"] + sa
+            t["SF"] = self.do * t["SF"] + sf
             t["N"] = self.do * t["N"] + 1
-            self.lg_sa[0] += sa
-            self.lg_sa[1] += 1
+            self.lg_shots[0] += sa
+            self.lg_shots[1] += 1
+
+        for gid, season, toi, saves, sa in gk_rows:
+            if toi <= 0 or sa <= 0:
+                continue
+            g = self.goalies.get(gid)
+            if g is None:
+                g = self.goalies[gid] = {"SV": 0.0, "SA": 0.0, "n": 0, "season": season}
+            elif g["season"] != season:
+                g["SV"] *= carry
+                g["SA"] *= carry
+                g["season"] = season
+            g["SV"] = self.d * g["SV"] + saves
+            g["SA"] = self.d * g["SA"] + sa
+            g["n"] += 1
+            self.lg_sv[0] += saves
+            self.lg_sv[1] += sa
 
 
-def walk(sk, gm, params, collect=True):
-    """Replay history. Returns (DataFrame of pre-game predictions or None, final Walker)."""
+def walk(sk, gm, params, gk=None, collect=True):
+    """Replay history. Returns (skater predictions df, goalie predictions df, final Walker)."""
     w = Walker(params)
-    sk = sk.sort_values(["date", "game_id"], kind="stable")
-    gm = gm.sort_values(["date", "game_id"], kind="stable")
-    sk_by_date = {d: g for d, g in sk.groupby("date", sort=False)}
-    gm_by_date = {d: g for d, g in gm.groupby("date", sort=False)}
-    out = [] if collect else None
+    by_date = lambda df: {d: g for d, g in df.sort_values(["date", "game_id"], kind="stable").groupby("date", sort=False)}
+    skd, gmd = by_date(sk), by_date(gm)
+    gkd = by_date(gk) if gk is not None else {}
+    out_s, out_g = ([], []) if collect else (None, None)
 
-    for d in sorted(set(sk_by_date) | set(gm_by_date)):
-        srows = sk_by_date.get(d)
-        grows = gm_by_date.get(d)
-        tuples = []
+    for d in sorted(set(skd) | set(gmd) | set(gkd)):
+        srows, grows, krows = skd.get(d), gmd.get(d), gkd.get(d)
+        tuples, gtuples, ktuples = [], [], []
         if srows is not None:
             for r in srows.itertuples(index=False):
                 if collect and r.toi_sec > 0:
-                    mu, n = w.player_mu(r.player_id, r.opp)
-                    out.append((r.date, r.season, r.game_id, r.player_id, r.team, r.opp,
-                                POS_GROUP.get(r.position, "F"), n, mu, r.sog, r.toi_sec))
-                tuples.append((int(r.player_id), r.position, r.season, r.toi_sec, r.sog))
-        gtuples = []
+                    toi_p, n = w.player_toi(r.player_id)
+                    mus = {s: w.player_mu(r.player_id, r.opp, s)[0] for s in SKATER_STATS}
+                    out_s.append((r.date, r.season, r.game_id, r.player_id, r.team, r.opp,
+                                  POS_GROUP.get(r.position, "F"), n, mus["sog"], mus["hits"], mus["blocks"],
+                                  toi_p, r.sog, r.hits, r.blocked, r.toi_sec))
+                tuples.append((int(r.player_id), r.position, r.season, r.toi_sec,
+                               {s: getattr(r, c) for s, c in SKATER_STATS.items()}))
+        if krows is not None:
+            for r in krows.itertuples(index=False):
+                if collect and r.toi_sec > 0 and str(r.starter).lower() == "true":
+                    mu, n = w.goalie_mu(r.player_id, r.team, r.opp)
+                    out_g.append((r.date, r.season, r.game_id, r.player_id, r.team, r.opp, n, mu,
+                                  r.saves, r.shots_against, r.toi_sec))
+                ktuples.append((int(r.player_id), r.season, r.toi_sec, r.saves, r.shots_against))
         if grows is not None:
             for r in grows.itertuples(index=False):
-                gtuples.append((r.away, r.home_sog, r.season))
-                gtuples.append((r.home, r.away_sog, r.season))
-        w.update(tuples, gtuples)
+                gtuples.append((r.away, r.away_sog, r.home_sog, r.season))
+                gtuples.append((r.home, r.home_sog, r.away_sog, r.season))
+        w.update(tuples, gtuples, ktuples)
 
-    df = None
-    if collect:
-        df = pd.DataFrame(out, columns=["date", "season", "game_id", "player_id", "team", "opp",
-                                        "pos", "n_prior", "mu", "sog", "toi_sec"])
-    return df, w
+    if not collect:
+        return None, None, w
+    sdf = pd.DataFrame(out_s, columns=["date", "season", "game_id", "player_id", "team", "opp", "pos", "n_prior",
+                                       "mu_sog", "mu_hits", "mu_blocks", "toi_proj", "sog", "hits", "blocks", "toi_sec"])
+    gdf = pd.DataFrame(out_g, columns=["date", "season", "game_id", "player_id", "team", "opp", "n_prior", "mu_saves",
+                                       "saves", "shots_against", "toi_sec"])
+    return sdf, gdf, w
 
 
 # ---------------------------------------------------------------------------- probabilities
@@ -186,6 +257,12 @@ def line_probs(mu, line, r):
     return 1.0 - under, under, 0.0
 
 
+def normal_probs(mu, line, sd):
+    """(P over, P under, 0) for a continuous stat (TOI minutes)."""
+    under = float(norm.cdf((float(line) - mu) / sd))
+    return 1.0 - under, under, 0.0
+
+
 def pick_side(p_over, p_under):
     """Model's side and its probability, conditional on no push."""
     tot = p_over + p_under
@@ -200,3 +277,13 @@ def nb_loglik(mu, y, r):
     if r is None or r > 1e6:
         return poisson.logpmf(y, mu)
     return nbinom.logpmf(y, r, r / (r + mu))
+
+
+def dist_for(cfg, cat):
+    """Distribution parameter for a prop: nb_r for counts, sd_min for toi."""
+    d = (cfg.get("dist") or {}).get(cat, {})
+    if cat == "sog":
+        return d.get("nb_r", cfg["model"].get("nb_r", 14.0))
+    defaults = {"hits": {"nb_r": 6.0}, "blocks": {"nb_r": 6.0}, "saves": {"nb_r": 40.0}, "toi": {"sd_min": 3.0}}
+    key = "sd_min" if cat == "toi" else "nb_r"
+    return d.get(key, defaults.get(cat, {}).get(key))

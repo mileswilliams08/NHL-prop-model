@@ -69,11 +69,15 @@ def main():
 
     gm = pd.read_csv(os.path.join(HIST_DIR, "games.csv"), usecols=["game_id"])
     final_games = set(gm["game_id"].astype("int64").astype(str))
-    sk = pd.read_csv(os.path.join(HIST_DIR, "skater_games.csv"), usecols=["game_id", "player_id", "toi_sec", "sog"])
-    gk = pd.read_csv(os.path.join(HIST_DIR, "goalie_games.csv"), usecols=["game_id", "player_id", "toi_sec", "saves"])
-    sk_idx = {(str(g), str(p)): (t, v) for g, p, t, v in sk.itertuples(index=False)}
-    gk_idx = {(str(g), str(p)): (t, v) for g, p, t, v in gk.itertuples(index=False)}
-    sources = {"sog": sk_idx, "saves": gk_idx}
+    sk = pd.read_csv(os.path.join(HIST_DIR, "skater_games.csv"))
+    gk = pd.read_csv(os.path.join(HIST_DIR, "goalie_games.csv"))
+    def index(df, col, scale=1.0):
+        vals = pd.to_numeric(df[col], errors="coerce") / scale
+        return {(str(g), str(p)): (t, v) for g, p, t, v in
+                zip(df["game_id"], df["player_id"], df["toi_sec"], vals)}
+    # category -> {(game_id, player_id): (toi_sec, actual)}; TOI props are graded in minutes
+    sources = {"sog": index(sk, "sog"), "hits": index(sk, "hits"), "blocks": index(sk, "blocked"),
+               "toi": index(sk, "toi_sec", 60.0), "saves": index(gk, "saves")}
 
     new_rows, pending = [], 0
     for k, (pk, snap_at, mver) in sorted(todo.items()):
@@ -87,12 +91,14 @@ def main():
             else:
                 pending += 1
             continue
+        if cat not in sources:
+            continue
         hit = sources[cat].get((gid, pid))
         if hit is None or hit[0] <= 0:
             row.update(result="void", actual="", toi_sec=hit[0] if hit else 0, blind_over="", blind_under="")
         else:
             actual, line = float(hit[1]), float(pk["line"])
-            row.update(actual=int(actual), toi_sec=int(hit[0]), result=outcome(actual, line, pk["side"]),
+            row.update(actual=round(actual, 2) if cat == "toi" else int(actual), toi_sec=int(hit[0]), result=outcome(actual, line, pk["side"]),
                        blind_over=outcome(actual, line, "over"), blind_under=outcome(actual, line, "under"))
         new_rows.append(row)
 

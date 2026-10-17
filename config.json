@@ -7,16 +7,40 @@
       "headline": true,
       "label": "Shots On Goal"
     },
+    "hits": {
+      "enabled": true,
+      "headline": false,
+      "label": "Hits"
+    },
+    "blocks": {
+      "enabled": true,
+      "headline": false,
+      "label": "Blocked Shots"
+    },
+    "toi": {
+      "enabled": true,
+      "headline": false,
+      "label": "Time On Ice"
+    },
     "saves": {
-      "enabled": false,
+      "enabled": true,
       "headline": false,
       "label": "Goalie Saves"
+    },
+    "faceoffs": {
+      "enabled": true,
+      "headline": false,
+      "label": "Faceoffs Won (lines recorded, not priced yet)"
     }
   },
   "pp_stat_types": {
     "Shots On Goal": "sog",
+    "Hits": "hits",
+    "Blocked Shots": "blocks",
+    "Time On Ice": "toi",
     "Goalie Saves": "saves",
-    "Saves": "saves"
+    "Saves": "saves",
+    "Faceoffs Won": "faceoffs"
   },
   "headline_requires_unadjusted": false,
   "team_map": {
@@ -40,6 +64,24 @@
     "opp_prior_games": 10,
     "opp_beta": 1.0,
     "nb_r": 14.05,
-    "min_prior_games": 5
+    "min_prior_games": 5,
+    "min_prior_starts": 3
+  },
+  "dist": {
+    "sog": {
+      "nb_r": 14.05
+    },
+    "hits": {
+      "nb_r": 4.91
+    },
+    "blocks": {
+      "nb_r": 9.72
+    },
+    "toi": {
+      "sd_min": 2.523
+    },
+    "saves": {
+      "nb_r": 21.9
+    }
   }
 }
