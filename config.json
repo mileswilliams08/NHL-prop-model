@@ -1,10 +1,17 @@
 {
   "league_id": 8,
   "model_version": "sog-baseline-1",
-
   "props": {
-    "sog":   {"enabled": true,  "headline": true,  "label": "Shots On Goal"},
-    "saves": {"enabled": false, "headline": false, "label": "Goalie Saves"}
+    "sog": {
+      "enabled": true,
+      "headline": true,
+      "label": "Shots On Goal"
+    },
+    "saves": {
+      "enabled": false,
+      "headline": false,
+      "label": "Goalie Saves"
+    }
   },
   "pp_stat_types": {
     "Shots On Goal": "sog",
@@ -12,21 +19,27 @@
     "Saves": "saves"
   },
   "headline_requires_unadjusted": true,
-
-  "team_map": {"LA": "LAK", "TB": "TBL", "NJ": "NJD", "SJ": "SJS"},
+  "team_map": {
+    "LA": "LAK",
+    "TB": "TBL",
+    "NJ": "NJD",
+    "SJ": "SJS"
+  },
   "min_minutes_before_start": 10,
-  "history_game_types": [2, 3],
-
+  "history_game_types": [
+    2,
+    3
+  ],
   "model": {
-    "halflife_games": 20,
-    "prior_toi_sec": 3600,
-    "season_carry": 0.7,
+    "halflife_games": 40,
+    "prior_toi_sec": 7200,
+    "season_carry": 0.5,
     "toi_halflife_games": 5,
     "toi_prior_games": 3,
     "opp_halflife_games": 20,
     "opp_prior_games": 10,
     "opp_beta": 1.0,
-    "nb_r": 30.0,
+    "nb_r": 14.05,
     "min_prior_games": 5
   }
 }
