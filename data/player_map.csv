@@ -45,6 +45,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218271,Matvei Michkov,PHI,F,8484387,Matvei Michkov,exact,2026-10-17,2026-10-17
 218221,Owen Tippett,PHI,F,8480015,Owen Tippett,exact,2026-10-17,2026-10-17
 268081,Trevor Zegras,PHI,F,8481533,Trevor Zegras,exact,2026-10-17,2026-10-17
+267838,Ben Kindel,PIT,F,8485414,Ben Kindel,exact,2026-10-17,2026-10-17
 57897,Jordan Eberle,SEA,F,8474586,Jordan Eberle,exact,2026-10-17,2026-10-17
 218284,Matty Beniers,SEA,F,8482665,Matty Beniers,exact,2026-10-17,2026-10-17
 286939,Igor Chernyshov,SJ,F,8484994,Igor Chernyshov,exact,2026-10-17,2026-10-17
@@ -67,6 +68,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 57905,Brock Boeser,VAN,F,8478444,Brock Boeser,exact,2026-10-17,2026-10-17
 227223,Filip Chytil,VAN,F,8480078,Filip Chytil,exact,2026-10-17,2026-10-17
 286708,Marco Rossi,VAN,F,8482079,Marco Rossi,exact,2026-10-17,2026-10-17
+218580,Tomas Hertl,VGK,F,8476881,Tomas Hertl,exact,2026-10-17,2026-10-17
 218264,Gabriel Vilardi,WPG,F,8480014,Gabriel Vilardi,exact,2026-10-17,2026-10-17
 218354,Neal Pionk,WPG,D,8480145,Neal Pionk,exact,2026-10-17,2026-10-17
 184753,Aliaksei Protas,WSH,F,8481656,Aliaksei Protas,exact,2026-10-17,2026-10-17
