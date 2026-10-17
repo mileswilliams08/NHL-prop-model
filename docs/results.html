@@ -3,30 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NHL Prop Results</title>
+<title>NHL Prop Tracker — Results</title>
 <link rel="stylesheet" href="site.css">
+<style>
+  h2 { font-size: 16px; color: #8b98a5; font-weight: 600; margin: 28px 0 10px; }
+  .overall-card { display: flex; gap: 24px; padding: 16px; background: #1c2733;
+                  border-radius: 6px; margin-bottom: 8px; align-items: baseline; flex-wrap: wrap; }
+  .overall-card .big { font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .overall-card .sub { color: #8b98a5; font-size: 13px; }
+  .caveat { color: #8b98a5; font-size: 12px; margin: 4px 0 8px; line-height: 1.5; }
+  .show { color: #8b98a5; font-size: 12px; margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .show select { background: #1c2733; color: #e6edf3; border: 1px solid #263140; border-radius: 4px; padding: 4px 8px; font-size: 13px; }
+  .result-tag { padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+  .result-hit { background: #1a4620; color: #3fb950; }
+  .result-miss { background: #2d1a1a; color: #f85149; }
+  .result-push { background: #2d2a1a; color: #d4a72c; }
+</style>
 </head>
 <body>
 <h1>NHL Prop Tracker</h1>
-<div class="tag">Every graded pick, not a highlight reel. Tracking only.</div>
 <nav>
   <a href="index.html">Today's lines</a>
   <a href="results.html" class="active">Results</a>
   <a href="backtest.html">Backtest</a>
 </nav>
 <div class="meta" id="meta">Loading...</div>
-
-<div id="headline"></div>
-<div class="section" id="experimental"></div>
+<div id="content"></div>
 
 <script>
+// Every graded pick is tracked here, not just ones that cleared a threshold: this is the model's
+// honest hit rate and calibration. Headline props and experimental props never mix.
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const pct = x => x == null ? "—" : (x * 100).toFixed(1) + "%";
-const BUCKETS = [[.5,.55],[.55,.6],[.6,.65],[.65,.7],[.7,.8],[.8,1.01]];
+const RESULT = {h: "hit", m: "miss", p: "push"};
+const PROBS = [["__all__", "All probabilities"], ["50-60", "50-60%"], ["60-65", "60-65%"], ["65-70", "65-70%"],
+               ["70-80", "70-80%"], ["80+", "80%+"]];
+const BUCKETS = [["50-55%", .50, .55], ["55-60%", .55, .60], ["60-65%", .60, .65], ["65-70%", .65, .70],
+                 ["70-80%", .70, .80], ["80-100%", .80, 1.01]];
 
-function rate(codes) {
+function summarize(codes) {
+  const pushes = codes.filter(c => c === "p").length;
   const dec = codes.filter(c => c === "h" || c === "m");
-  return {n: dec.length, hits: dec.filter(c => c === "h").length, r: dec.length ? dec.filter(c => c === "h").length / dec.length : null};
+  const hits = dec.filter(c => c === "h").length;
+  return {n: dec.length, hits, pushes, rate: dec.length ? hits / dec.length : null};
+}
+function inProb(p, key) {
+  if (key === "__all__") return true;
+  if (key === "80+") return p >= 0.8;
+  const [lo, hi] = key.split("-").map(v => +v / 100);
+  return p >= lo && p < hi;
+}
+function inDate(d, key, latest) {
+  if (key === "__all__") return true;
+  if (key.startsWith("last")) {
+    const days = +key.slice(4), cut = new Date(latest + "T00:00:00");
+    cut.setDate(cut.getDate() - days + 1);
+    return new Date(d + "T00:00:00") >= cut;
+  }
+  return d === key;
 }
 function slope(rows) {
   const x = rows.map(p => p.m - p.l), y = rows.map(p => p.a - p.l), n = x.length;
@@ -38,80 +72,192 @@ function slope(rows) {
   const b = sxy / sxx;
   let sse = 0;
   for (let i = 0; i < n; i++) sse += (y[i] - ym - b * (x[i] - xm)) ** 2;
-  return {b, se: Math.sqrt(sse / (n - 2) / sxx), n};
+  return {b, se: Math.sqrt(sse / (n - 2) / sxx)};
 }
+const tag = x => `<span class="result-tag result-${RESULT[x]}">${RESULT[x].toUpperCase()}</span>`;
 
-function section(el, title, blurb, picks, labels) {
-  const id = el.id;
-  const cats = [...new Set(picks.map(p => p.c))];
-  const dates = picks.map(p => p.d).sort();
-  el.innerHTML = `<h2>${title}</h2><div class="note" style="margin-bottom:10px">${blurb}</div>
-    <div class="filters">
-      From <input type="date" id="${id}-from" value="${dates[0] || ""}"> to <input type="date" id="${id}-to" value="${dates[dates.length - 1] || ""}">
-      <select id="${id}-cat"><option value="">All props</option>${cats.map(c => `<option value="${c}">${esc(labels[c] || c)}</option>`).join("")}</select>
-      <select id="${id}-side"><option value="">Over and Under picks</option><option value="over">Over picks</option><option value="under">Under picks</option></select>
-      <select id="${id}-pmin"><option value="0">Any probability</option>${[.55,.6,.65,.7].map(v => `<option value="${v}">prob ≥ ${Math.round(v*100)}%</option>`).join("")}</select>
-      <select id="${id}-pmax"><option value="2">no max</option>${[.55,.6,.65,.7,.8].map(v => `<option value="${v}">prob &lt; ${Math.round(v*100)}%</option>`).join("")}</select>
-    </div><div id="${id}-out"></div>`;
-  const draw = () => {
-    const v = k => document.getElementById(`${id}-${k}`).value;
-    const rows = picks.filter(p => (!v("from") || p.d >= v("from")) && (!v("to") || p.d <= v("to"))
-      && (!v("cat") || p.c === v("cat")) && (!v("side") || p.s === v("side")) && p.p >= +v("pmin") && p.p < +v("pmax"));
-    const out = document.getElementById(`${id}-out`);
-    if (!rows.length) { out.innerHTML = `<div class="empty">No graded picks for this selection yet.</div>`; return; }
-    const m = rate(rows.map(p => p.x)), o = rate(rows.map(p => p.ox)), u = rate(rows.map(p => p.ux));
-    const avgP = rows.reduce((a, p) => a + p.p, 0) / rows.length;
-    const s = slope(rows);
-    const pushes = rows.filter(p => p.x === "p").length;
-    let h = `<div class="cards">
-      <div class="card"><div class="big">${pct(m.r)}</div><div class="sub">model · ${m.hits}/${m.n}${pushes ? ` · ${pushes} push` : ""}</div></div>
-      <div class="card"><div class="big">${pct(o.r)}</div><div class="sub">blind Over, same lines (n ${o.n})</div></div>
-      <div class="card"><div class="big">${pct(u.r)}</div><div class="sub">blind Under, same lines (n ${u.n})</div></div>
-      <div class="card"><div class="big">${pct(avgP)}</div><div class="sub">model's average stated prob</div></div>
-      <div class="card"><div class="big">${s ? s.b.toFixed(2) : "—"}</div><div class="sub">${s ? `slope ± ${(1.96 * s.se).toFixed(2)} (95% CI)` : "slope (needs 10+ picks)"}</div></div>
-    </div>
-    <div class="note">${m.n < 100 ? `<span class="warn">Only ${m.n} decided picks: too few to judge or recalibrate (wait for ~100+ per prop).</span> ` : ""}
-      Slope = how much of the model's disagreement with the line shows up in results: regress (actual − line) on (model mean − line).
-      1 means fully real, 0 means none. The model only adds value if it beats the better of blind Over / blind Under.</div>
-    <h2>Calibration (model's pick probability)</h2><div class="table-wrap"><table><thead><tr>
-      <th>Prob bucket</th><th class="num">Picks</th><th class="num">Avg stated prob</th><th class="num">Actual hit rate</th><th class="num">Gap</th></tr></thead><tbody>`;
-    for (const [lo, hi] of BUCKETS) {
-      const b = rows.filter(p => p.p >= lo && p.p < hi);
-      if (!b.length) continue;
-      const r = rate(b.map(p => p.x)), ap = b.reduce((a, p) => a + p.p, 0) / b.length;
-      h += `<tr><td>${Math.round(lo * 100)}–${Math.round(Math.min(hi, 1) * 100)}%</td><td class="num">${r.n}</td><td class="num">${pct(ap)}</td>
-        <td class="num">${pct(r.r)}</td><td class="num">${r.r == null ? "—" : ((r.r - ap) * 100).toFixed(1) + " pts"}</td></tr>`;
-    }
-    h += `</tbody></table></div>
-    <h2>By side</h2><div class="table-wrap"><table><thead><tr><th>Model picked</th><th class="num">Picks</th><th class="num">Hit rate</th></tr></thead><tbody>
-      ${["over", "under"].map(sd => { const r = rate(rows.filter(p => p.s === sd).map(p => p.x));
-        return `<tr><td class="${sd}">${sd}</td><td class="num">${r.n}</td><td class="num">${pct(r.r)}</td></tr>`; }).join("")}
-    </tbody></table></div>
-    <h2>Picks (latest 150 of ${rows.length})</h2><div class="table-wrap"><table><thead><tr>
-      <th>Date</th><th>Player</th><th>Matchup</th><th>Prop</th><th class="num">Line</th><th class="num">Mean</th><th>Pick</th>
-      <th class="num">Prob</th><th class="num">Actual</th><th>Result</th></tr></thead><tbody>
-      ${[...rows].sort((a, b) => b.d.localeCompare(a.d)).slice(0, 150).map(p => `<tr><td>${p.d}</td><td>${esc(p.pl)}</td>
-        <td>${esc(p.tm)} v ${esc(p.op)}</td><td>${esc(labels[p.c] || p.c)}${p.adj ? " (adj)" : ""}</td><td class="num">${p.l}</td>
-        <td class="num">${p.m.toFixed(2)}</td><td class="${p.s}">${p.s}</td><td class="num">${pct(p.p)}</td>
-        <td class="num">${p.a}</td><td><span class="pill ${p.x}">${{h: "HIT", m: "MISS", p: "PUSH"}[p.x]}</span></td></tr>`).join("")}
-    </tbody></table></div>`;
-    out.innerHTML = h;
-  };
-  el.querySelectorAll("select, input").forEach(x => x.addEventListener("change", draw));
-  draw();
-}
-
-fetch("data/results.json", {cache: "no-store"}).then(r => r.json()).then(data => {
+function render(data) {
   const labels = data.labels || {};
-  document.getElementById("meta").textContent = `Updated ${new Date(data.generated_at).toLocaleString()} · ` +
-    `${data.picks.length} graded picks · ${data.voids} voided (player didn't play / game not played) · ${data.excluded} excluded by hand`;
-  section(document.getElementById("headline"), "Headline: standard two-way lines",
-    "Standard PrizePicks lines with normal payouts, for props the model is judged on. Goblins and demons (Over-only) are never included.",
-    data.picks.filter(p => p.hd), labels);
-  section(document.getElementById("experimental"), "Experimental",
-    "Unproven props and standard lines flagged adjusted_odds by PrizePicks. Tracked here so they never move the headline numbers.",
-    data.picks.filter(p => !p.hd), labels);
-}).catch(() => { document.getElementById("meta").textContent = "No results yet."; });
+  const L = c => labels[c] || c;
+  const all = data.picks || [];
+  const content = document.getElementById("content");
+  document.getElementById("meta").textContent = `Updated ${new Date(data.generated_at).toLocaleString()}` +
+    (data.voids ? ` · ${data.voids} voided (player didn't play / game not played)` : "") +
+    (data.excluded ? ` · ${data.excluded} excluded by hand` : "");
+  if (!all.length) {
+    content.innerHTML = `<div class="empty">No graded picks yet. Results show up here once a day's props had a real
+      posted line AND that game is final (the morning run after each slate).</div>`;
+    return;
+  }
+
+  const head = all.filter(p => p.hd), exp = all.filter(p => !p.hd);
+  const dates = [...new Set(all.map(p => p.d))].sort().reverse();
+  const latest = dates[0];
+  const DATE_OPTS = `<option value="__all__">All dates</option><option value="last7">Last 7 days</option>
+    <option value="last30">Last 30 days</option>` + dates.map(d => `<option value="${d}">${d}</option>`).join("");
+  const propOpts = rows => `<option value="__all__">All props</option>` +
+    [...new Set(rows.map(p => p.c))].map(c => `<option value="${c}">${esc(L(c))}</option>`).join("");
+  const PROB_OPTS = PROBS.map(([k, l]) => `<option value="${k}">${l}</option>`).join("");
+  const show = (id, rows, {prop = true, prob = true} = {}) => `<div class="show">Show:
+      <select id="${id}-date">${DATE_OPTS}</select>
+      ${prop ? `<select id="${id}-prop">${propOpts(rows)}</select>` : ""}
+      ${prob ? `<select id="${id}-prob">${PROB_OPTS}</select>` : ""}</div>`;
+  const filt = (id, rows) => {
+    const v = k => (document.getElementById(`${id}-${k}`) || {}).value || "__all__";
+    return rows.filter(p => inDate(p.d, v("date"), latest) && (v("prop") === "__all__" || p.c === v("prop"))
+      && inProb(p.p, v("prob")));
+  };
+
+  content.innerHTML = `
+    ${show("ov", head)}
+    <div id="ov-out"></div>
+
+    <h2>Overs vs. Unders</h2>
+    ${show("side", head)}
+    <div id="side-out"></div>
+
+    <h2>Overs vs. Unders by date</h2>
+    <div class="caveat">Follows the prop and probability filters above.</div>
+    <div class="table-wrap" id="bydate-out"></div>
+    <div class="caveat">Based on the side the model picked; pushes excluded. Small samples swing a lot — treat anything under ~30 picks as noise.</div>
+
+    <h2>Model vs. blind picks (the market test)</h2>
+    <div class="caveat">Same PrizePicks lines, three ways to pick: the model's side, or ignore the model and take every line
+      Over (or every line Under). The model only adds value if it beats the better blind side. The slope regresses
+      (actual − line) on (model mean − line): 1 means the model's disagreement with the line is fully real, 0 means none.</div>
+    ${show("mk", head, {prob: false})}
+    <div id="mk-out"></div>
+
+    <h2>Experimental props</h2>
+    <div class="caveat">New props still being validated. Their results are shown only here and are not counted in any other number on this page.</div>
+    ${show("exp", exp)}
+    <div id="exp-out"></div>
+
+    <h2>By model confidence (calibration check)</h2>
+    <div class="caveat">If the model is well-calibrated, its 60-65% bucket should hit close to 60-65% of the time — not more, not less.
+      Don't recalibrate before ~100+ picks per prop.</div>
+    ${show("cal", head, {prob: false})}
+    <div class="table-wrap" id="cal-out"></div>
+
+    <h2>Recent graded picks</h2>
+    ${show("rec", all)}
+    <div class="table-wrap" id="rec-out"></div>`;
+
+  const drawOverall = () => {
+    const rows = filt("ov", head), s = summarize(rows.map(p => p.x));
+    let h = `<div class="overall-card">
+        <div><div class="big">${pct(s.rate)}</div><div class="sub">overall hit rate</div></div>
+        <div><div class="big">${s.n + s.pushes}</div><div class="sub">graded picks</div></div>
+        <div><div class="big">${s.hits}</div><div class="sub">hits</div></div>
+        <div><div class="big">${s.pushes}</div><div class="sub">pushes (excluded above)</div></div></div>
+      <h2>By prop type</h2><div class="table-wrap"><table><thead><tr><th>Prop</th><th class="num">N</th><th class="num">Hit rate</th><th class="num">Pushes</th></tr></thead><tbody>`;
+    for (const c of [...new Set(rows.map(p => p.c))]) {
+      const t = summarize(rows.filter(p => p.c === c).map(p => p.x));
+      h += `<tr><td>${esc(L(c))}</td><td class="num">${t.n}</td><td class="num">${pct(t.rate)}</td><td class="num">${t.pushes}</td></tr>`;
+    }
+    h += `</tbody></table></div><div class="caveat">Tracks every graded pick, not just ones that cleared a breakeven threshold — this is the model's real calibration, not a highlight reel.</div>`;
+    document.getElementById("ov-out").innerHTML = rows.length ? h : `<div class="empty">No graded picks for this selection.</div>`;
+  };
+
+  const sideTable = rows => {
+    let h = `<div class="table-wrap"><table><thead><tr><th>Prop</th><th class="num">Over N</th><th class="num">Over hit rate</th>
+      <th class="num">Under N</th><th class="num">Under hit rate</th></tr></thead><tbody>`;
+    for (const c of [...new Set(rows.map(p => p.c))]) {
+      const o = summarize(rows.filter(p => p.c === c && p.s === "over").map(p => p.x));
+      const u = summarize(rows.filter(p => p.c === c && p.s === "under").map(p => p.x));
+      h += `<tr><td>${esc(L(c))}</td><td class="num">${o.n}</td><td class="num">${pct(o.rate)}</td><td class="num">${u.n}</td><td class="num">${pct(u.rate)}</td></tr>`;
+    }
+    return h + `</tbody></table></div>`;
+  };
+
+  const drawSide = () => {
+    const rows = filt("side", head);
+    const o = summarize(rows.filter(p => p.s === "over").map(p => p.x)), u = summarize(rows.filter(p => p.s === "under").map(p => p.x));
+    document.getElementById("side-out").innerHTML = rows.length ? `<div class="overall-card">
+        <div><div class="big">${pct(o.rate)}</div><div class="sub">Over hit rate (${o.n} picks)</div></div>
+        <div><div class="big">${pct(u.rate)}</div><div class="sub">Under hit rate (${u.n} picks)</div></div></div>` + sideTable(rows)
+      : `<div class="empty">No graded picks for this selection.</div>`;
+    // by-date table follows this section's prop/probability filters
+    const v = k => document.getElementById(`side-${k}`).value;
+    const base = head.filter(p => (v("prop") === "__all__" || p.c === v("prop")) && inProb(p.p, v("prob")));
+    let h = `<table><thead><tr><th>Date</th><th class="num">Graded N</th><th class="num">Overall</th><th class="num">Over N</th>
+      <th class="num">Over hit rate</th><th class="num">Under N</th><th class="num">Under hit rate</th></tr></thead><tbody>`;
+    for (const d of [...new Set(base.map(p => p.d))].sort().reverse()) {
+      const day = base.filter(p => p.d === d), a = summarize(day.map(p => p.x));
+      const dO = summarize(day.filter(p => p.s === "over").map(p => p.x)), dU = summarize(day.filter(p => p.s === "under").map(p => p.x));
+      h += `<tr><td>${d}</td><td class="num">${a.n}</td><td class="num">${pct(a.rate)}</td><td class="num">${dO.n}</td><td class="num">${pct(dO.rate)}</td>
+        <td class="num">${dU.n}</td><td class="num">${pct(dU.rate)}</td></tr>`;
+    }
+    document.getElementById("bydate-out").innerHTML = h + `</tbody></table>`;
+  };
+
+  const drawMarket = () => {
+    const rows = filt("mk", head);
+    if (!rows.length) { document.getElementById("mk-out").innerHTML = `<div class="empty">No graded picks for this selection.</div>`; return; }
+    const m = summarize(rows.map(p => p.x)), o = summarize(rows.map(p => p.ox)), u = summarize(rows.map(p => p.ux));
+    const avgP = rows.reduce((a, p) => a + p.p, 0) / rows.length, s = slope(rows);
+    document.getElementById("mk-out").innerHTML = `<div class="table-wrap"><table><thead><tr><th>Method</th><th class="num">N</th>
+        <th class="num">Hit rate</th><th class="num">Avg predicted prob</th></tr></thead><tbody>
+      <tr><td>Model</td><td class="num">${m.n}</td><td class="num">${pct(m.rate)}</td><td class="num">${pct(avgP)}</td></tr>
+      <tr><td>Blind Over (every line)</td><td class="num">${o.n}</td><td class="num">${pct(o.rate)}</td><td class="num">—</td></tr>
+      <tr><td>Blind Under (every line)</td><td class="num">${u.n}</td><td class="num">${pct(u.rate)}</td><td class="num">—</td></tr>
+      <tr><td>Slope (actual − line) on (model mean − line)</td><td class="num">${s ? rows.length : "—"}</td>
+        <td class="num">${s ? s.b.toFixed(2) : "needs 10+ picks"}</td><td class="num">${s ? "± " + (1.96 * s.se).toFixed(2) + " (95% CI)" : "—"}</td></tr>
+      </tbody></table></div>
+      <div class="caveat">If "Avg predicted prob" is well above the model's hit rate, the model is overconfident.${m.n < 100 ? ` Only ${m.n} decided picks so far — too few to judge.` : ""}</div>`;
+  };
+
+  const drawExp = () => {
+    const rows = filt("exp", exp);
+    if (!rows.length) { document.getElementById("exp-out").innerHTML = `<div class="empty">No graded experimental picks for this selection yet.</div>`; return; }
+    const s = summarize(rows.map(p => p.x));
+    let h = `<div class="overall-card">
+        <div><div class="big">${pct(s.rate)}</div><div class="sub">experimental hit rate</div></div>
+        <div><div class="big">${s.n + s.pushes}</div><div class="sub">graded picks</div></div>
+        <div><div class="big">${s.hits}</div><div class="sub">hits</div></div>
+        <div><div class="big">${s.pushes}</div><div class="sub">pushes (excluded above)</div></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Prop</th><th class="num">N</th><th class="num">Hit rate</th><th class="num">Blind Over</th>
+        <th class="num">Blind Under</th><th class="num">Over N</th><th class="num">Over hit rate</th><th class="num">Under N</th><th class="num">Under hit rate</th></tr></thead><tbody>`;
+    for (const c of [...new Set(rows.map(p => p.c))]) {
+      const r = rows.filter(p => p.c === c), t = summarize(r.map(p => p.x));
+      const o = summarize(r.filter(p => p.s === "over").map(p => p.x)), u = summarize(r.filter(p => p.s === "under").map(p => p.x));
+      h += `<tr><td>${esc(L(c))}</td><td class="num">${t.n}</td><td class="num">${pct(t.rate)}</td>
+        <td class="num">${pct(summarize(r.map(p => p.ox)).rate)}</td><td class="num">${pct(summarize(r.map(p => p.ux)).rate)}</td>
+        <td class="num">${o.n}</td><td class="num">${pct(o.rate)}</td><td class="num">${u.n}</td><td class="num">${pct(u.rate)}</td></tr>`;
+    }
+    document.getElementById("exp-out").innerHTML = h + `</tbody></table></div>`;
+  };
+
+  const drawCal = () => {
+    const rows = filt("cal", head);
+    let h = `<table><thead><tr><th>Confidence</th><th class="num">N</th><th class="num">Avg stated prob</th><th class="num">Hit rate</th><th class="num">Pushes</th></tr></thead><tbody>`;
+    for (const [label, lo, hi] of BUCKETS) {
+      const b = rows.filter(p => p.p >= lo && p.p < hi), s = summarize(b.map(p => p.x));
+      const ap = b.length ? b.reduce((a, p) => a + p.p, 0) / b.length : null;
+      h += `<tr><td>${label}</td><td class="num">${s.n}</td><td class="num">${pct(ap)}</td><td class="num">${pct(s.rate)}</td><td class="num">${s.pushes}</td></tr>`;
+    }
+    document.getElementById("cal-out").innerHTML = h + `</tbody></table>`;
+  };
+
+  const drawRecent = () => {
+    const rows = filt("rec", all).sort((a, b) => b.d.localeCompare(a.d)).slice(0, 200);
+    document.getElementById("rec-out").innerHTML = rows.length ? `<table><thead><tr><th>Date</th><th>Player</th><th>Matchup</th><th>Prop</th>
+        <th class="num">Line</th><th>Pick</th><th class="num">Model prob</th><th class="num">Actual</th><th>Result</th></tr></thead><tbody>
+      ${rows.map(p => `<tr><td>${p.d}</td><td>${esc(p.pl)}</td><td>${esc(p.tm)} v ${esc(p.op)}</td>
+        <td>${esc(L(p.c))}${p.hd ? "" : " (experimental)"}</td><td class="num">${p.l}</td><td class="${p.s}">${p.s}</td>
+        <td class="num">${pct(p.p)}</td><td class="num">${p.a}</td><td>${tag(p.x)}</td></tr>`).join("")}</tbody></table>`
+      : `<div class="empty">No graded picks for this selection.</div>`;
+  };
+
+  const sections = {ov: drawOverall, side: drawSide, mk: drawMarket, exp: drawExp, cal: drawCal, rec: drawRecent};
+  for (const [id, fn] of Object.entries(sections)) {
+    content.querySelectorAll(`[id^="${id}-"]`).forEach(el => el.tagName === "SELECT" && el.addEventListener("change", fn));
+    fn();
+  }
+}
+
+fetch("data/results.json", {cache: "no-store"}).then(r => r.json()).then(render)
+  .catch(() => { document.getElementById("meta").textContent = "No results yet."; });
 </script>
 </body>
 </html>
