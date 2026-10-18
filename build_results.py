@@ -17,6 +17,7 @@ import os
 import numpy as np
 import pandas as pd
 
+import movement
 from common import EXCLUDED_PATH, GRADED_PATH, load_config, norm_name, path, write_json
 
 BUCKETS = [(0.50, 0.55), (0.55, 0.60), (0.60, 0.65), (0.65, 0.70), (0.70, 0.80), (0.80, 1.01)]
@@ -40,11 +41,17 @@ def classify(df, cfg):
     return df
 
 
+def exclusion_keys():
+    if not os.path.exists(EXCLUDED_PATH):
+        return set()
+    ex = pd.read_csv(EXCLUDED_PATH, dtype=str).fillna("")
+    return {(r.game_date, norm_name(r.player), r.category.lower()) for r in ex.itertuples()}
+
+
 def apply_exclusions(df):
     if df.empty or not os.path.exists(EXCLUDED_PATH):
         return df, 0
-    ex = pd.read_csv(EXCLUDED_PATH, dtype=str).fillna("")
-    keys = {(r.game_date, norm_name(r.player), r.category.lower()) for r in ex.itertuples()}
+    keys = exclusion_keys()
     mask = df.apply(lambda r: (str(r["game_date"]), norm_name(r["player"]), str(r["category"]).lower()) in keys, axis=1)
     return df[~mask].copy(), int(mask.sum())
 
@@ -90,10 +97,15 @@ def print_summary(name, sub):
 def main():
     cfg = load_config()
     df = load_graded()
+    try:
+        moves = movement.build_moves(cfg, exclusion_keys())
+    except Exception as e:   # line movement is a bonus; never block the results page
+        print(f"line-movement build failed: {e}")
+        moves = []
     if df.empty:
         write_json(path("docs", "data", "results.json"),
                    {"generated_at": pd.Timestamp.now("UTC").isoformat(), "picks": [], "voids": 0, "excluded": 0,
-                    "labels": {c: v["label"] for c, v in cfg["props"].items()}})
+                    "moves": moves, "labels": {c: v["label"] for c, v in cfg["props"].items()}})
         print("no graded picks yet; wrote an empty results.json")
         return 0
     df = classify(df, cfg)
@@ -110,8 +122,11 @@ def main():
              for r in df.itertuples()]
     write_json(path("docs", "data", "results.json"),
                {"generated_at": pd.Timestamp.now("UTC").isoformat(), "voids": voids, "excluded": n_ex,
-                "labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks})
+                "labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks,
+                "moves": moves})
     print(f"results.json: {len(picks)} graded picks ({voids} voids, {n_ex} excluded not shown)")
+    print("LINE MOVEMENT headline: " + movement.summarize([m for m in moves if m["hd"]]))
+    print("LINE MOVEMENT experimental: " + movement.summarize([m for m in moves if not m["hd"]]))
     print_summary("HEADLINE", df[df["headline"]])
     for cat, sub in df[~df["headline"]].groupby("category"):
         print_summary(f"EXPERIMENTAL {cat}", sub)

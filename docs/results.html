@@ -62,8 +62,9 @@ function inDate(d, key, latest) {
   }
   return d === key;
 }
-function slope(rows) {
-  const x = rows.map(p => p.m - p.l), y = rows.map(p => p.a - p.l), n = x.length;
+function slope(rows) { return slopeXY(rows.map(p => p.m - p.l), rows.map(p => p.a - p.l)); }
+function slopeXY(x, y) {
+  const n = x.length;
   if (n < 10) return null;
   const xm = x.reduce((a, b) => a + b, 0) / n, ym = y.reduce((a, b) => a + b, 0) / n;
   let sxx = 0, sxy = 0;
@@ -127,6 +128,18 @@ function render(data) {
       (actual − line) on (model mean − line): 1 means the model's disagreement with the line is fully real, 0 means none.</div>
     ${show("mk", head, {prob: false})}
     <div id="mk-out"></div>
+
+    <h2>Line movement (closing line check)</h2>
+    <div class="caveat">Compares each pick's line with the last PrizePicks line seen before puck drop. "Toward model" means the line
+      later rose on an Over pick or fell on an Under pick — the market came around to the model's side. That only means something
+      if it beats how often lines simply drift the model's usual way, so the up/down share of all moved lines is shown alongside.
+      The slope regresses (closing − pick line) on (model mean − pick line): above 0 means lines move toward the model.
+      Lines are recorded every 30 minutes through game hours; "captured within" limits it to closing lines seen close to puck drop.</div>
+    <div class="show">Show: <select id="mv-date"></select> <select id="mv-prop"></select>
+      <select id="mv-grp"><option value="hd">Headline props</option><option value="exp">Experimental props</option><option value="all">Headline + experimental</option></select>
+      <select id="mv-win"><option value="99999">Captured any time before puck drop</option><option value="180">Captured within 3 h of puck drop</option>
+        <option value="60">Captured within 60 min</option></select></div>
+    <div id="mv-out"></div>
 
     <h2>Experimental props</h2>
     <div class="caveat">New props still being validated. Their results are shown only here and are not counted in any other number on this page.</div>
@@ -248,6 +261,54 @@ function render(data) {
         <td class="num">${pct(p.p)}</td><td class="num">${p.a}</td><td>${tag(p.x)}</td></tr>`).join("")}</tbody></table>`
       : `<div class="empty">No graded picks for this selection.</div>`;
   };
+
+  const moves = data.moves || [];
+  const mvDates = [...new Set(moves.map(p => p.d))].sort().reverse();
+  document.getElementById("mv-date").innerHTML = `<option value="__all__">All dates</option><option value="last7">Last 7 days</option>
+    <option value="last30">Last 30 days</option>` + mvDates.map(d => `<option value="${d}">${d}</option>`).join("");
+  document.getElementById("mv-prop").innerHTML = `<option value="__all__">All props</option>` +
+    [...new Set(moves.map(p => p.c))].map(c => `<option value="${c}">${esc(L(c))}</option>`).join("");
+  const drawMoves = () => {
+    const v = k => document.getElementById(`mv-${k}`).value;
+    const rows = moves.filter(p => inDate(p.d, v("date"), mvDates[0]) && (v("prop") === "__all__" || p.c === v("prop"))
+      && (v("grp") === "all" || (v("grp") === "hd" ? p.hd : !p.hd)) && p.cm <= +v("win"));
+    const out = document.getElementById("mv-out");
+    if (!rows.length) { out.innerHTML = `<div class="empty">No picks with a recorded closing line for this selection yet.</div>`; return; }
+    const stats = rs => {
+      const mv = rs.filter(p => p.lc !== p.l0), up = mv.filter(p => p.lc > p.l0).length;
+      const tw = mv.filter(p => (p.lc > p.l0) === (p.s === "over")).length;
+      return {n: rs.length, moved: mv.length, up, down: mv.length - up, toward: tw,
+              pm: rs.length ? mv.length / rs.length : null, pt: mv.length ? tw / mv.length : null,
+              pu: mv.length ? up / mv.length : null, pd: mv.length ? (mv.length - up) / mv.length : null};
+    };
+    const t = stats(rows), sl = t.moved < 20 ? null : slopeXY(rows.map(p => p.m - p.l0), rows.map(p => p.lc - p.l0));
+    const medCm = [...rows.map(p => p.cm)].sort((a, b) => a - b)[Math.floor(rows.length / 2)];
+    let h = `<div class="overall-card">
+        <div><div class="big">${pct(t.pt)}</div><div class="sub">moved toward model (${t.toward}/${t.moved})</div></div>
+        <div><div class="big">${pct(t.pm)}</div><div class="sub">of ${t.n} lines moved</div></div>
+        <div><div class="big">${pct(t.pu)}</div><div class="sub">moved lines that went up (blind Over)</div></div>
+        <div><div class="big">${pct(t.pd)}</div><div class="sub">moved lines that went down (blind Under)</div></div>
+        <div><div class="big">${sl ? sl.b.toFixed(2) : "—"}</div><div class="sub">${sl ? `slope ± ${(1.96 * sl.se).toFixed(2)} (95% CI)` : "slope (shown once 20+ lines have moved)"}</div></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Prop</th><th class="num">Picks</th><th class="num">Moved</th><th class="num">Toward model</th>
+        <th class="num">Moved up</th><th class="num">Moved down</th></tr></thead><tbody>`;
+    for (const c of [...new Set(rows.map(p => p.c))]) {
+      const r = stats(rows.filter(p => p.c === c));
+      h += `<tr><td>${esc(L(c))}</td><td class="num">${r.n}</td><td class="num">${r.moved} (${pct(r.pm)})</td><td class="num">${pct(r.pt)}</td>
+        <td class="num">${pct(r.pu)}</td><td class="num">${pct(r.pd)}</td></tr>`;
+    }
+    const moved = rows.filter(p => p.lc !== p.l0).sort((a, b) => b.d.localeCompare(a.d)).slice(0, 50);
+    h += `</tbody></table></div><div class="caveat">Median closing line captured ${medCm} min before puck drop.
+      ${t.moved < 50 ? `Only ${t.moved} moved lines so far — far too few to judge.` : ""}</div>`;
+    if (moved.length) h += `<div class="table-wrap"><table><thead><tr><th>Date</th><th>Player</th><th>Prop</th><th>Pick</th>
+      <th class="num">Pick line</th><th class="num">Closing line</th><th class="num">Model mean</th><th>Moved</th></tr></thead><tbody>
+      ${moved.map(p => `<tr><td>${p.d}</td><td>${esc(p.pl)}</td><td>${esc(L(p.c))}</td><td class="${p.s}">${p.s}</td><td class="num">${p.l0}</td>
+        <td class="num">${p.lc}</td><td class="num">${p.m.toFixed(2)}</td>
+        <td>${(p.lc > p.l0) === (p.s === "over") ? tag("h").replace("HIT", "TOWARD") : tag("m").replace("MISS", "AWAY")}</td></tr>`).join("")}
+      </tbody></table></div>`;
+    out.innerHTML = h;
+  };
+  ["mv-date", "mv-prop", "mv-grp", "mv-win"].forEach(id => document.getElementById(id).addEventListener("change", drawMoves));
+  drawMoves();
 
   const sections = {ov: drawOverall, side: drawSide, mk: drawMarket, exp: drawExp, cal: drawCal, rec: drawRecent};
   for (const [id, fn] of Object.entries(sections)) {

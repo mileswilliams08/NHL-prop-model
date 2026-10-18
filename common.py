@@ -19,6 +19,7 @@ CONFIG_PATH = path("config.json")
 HIST_DIR = path("data", "history")
 RAW_DIR = path("data", "raw", "boxscores")          # local cache, gitignored
 SNAP_DIR = path("data", "snapshots")                # one file per prediction run
+LINES_DIR = path("data", "lines")                   # line history per slate date (lines.py)
 GRADED_PATH = path("data", "graded_results.csv")    # append-only
 EXCLUDED_PATH = path("data", "excluded_picks.csv")  # hand-maintained via exclude_pick.py
 PLAYER_MAP_PATH = path("data", "player_map.csv")    # PrizePicks player id -> NHL player id
