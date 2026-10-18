@@ -279,11 +279,33 @@ def nb_loglik(mu, y, r):
     return nbinom.logpmf(y, r, r / (r + mu))
 
 
+FULL_GAME_SEC = 3500   # a starter with less TOI than this was pulled or left early
+
+
+def saves_mean(mu_full, d):
+    """Expected saves once pulls are accounted for. mu_full = saves if he plays the whole game."""
+    return mu_full * (d["q_full"] + (1 - d["q_full"]) * d["pull_frac"])
+
+
+def saves_probs(mu_full, line, d):
+    """Goalie saves as a two-case mixture: plays the full game (prob q_full, NB around mu_full) or is
+    pulled / leaves early (NB around pull_frac * mu_full, much wider). Fitted in backtest.py on training
+    seasons only; ignoring pulls over-predicted saves by ~1 per start."""
+    q = d["q_full"]
+    a = line_probs(mu_full, line, d["nb_r_full"])
+    b = line_probs(mu_full * d["pull_frac"], line, d["nb_r_pull"])
+    return tuple(q * x + (1 - q) * y for x, y in zip(a, b))
+
+
 def dist_for(cfg, cat):
     """Distribution parameter for a prop: nb_r for counts, sd_min for toi."""
     d = (cfg.get("dist") or {}).get(cat, {})
     if cat == "sog":
         return d.get("nb_r", cfg["model"].get("nb_r", 14.0))
-    defaults = {"hits": {"nb_r": 6.0}, "blocks": {"nb_r": 6.0}, "saves": {"nb_r": 40.0}, "toi": {"sd_min": 3.0}}
+    if cat == "saves":
+        out = {"q_full": 0.78, "pull_frac": 0.80, "nb_r_full": 50.0, "nb_r_pull": 8.0}
+        out.update({k: v for k, v in d.items() if k in out})
+        return out
+    defaults = {"hits": {"nb_r": 6.0}, "blocks": {"nb_r": 6.0}, "toi": {"sd_min": 3.0}}
     key = "sd_min" if cat == "toi" else "nb_r"
     return d.get(key, defaults.get(cat, {}).get(key))

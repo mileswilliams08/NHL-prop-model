@@ -1,6 +1,6 @@
 {
   "league_id": 8,
-  "model_version": "sog-baseline-1",
+  "model_version": "baseline-2",
   "props": {
     "sog": {
       "enabled": true,
@@ -81,7 +81,10 @@
       "sd_min": 2.523
     },
     "saves": {
-      "nb_r": 21.9
+      "q_full": 0.7815,
+      "pull_frac": 0.8027,
+      "nb_r_full": 49.55,
+      "nb_r_pull": 8.44
     }
   }
 }

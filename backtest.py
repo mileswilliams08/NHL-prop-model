@@ -102,6 +102,38 @@ def toi_report(train, test, baselines):
             "units": "minutes"}
 
 
+def saves_report(train, test):
+    """Starters only. Two-case mixture: full game vs pulled/left early (see model.saves_probs)."""
+    from model import FULL_GAME_SEC, saves_mean
+    full = train["toi_sec"] >= FULL_GAME_SEC
+    d = {"q_full": round(float(full.mean()), 4),
+         "pull_frac": round(float(train.loc[~full, "saves"].sum() / train.loc[~full, "mu_saves"].sum()), 4)}
+    d["nb_r_full"] = round(fit_r(train.loc[full, "mu_saves"].values, train.loc[full, "saves"].values), 2)
+    d["nb_r_pull"] = round(fit_r(d["pull_frac"] * train.loc[~full, "mu_saves"].values, train.loc[~full, "saves"].values), 2)
+    mu, y = np.maximum(test["mu_saves"].values, 1e-6), test["saves"].values
+    q, f = d["q_full"], d["pull_frac"]
+    nbp = lambda k, m, r: nbinom.pmf(k, r, r / (r + m))
+    nbs = lambda L, m, r: 1.0 - nbinom.cdf(int(np.floor(L)), r, r / (r + m))
+    mix_ll = np.log(q * nbp(y, mu, d["nb_r_full"]) + (1 - q) * nbp(y, f * mu, d["nb_r_pull"]))
+    mean = saves_mean(mu, d)
+
+    def m(col):
+        rb = fit_r(train[col].values, train["saves"].values)
+        return {"ll_nb": round(float(nb_loglik(test[col], y, rb).mean()), 5),
+                "mae": round(float(np.abs(test[col] - y).mean()), 4), "bias": round(float((test[col] - y).mean()), 4)}
+    metrics = {"model": {"ll_nb": round(float(mix_ll.mean()), 5), "mae": round(float(np.abs(mean - y).mean()), 4),
+                         "bias": round(float((mean - y).mean()), 4)},
+               "season-to-date avg": m("b_season_saves"), "last-10 avg": m("b_last10_saves")}
+    cal = {}
+    for L in SAVES_LINES:
+        p = q * nbs(L, mu, d["nb_r_full"]) + (1 - q) * nbs(L, f * mu, d["nb_r_pull"])
+        hit = (y > L).astype(float)
+        cal[str(L)] = {"rows": calib_rows(p, hit), "n": int(len(p)),
+                       "pred_mean": round(float(p.mean()), 4), "actual_mean": round(float(hit.mean()), 4)}
+    return {"dist": d, "n_test": int(len(test)), "metrics": metrics, "calibration": cal,
+            "note": "starting goalies only; full-game vs pulled mixture"}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--test-from", default="2025-09-01")
@@ -166,9 +198,7 @@ def main():
     if len(gte) < 200:
         gte = gtr
     if len(gtr) >= 200:
-        report["props"]["saves"] = count_report(gtr, gte, "mu_saves", "saves", SAVES_LINES,
-                                                {"season-to-date avg": "b_season_saves", "last-10 avg": "b_last10_saves"})
-        report["props"]["saves"]["note"] = "starting goalies only"
+        report["props"]["saves"] = saves_report(gtr, gte)
 
     write_json(path("docs", "data", "backtest.json"), report)
 

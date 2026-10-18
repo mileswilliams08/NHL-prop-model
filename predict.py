@@ -120,8 +120,13 @@ def main():
                 reason = "insufficient_history"
             else:
                 d = model.dist_for(cfg, cat)
-                po, pu, pp = (model.normal_probs(mu, r["line"], d) if cat == "toi"
-                              else model.line_probs(mu, r["line"], d))
+                if cat == "toi":
+                    po, pu, pp = model.normal_probs(mu, r["line"], d)
+                elif cat == "saves":
+                    po, pu, pp = model.saves_probs(mu, r["line"], d)
+                    mu = model.saves_mean(mu, d)   # report the pull-adjusted expectation
+                else:
+                    po, pu, pp = model.line_probs(mu, r["line"], d)
                 side, prob = model.pick_side(po, pu)
                 pick.update(model_mean=round(mu, 4), p_over=round(po, 4), p_under=round(pu, 4),
                             p_push=round(pp, 4), side=side, prob=round(prob, 4))
