@@ -18,7 +18,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218357,Jeremy Swayman,BOS,G,8480280,Jeremy Swayman,exact,2026-10-17,2026-10-20
 219292,Mark Kastelic,BOS,F,8480355,Mark Kastelic,exact,2026-10-20,2026-10-20
 171836,Morgan Geekie,BOS,F,8479987,Morgan Geekie,exact,2026-10-19,2026-10-20
-87045,Pavel Zacha,BOS,F,8478401,Pavel Zacha,exact,2026-10-17,2026-10-17
+87045,Pavel Zacha,BOS,F,8478401,Pavel Zacha,exact,2026-10-17,2026-10-20
 267676,Tanner Jeannot,BOS,F,8479661,Tanner Jeannot,exact,2026-10-17,2026-10-17
 218294,Beck Malenstyn,BUF,F,8479359,Beck Malenstyn,exact,2026-10-17,2026-10-17
 92751,Jack Quinn,BUF,F,8482097,Jack Quinn,exact,2026-10-17,2026-10-17
@@ -100,6 +100,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 124195,Wyatt Johnston,DAL,F,8482740,Wyatt Johnston,exact,2026-10-17,2026-10-20
 171511,Alex DeBrincat,DET,F,8479337,Alex DeBrincat,exact,2026-10-17,2026-10-20
 87159,Andrew Copp,DET,F,8477429,Andrew Copp,exact,2026-10-17,2026-10-17
+87726,Ben Chiarot,DET,D,8475279,Ben Chiarot,exact,2026-10-20,2026-10-20
 347509,Daniil Tarasov,DET,G,8480193,Daniil Tarasov,exact,2026-10-20,2026-10-20
 218570,Dylan Larkin,DET,F,8477946,Dylan Larkin,exact,2026-10-17,2026-10-20
 268332,Emmitt Finnie,DET,F,8484471,Emmitt Finnie,exact,2026-10-17,2026-10-20
@@ -120,7 +121,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 125451,Mattias Ekholm,EDM,D,8475218,Mattias Ekholm,exact,2026-10-20,2026-10-20
 286542,Tristan Jarry,EDM,G,8477465,Tristan Jarry,exact,2026-10-17,2026-10-17
 237359,Vasily Podkolzin,EDM,F,8481617,Vasily Podkolzin,exact,2026-10-17,2026-10-20
-346715,Brady Tkachuk,FLA,F,8480801,Brady Tkachuk,exact,2026-10-17,2026-10-17
+346715,Brady Tkachuk,FLA,F,8480801,Brady Tkachuk,exact,2026-10-17,2026-10-20
 57848,Carter Verhaeghe,FLA,F,8477409,Carter Verhaeghe,exact,2026-10-17,2026-10-17
 218673,Gustav Forsling,FLA,D,8478055,Gustav Forsling,exact,2026-10-17,2026-10-17
 348253,Jacob Markstrom,FLA,G,8474593,Jacob Markstrom,exact,2026-10-17,2026-10-17
@@ -245,7 +246,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 348309,Darnell Nurse,SJ,D,8477498,Darnell Nurse,exact,2026-10-20,2026-10-20
 268358,Dmitry Orlov,SJ,D,8475200,Dmitry Orlov,exact,2026-10-20,2026-10-20
 286939,Igor Chernyshov,SJ,F,8484994,Igor Chernyshov,exact,2026-10-17,2026-10-19
-348699,Ivar Stenberg,SJ,F,8486103,Ivar Stenberg,exact,2026-10-17,2026-10-19
+348699,Ivar Stenberg,SJ,F,8486103,Ivar Stenberg,exact,2026-10-17,2026-10-20
 348310,Jacob Trouba,SJ,D,8476885,Jacob Trouba,exact,2026-10-17,2026-10-19
 295018,Kiefer Sherwood,SJ,F,8480748,Kiefer Sherwood,exact,2026-10-17,2026-10-20
 218257,Macklin Celebrini,SJ,F,8484801,Macklin Celebrini,exact,2026-10-17,2026-10-20
@@ -265,6 +266,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 346303,Mason McTavish,STL,F,8482745,Mason McTavish,exact,2026-10-20,2026-10-20
 218232,Pavel Buchnevich,STL,F,8477402,Pavel Buchnevich,exact,2026-10-17,2026-10-17
 58601,Robert Thomas,STL,F,8480023,Robert Thomas,exact,2026-10-17,2026-10-20
+218435,Andrei Vasilevskiy,TB,G,8476883,Andrei Vasilevskiy,exact,2026-10-20,2026-10-20
 218705,Anthony Cirelli,TB,F,8478519,Anthony Cirelli,exact,2026-10-17,2026-10-20
 218695,Brandon Hagel,TB,F,8479542,Brandon Hagel,exact,2026-10-17,2026-10-17
 57951,Brayden Point,TB,F,8478010,Brayden Point,exact,2026-10-17,2026-10-20
@@ -311,6 +313,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 348179,Paul Cotter,VAN,F,8481032,Paul Cotter,exact,2026-10-17,2026-10-17
 276194,Tom Willander,VAN,D,8484240,Tom Willander,exact,2026-10-20,2026-10-20
 87700,Brett Howden,VGK,F,8479353,Brett Howden,exact,2026-10-17,2026-10-17
+311689,Carter Hart,VGK,G,8479394,Carter Hart,exact,2026-10-20,2026-10-20
 291688,Dylan Coghlan,VGK,D,8479639,Dylan Coghlan,exact,2026-10-20,2026-10-20
 125904,Ivan Barbashev,VGK,F,8477964,Ivan Barbashev,exact,2026-10-20,2026-10-20
 218569,Jack Eichel,VGK,F,8478403,Jack Eichel,exact,2026-10-20,2026-10-20
