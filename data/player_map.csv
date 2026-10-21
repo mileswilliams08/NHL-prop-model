@@ -22,8 +22,10 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 267676,Tanner Jeannot,BOS,F,8479661,Tanner Jeannot,exact,2026-10-17,2026-10-17
 218294,Beck Malenstyn,BUF,F,8479359,Beck Malenstyn,exact,2026-10-17,2026-10-17
 92751,Jack Quinn,BUF,F,8482097,Jack Quinn,exact,2026-10-17,2026-10-21
+220168,Jason Zucker,BUF,F,8475722,J. Zucker,boxscore_history,2026-10-21,2026-10-21
+230933,Josh Norris,BUF,F,8480064,Josh Norris,exact,2026-10-21,2026-10-21
 92038,Mattias Samuelsson,BUF,D,8480807,Mattias Samuelsson,exact,2026-10-17,2026-10-21
-272058,Noah Ostlund,BUF,F,8483500,Noah Ostlund,exact,2026-10-17,2026-10-17
+272058,Noah Ostlund,BUF,F,8483500,Noah Ostlund,exact,2026-10-17,2026-10-21
 92131,Owen Power,BUF,D,8482671,Owen Power,exact,2026-10-17,2026-10-17
 215149,Ryan McLeod,BUF,F,8480802,Ryan McLeod,exact,2026-10-21,2026-10-21
 218270,Tage Thompson,BUF,F,8479420,Tage Thompson,exact,2026-10-17,2026-10-21
@@ -289,7 +291,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 348173,Darren Raddysh,TOR,D,8478178,Darren Raddysh,exact,2026-10-17,2026-10-20
 269199,Easton Cowan,TOR,F,8484158,Easton Cowan,exact,2026-10-17,2026-10-20
 348174,Gavin McKenna,TOR,F,8486067,Gavin McKenna,exact,2026-10-17,2026-10-20
-348460,Kirill Marchenko,TOR,F,8480893,Kirill Marchenko,exact,2026-10-17,2026-10-20
+348460,Kirill Marchenko,TOR,F,8480893,Kirill Marchenko,exact,2026-10-17,2026-10-21
 349896,Nick Paul,TOR,F,8477426,Nick Paul,exact,2026-10-20,2026-10-20
 348259,Sergei Bobrovsky,TOR,G,8475683,Sergei Bobrovsky,exact,2026-10-17,2026-10-19
 281305,Troy Stecher,TOR,D,8479442,Troy Stecher,exact,2026-10-17,2026-10-20
