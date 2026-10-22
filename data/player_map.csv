@@ -106,10 +106,10 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 58482,Miro Heiskanen,DAL,D,8480036,Miro Heiskanen,exact,2026-10-19,2026-10-20
 58484,Roope Hintz,DAL,F,8478449,Roope Hintz,exact,2026-10-17,2026-10-22
 140703,Thomas Harley,DAL,D,8481581,Thomas Harley,exact,2026-10-17,2026-10-22
-58488,Tyler Seguin,DAL,F,8475794,Tyler Seguin,exact,2026-10-20,2026-10-20
+58488,Tyler Seguin,DAL,F,8475794,Tyler Seguin,exact,2026-10-20,2026-10-22
 124195,Wyatt Johnston,DAL,F,8482740,Wyatt Johnston,exact,2026-10-17,2026-10-20
 171511,Alex DeBrincat,DET,F,8479337,Alex DeBrincat,exact,2026-10-17,2026-10-22
-87159,Andrew Copp,DET,F,8477429,Andrew Copp,exact,2026-10-17,2026-10-17
+87159,Andrew Copp,DET,F,8477429,Andrew Copp,exact,2026-10-17,2026-10-22
 87726,Ben Chiarot,DET,D,8475279,Ben Chiarot,exact,2026-10-20,2026-10-20
 347509,Daniil Tarasov,DET,G,8480193,Daniil Tarasov,exact,2026-10-20,2026-10-20
 218570,Dylan Larkin,DET,F,8477946,Dylan Larkin,exact,2026-10-17,2026-10-22
@@ -127,7 +127,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 348862,Devon Levi,EDM,G,8482221,Devon Levi,exact,2026-10-22,2026-10-22
 58024,Evan Bouchard,EDM,D,8480803,Evan Bouchard,exact,2026-10-17,2026-10-22
 233936,Jake Walman,EDM,D,8478013,Jake Walman,exact,2026-10-17,2026-10-20
-240350,Kasperi Kapanen,EDM,F,8477953,Kasperi Kapanen,exact,2026-10-20,2026-10-20
+240350,Kasperi Kapanen,EDM,F,8477953,Kasperi Kapanen,exact,2026-10-20,2026-10-22
 57828,Leon Draisaitl,EDM,F,8477934,Leon Draisaitl,exact,2026-10-17,2026-10-22
 125451,Mattias Ekholm,EDM,D,8475218,Mattias Ekholm,exact,2026-10-20,2026-10-22
 58026,Ryan Nugent-Hopkins,EDM,F,8476454,Ryan Nugent-Hopkins,exact,2026-10-22,2026-10-22
@@ -154,7 +154,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 221574,Brandt Clarke,LA,D,8482730,Brandt Clarke,exact,2026-10-22,2026-10-22
 218122,Darcy Kuemper,LA,G,8475311,Darcy Kuemper,exact,2026-10-20,2026-10-22
 57763,Drew Doughty,LA,D,8474563,Drew Doughty,exact,2026-10-20,2026-10-22
-348295,Erik Haula,LA,F,8475287,Erik Haula,exact,2026-10-20,2026-10-20
+348295,Erik Haula,LA,F,8475287,Erik Haula,exact,2026-10-20,2026-10-22
 217672,Joel Edmundson,LA,D,8476441,Joel Edmundson,exact,2026-10-22,2026-10-22
 348297,Mats Zuccarello,LA,F,8475692,Mats Zuccarello,exact,2026-10-22,2026-10-22
 86998,Quinton Byfield,LA,F,8482124,Quinton Byfield,exact,2026-10-17,2026-10-22
