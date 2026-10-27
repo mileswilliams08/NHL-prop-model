@@ -84,9 +84,9 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 173353,Matt Coronato,CGY,F,8482679,Matt Coronato,exact,2026-10-18,2026-10-26
 267802,Matvei Gridin,CGY,F,8484860,Matvei Gridin,exact,2026-10-18,2026-10-26
 218240,Mikael Backlund,CGY,F,8474150,Mikael Backlund,exact,2026-10-18,2026-10-18
-226754,Morgan Frost,CGY,F,8480028,Morgan Frost,exact,2026-10-17,2026-10-24
+226754,Morgan Frost,CGY,F,8480028,Morgan Frost,exact,2026-10-17,2026-10-27
 348317,Simon Nemec,CGY,D,8483495,Simon Nemec,exact,2026-10-22,2026-10-26
-218650,Yegor Sharangovich,CGY,F,8481068,Yegor Sharangovich,exact,2026-10-18,2026-10-26
+218650,Yegor Sharangovich,CGY,F,8481068,Yegor Sharangovich,exact,2026-10-18,2026-10-27
 294810,Zach Whitecloud,CGY,D,8480727,Zach Whitecloud,exact,2026-10-24,2026-10-26
 269050,Zayne Parekh,CGY,D,8484768,Zayne Parekh,exact,2026-10-22,2026-10-26
 179254,Alex Vlasic,CHI,D,8481568,Alex Vlasic,exact,2026-10-17,2026-10-27
@@ -149,7 +149,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218571,Moritz Seider,DET,D,8481542,Moritz Seider,exact,2026-10-17,2026-10-26
 348321,Viktor Arvidsson,DET,F,8478042,Viktor Arvidsson,exact,2026-10-17,2026-10-26
 305122,Colton Dach,EDM,F,8482703,Colton Dach,exact,2026-10-20,2026-10-24
-57827,Connor McDavid,EDM,F,8478402,Connor McDavid,exact,2026-10-17,2026-10-26
+57827,Connor McDavid,EDM,F,8478402,Connor McDavid,exact,2026-10-17,2026-10-27
 304841,Connor Murphy,EDM,D,8476473,Connor Murphy,exact,2026-10-17,2026-10-17
 348862,Devon Levi,EDM,G,8482221,Devon Levi,exact,2026-10-22,2026-10-22
 58024,Evan Bouchard,EDM,D,8480803,Evan Bouchard,exact,2026-10-17,2026-10-26
