@@ -17,6 +17,7 @@ import os
 import numpy as np
 import pandas as pd
 
+import model
 import movement
 from common import EXCLUDED_PATH, GRADED_PATH, load_config, norm_name, path, write_json
 
@@ -88,7 +89,7 @@ def print_summary(name, sub):
         b = sub[(sub["prob"] >= lo) & (sub["prob"] < hi)]
         if len(b):
             hr, bn = rate(b["result"])
-            print(f"   {lo:.0%}-{min(hi, 1):.0%}: n={bn:4d}  avg prob {b['prob'].mean():.3f}  hit {f(hr)}")
+            print(f"   raw {lo:.0%}-{min(hi, 1):.0%}: n={bn:4d}  avg raw prob {b['prob'].mean():.3f}  hit {f(hr)}")
     s = slope(sub)
     if s:
         print(f"   slope (actual-line) on (mean-line): {s[0]:.2f} +/- {1.96 * s[1]:.2f} (95% CI)")
@@ -113,9 +114,18 @@ def main():
     df = df[df["result"] != "void"]
     df, n_ex = apply_exclusions(df)
 
+    k_used = (cfg.get("calibration") or {}).get("shrink", 1.0)
+    dec = df[df["result"].isin(["hit", "miss"]) & df["prob"].notna()]
+    cal = {"k_used": k_used, "fitted_through": (cfg.get("calibration") or {}).get("fitted_through")}
+    if len(dec) >= 100:
+        k, lo, hi = model.fit_shrink(dec["prob"], dec["result"].eq("hit"))
+        cal.update(k_fit=round(k, 3), k_lo=round(lo, 3), k_hi=round(hi, 3), n=int(len(dec)))
+        print(f"CALIBRATION: using shrink {k_used}; best fit on {len(dec)} graded picks = {k:.2f} (95% {lo:.2f}-{hi:.2f})"
+              + ("  <- consider updating config.json" if not lo <= k_used <= hi else ""))
+
     code = {"hit": "h", "miss": "m", "push": "p"}
     picks = [{"d": r.game_date, "pl": r.player, "tm": r.team, "op": r.opp, "c": r.category,
-              "l": r.line, "m": round(r.model_mean, 3), "s": r.side, "p": round(r.prob, 4),
+              "l": r.line, "m": round(r.model_mean, 3), "s": r.side, "p": round(0.5 + k_used * (r.prob - 0.5), 4), "pr": round(r.prob, 4),
               "a": round(float(r.actual), 2), "x": code[r.result], "ox": code[r.blind_over], "ux": code[r.blind_under],
               "hd": 1 if r.headline else 0, "adj": 1 if str(r.adjusted_odds).lower() == "true" else 0,
               "v": r.model_version}
@@ -123,7 +133,7 @@ def main():
     write_json(path("docs", "data", "results.json"),
                {"generated_at": pd.Timestamp.now("UTC").isoformat(), "voids": voids, "excluded": n_ex,
                 "labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks,
-                "moves": moves})
+                "moves": moves, "calibration": cal})
     print(f"results.json: {len(picks)} graded picks ({voids} voids, {n_ex} excluded not shown)")
     print("LINE MOVEMENT headline: " + movement.summarize([m for m in moves if m["hd"]]))
     print("LINE MOVEMENT experimental: " + movement.summarize([m for m in moves if not m["hd"]]))

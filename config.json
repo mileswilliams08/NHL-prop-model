@@ -86,5 +86,11 @@
       "nb_r_full": 49.55,
       "nb_r_pull": 8.44
     }
+  },
+  "calibration": {
+    "shrink": 0.39,
+    "fitted_through": "2026-10-25",
+    "fitted_n": 1190,
+    "note": "Displayed probability = 50% + shrink x (model probability - 50%). Fitted on graded picks, all props pooled; re-fit as picks grow (build_results.py prints the current best fit)."
   }
 }

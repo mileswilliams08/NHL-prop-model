@@ -64,6 +64,7 @@
 <script>
 let DATA = null;
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const P = p => p.prob_cal ?? p.prob;   // calibrated % when available
 const time = iso => new Date(iso).toLocaleString([], {weekday: "short", hour: "numeric", minute: "2-digit"});
 
 function renderTable() {
@@ -77,22 +78,22 @@ function renderTable() {
   const rows = DATA.picks.filter(p => !p.skip_reason && p.category === cat && (!day || p.game_date === day)
       && (!team || p.team === team))
     .sort(team ? ((a, b) => (a.tier_rank || "Z").localeCompare(b.tier_rank || "Z", undefined, {numeric: true}))
-               : ((a, b) => b.prob - a.prob));
+               : ((a, b) => P(b) - P(a)));
   const tierCell = p => p.tier ? `<span class="tier tier-${p.tier}" title="${p.recent_toi} min avg, last 10 games">${esc(p.tier_rank)} · ${p.tier}</span>` : "";
   tbody.innerHTML = rows.length ? rows.map(p => `<tr>
       <td>${esc(p.player)}</td><td>${tierCell(p)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
       <td>${p.line} <span class="src">(prizepicks)</span></td>
       <td class="num">${p.model_mean.toFixed(2)}</td>
-      <td class="num">${(p.prob * 100).toFixed(1)}%</td>
+      <td class="num" title="raw model ${(p.prob * 100).toFixed(1)}%">${(P(p) * 100).toFixed(1)}%</td>
       <td class="${p.side}">${p.side === "over" ? "Over" : "Under"}</td>
-      <td>${p.prob >= breakeven ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
+      <td>${P(p) >= breakeven ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
     </tr>`).join("")
     : `<tr><td colspan="9" class="empty">No priced PrizePicks lines for this prop right now.</td></tr>`;
 
   const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day) && (!team || p.team === team));
   const why = {};
   skipped.forEach(p => (why[p.skip_reason] ||= new Set()).add(`${p.player} (${p.team})`));
-  document.getElementById("notes").innerHTML = (rows.length ? `${rows.length} lines. Model P(Side) is the model's chance its side wins, ignoring pushes. ` : "")
+  document.getElementById("notes").innerHTML = (rows.length ? `${rows.length} lines. Model P(Side) is the calibrated chance its side wins, ignoring pushes (hover for the raw model %): the raw model was overconfident, so its distance from 50% is scaled down. ` : "")
     + `Only standard two-way lines are priced; goblins and demons (Over-only) never are.`
     + Object.entries(why).map(([r, s]) => `<br><b>Not priced: ${esc(r.replace(/_/g, " "))}</b> — ${[...s].slice(0, 40).map(esc).join(", ")}${s.size > 40 ? " …" : ""}`).join("");
 }

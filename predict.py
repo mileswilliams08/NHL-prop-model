@@ -131,7 +131,8 @@ def main():
                     po, pu, pp = model.line_probs(mu, r["line"], d)
                 side, prob = model.pick_side(po, pu)
                 pick.update(model_mean=round(mu, 4), p_over=round(po, 4), p_under=round(pu, 4),
-                            p_push=round(pp, 4), side=side, prob=round(prob, 4))
+                            p_push=round(pp, 4), side=side, prob=round(prob, 4),
+                            prob_cal=round(model.calibrate(prob, cfg), 4))
         t = tier_of.get(int(nhl_id)) if nhl_id and r["category"] != "saves" else None
         if t:   # rotation tier: rank in his team's ice-time order (see tiers.py)
             pick.update(tier=t["tier"], tier_rank=f"{t['pos']}{t['rank']}", recent_toi=t["toi"])

@@ -271,6 +271,24 @@ def pick_side(p_over, p_under):
     return ("over", p_over / tot) if p_over >= p_under else ("under", p_under / tot)
 
 
+def calibrate(prob, cfg):
+    """Shrink a side probability toward 50%: the raw model was overconfident on graded picks."""
+    k = (cfg.get("calibration") or {}).get("shrink", 1.0)
+    return 0.5 + k * (float(prob) - 0.5)
+
+
+def fit_shrink(probs, hits):
+    """Best shrink factor k for side probabilities vs outcomes (max likelihood), with a 95% interval."""
+    from scipy.optimize import minimize_scalar
+    p, y = np.asarray(probs, float) - 0.5, np.asarray(hits, float)
+    hi_k = 0.499 / max(np.abs(p).max(), 1e-6)
+    nll = lambda k: -np.sum(y * np.log(0.5 + k * p) + (1 - y) * np.log(0.5 - k * p))
+    k = minimize_scalar(nll, bounds=(0.0, min(1.5, hi_k)), method="bounded").x
+    grid = np.linspace(0, min(1.5, hi_k), 301)
+    ok = grid[np.array([nll(x) for x in grid]) <= nll(k) + 1.92]
+    return float(k), float(ok.min()), float(ok.max())
+
+
 def nb_loglik(mu, y, r):
     mu = np.maximum(np.asarray(mu, float), 1e-6)
     y = np.asarray(y)

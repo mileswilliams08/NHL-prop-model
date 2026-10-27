@@ -28,6 +28,9 @@
   <a href="backtest.html">Backtest</a>
 </nav>
 <div class="meta" id="meta">Loading...</div>
+<div class="show" id="calbar" style="display:none">Probabilities:
+  <select id="calmode"><option value="cal">Calibrated</option><option value="raw">Raw model</option></select>
+  <span class="caveat" id="calnote" style="margin:0"></span></div>
 <div id="content"></div>
 
 <script>
@@ -317,7 +320,23 @@ function render(data) {
   }
 }
 
-fetch("data/results.json", {cache: "no-store"}).then(r => r.json()).then(render)
+let DATA = null;
+function redraw() {
+  const raw = document.getElementById("calmode").value === "raw";
+  render(Object.assign({}, DATA, {picks: DATA.picks.map(p => raw && p.pr != null ? Object.assign({}, p, {p: p.pr}) : p)}));
+}
+fetch("data/results.json", {cache: "no-store"}).then(r => r.json()).then(data => {
+  DATA = data;
+  const c = data.calibration;
+  if (c && data.picks.some(p => p.pr != null)) {
+    document.getElementById("calbar").style.display = "";
+    document.getElementById("calnote").textContent = `Calibrated = 50% + ${c.k_used} × (model % − 50%), because the raw model was overconfident.` +
+      (c.k_fit != null ? ` Current best fit on ${c.n} graded picks: ${c.k_fit} (95% ${c.k_lo}–${c.k_hi}).` : "") +
+      " Sides and hit rates are identical either way; only the stated % changes.";
+    document.getElementById("calmode").addEventListener("change", redraw);
+  }
+  redraw();
+})
   .catch(() => { document.getElementById("meta").textContent = "No results yet."; });
 </script>
 </body>
