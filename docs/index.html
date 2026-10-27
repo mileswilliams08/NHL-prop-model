@@ -15,6 +15,11 @@
   .bet-yes { background: #1a4620; color: #3fb950; }
   .bet-no { background: #2d1a1a; color: #f85149; }
   td.src { color: #8b98a5; font-size: 11px; }
+  .tier { padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .tier-Top { background: #1f3a5f; color: #79c0ff; }
+  .tier-Mid { background: #262c36; color: #c9d1d9; }
+  .tier-Depth { background: #2d2a1a; color: #d4a72c; }
+  .tiptext { color: #8b98a5; font-size: 12px; line-height: 1.5; margin: 8px 0 12px; padding: 10px 12px; background: #1c2733; border-radius: 6px; }
 </style>
 </head>
 <body>
@@ -37,11 +42,19 @@
 <div class="propsel">
   <label>Prop: <select id="propSelect"></select></label>
   <label><select id="dateSelect"></select></label>
+  <label><select id="teamSelect"></select></label>
 </div>
 
+<div class="tiptext" id="tierTip" style="display:none">
+  <b>Pairing two Time On Ice legs from the same team:</b> teammates in the same tier gain or lose minutes together
+  (power plays, overtime and trailing late lift the top guys; blowouts lift the depth guys), while top and depth players
+  trade minutes. So <b>same tier → same direction</b> pairs better, <b>Top vs Depth → opposite directions</b> pairs better,
+  and Mid players are close to independent. Tier = rank in the team's ice-time order over each player's last 10 games
+  (F1–F3 Top, F4–F9 Mid, F10+ Depth; D1–D2 Top, D3–D4 Mid, D5+ Depth). Measured on 2024–26 data; it doesn't make any single leg more likely.
+</div>
 <div class="table-wrap">
 <table>
-  <thead><tr><th>Player</th><th>Matchup</th><th>Start</th><th>Line</th><th class="num">Model mean</th>
+  <thead><tr><th>Player</th><th>Tier</th><th>Matchup</th><th>Start</th><th>Line</th><th class="num">Model mean</th>
     <th class="num">Model P(Side)</th><th>Side</th><th></th></tr></thead>
   <tbody id="propsBody"></tbody>
 </table>
@@ -56,22 +69,27 @@ const time = iso => new Date(iso).toLocaleString([], {weekday: "short", hour: "n
 function renderTable() {
   const cat = document.getElementById("propSelect").value;
   const day = document.getElementById("dateSelect").value;
+  const team = document.getElementById("teamSelect").value;
+  document.getElementById("tierTip").style.display = cat === "toi" ? "" : "none";
   const breakeven = Number(document.getElementById("breakeven").value) / 100;
   const tbody = document.getElementById("propsBody");
   // Ranked by the model's own confidence (highest P(side) first) so the most lopsided lines float to the top.
-  const rows = DATA.picks.filter(p => !p.skip_reason && p.category === cat && (!day || p.game_date === day))
-    .sort((a, b) => b.prob - a.prob);
+  const rows = DATA.picks.filter(p => !p.skip_reason && p.category === cat && (!day || p.game_date === day)
+      && (!team || p.team === team))
+    .sort(team ? ((a, b) => (a.tier_rank || "Z").localeCompare(b.tier_rank || "Z", undefined, {numeric: true}))
+               : ((a, b) => b.prob - a.prob));
+  const tierCell = p => p.tier ? `<span class="tier tier-${p.tier}" title="${p.recent_toi} min avg, last 10 games">${esc(p.tier_rank)} · ${p.tier}</span>` : "";
   tbody.innerHTML = rows.length ? rows.map(p => `<tr>
-      <td>${esc(p.player)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
+      <td>${esc(p.player)}</td><td>${tierCell(p)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
       <td>${p.line} <span class="src">(prizepicks)</span></td>
       <td class="num">${p.model_mean.toFixed(2)}</td>
       <td class="num">${(p.prob * 100).toFixed(1)}%</td>
       <td class="${p.side}">${p.side === "over" ? "Over" : "Under"}</td>
       <td>${p.prob >= breakeven ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
     </tr>`).join("")
-    : `<tr><td colspan="8" class="empty">No priced PrizePicks lines for this prop right now.</td></tr>`;
+    : `<tr><td colspan="9" class="empty">No priced PrizePicks lines for this prop right now.</td></tr>`;
 
-  const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day));
+  const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day) && (!team || p.team === team));
   const why = {};
   skipped.forEach(p => (why[p.skip_reason] ||= new Set()).add(`${p.player} (${p.team})`));
   document.getElementById("notes").innerHTML = (rows.length ? `${rows.length} lines. Model P(Side) is the model's chance its side wins, ignoring pushes. ` : "")
@@ -94,10 +112,13 @@ fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(json => {
   const dates = [...new Set(json.picks.map(p => p.game_date))].sort();
   document.getElementById("dateSelect").innerHTML = (dates.length > 1 ? `<option value="">All dates</option>` : "") +
     dates.map(d => `<option value="${d}">${d}</option>`).join("");
+  const teams = [...new Set(json.picks.map(p => p.team))].sort();
+  document.getElementById("teamSelect").innerHTML = `<option value="">All teams</option>` +
+    teams.map(t => `<option value="${t}">${esc(t)}</option>`).join("");
   renderTable();
 }).catch(() => { document.getElementById("meta").textContent = "Couldn't load props.json yet — run the Action."; });
 
-["propSelect", "dateSelect"].forEach(id => document.getElementById(id).addEventListener("change", renderTable));
+["propSelect", "dateSelect", "teamSelect"].forEach(id => document.getElementById(id).addEventListener("change", renderTable));
 document.getElementById("breakeven").addEventListener("input", renderTable);
 </script>
 </body>

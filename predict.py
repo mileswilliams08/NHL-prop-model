@@ -21,6 +21,7 @@ from common import DOCS_DATA, SNAP_DIR, get_json, load_config, nhl_team, parse_t
 import model
 import player_map
 import prizepicks
+import tiers
 
 MODELED = {"sog", "hits", "blocks", "toi", "saves"}
 
@@ -79,6 +80,7 @@ def main():
     sk, gm, gk = model.load_history(cfg)
     params = cfg["model"]
     _, _, walker = model.walk(sk, gm, params, gk=gk, collect=False)
+    tier_of = tiers.team_tiers(sk)
     hist_through = str(sk["date"].max())
 
     picks, reasons = [], Counter()
@@ -130,6 +132,9 @@ def main():
                 side, prob = model.pick_side(po, pu)
                 pick.update(model_mean=round(mu, 4), p_over=round(po, 4), p_under=round(pu, 4),
                             p_push=round(pp, 4), side=side, prob=round(prob, 4))
+        t = tier_of.get(int(nhl_id)) if nhl_id and r["category"] != "saves" else None
+        if t:   # rotation tier: rank in his team's ice-time order (see tiers.py)
+            pick.update(tier=t["tier"], tier_rank=f"{t['pos']}{t['rank']}", recent_toi=t["toi"])
         pick["skip_reason"] = reason
         reasons[reason or "modeled"] += 1
         picks.append(pick)
