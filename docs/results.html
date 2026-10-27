@@ -18,6 +18,17 @@
   .result-hit { background: #1a4620; color: #3fb950; }
   .result-miss { background: #2d1a1a; color: #f85149; }
   .result-push { background: #2d2a1a; color: #d4a72c; }
+  .thr-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 4px 0 8px; }
+  @media (max-width: 760px) { .thr-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .thr-card { background: #1c2733; border: 1px solid #263140; border-radius: 8px; padding: 14px 16px; }
+  .thr-card .lbl { color: #8b98a5; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+  .thr-card .row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 8px 0 10px; flex-wrap: wrap; }
+  .thr-card .big { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .thr-card .rec { color: #8b98a5; font-size: 12px; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  .thr-bar { position: relative; height: 6px; background: #263140; border-radius: 3px; }
+  .thr-bar .fill { position: absolute; left: 0; top: 0; bottom: 0; background: #3fb950; border-radius: 3px; }
+  .thr-bar .fill.below { background: #d4a72c; }
+  .thr-bar .be { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #e6edf3; opacity: .7; }
 </style>
 </head>
 <body>
@@ -113,6 +124,17 @@ function render(data) {
   };
 
   content.innerHTML = `
+    <h2 style="margin-top:4px">Hit rate above a probability</h2>
+    <div class="show">Show:
+      <select id="thr-scope"><option value="hd">Headline props</option><option value="all">All props (incl. experimental)</option>
+        ${[...new Set(all.map(p => p.c))].map(c => `<option value="c:${c}">${esc(L(c))}</option>`).join("")}</select>
+      <select id="thr-side"><option value="">Over and Under picks</option><option value="over">Over picks</option><option value="under">Under picks</option></select>
+      <select id="thr-date">${DATE_OPTS}</select>
+      Breakeven <input id="thr-be" type="number" min="50" max="80" step="0.1" value="57.7" style="width:64px"> %</div>
+    <div class="thr-grid" id="thr-out"></div>
+    <div class="caveat">Every graded pick at or above each probability (${RAWMODE ? "raw model %" : "calibrated %"}). Record = hits-misses-pushes;
+      pushes don't count in the hit rate. The white tick is your breakeven (57.7% = a 2-pick at 3×); green bars clear it.</div>
+
     ${show("ov", head)}
     <div id="ov-out"></div>
 
@@ -313,6 +335,26 @@ function render(data) {
   ["mv-date", "mv-prop", "mv-grp", "mv-win"].forEach(id => document.getElementById(id).addEventListener("change", drawMoves));
   drawMoves();
 
+  const THR = RAWMODE ? [.55, .60, .65, .70] : [.52, .54, .56, .58];
+  const drawThr = () => {
+    const v = id => document.getElementById(id).value;
+    const scope = v("thr-scope");
+    const rows = all.filter(p => (scope === "all" || (scope === "hd" ? p.hd : p.c === scope.slice(2)))
+      && (!v("thr-side") || p.s === v("thr-side")) && inDate(p.d, v("thr-date"), latest));
+    const be = (+v("thr-be") || 57.7) / 100;
+    document.getElementById("thr-out").innerHTML = THR.map(t => {
+      const r = rows.filter(p => p.p >= t), s = summarize(r.map(p => p.x)), m = s.n - s.hits;
+      const w = s.rate == null ? 0 : Math.min(100, s.rate * 100);
+      return `<div class="thr-card"><div class="lbl">≥${Math.round(t * 100)}% prob</div>
+        <div class="row"><span class="big">${pct(s.rate)}</span><span class="rec">${s.hits}-${m}-${s.pushes}</span></div>
+        <div class="thr-bar"><div class="fill ${s.rate != null && s.rate >= be ? "" : "below"}" style="width:${w}%"></div>
+          <div class="be" style="left:${be * 100}%"></div></div></div>`;
+    }).join("");
+  };
+  ["thr-scope", "thr-side", "thr-date", "thr-be"].forEach(id =>
+    document.getElementById(id).addEventListener(id === "thr-be" ? "input" : "change", drawThr));
+  drawThr();
+
   const sections = {ov: drawOverall, side: drawSide, mk: drawMarket, exp: drawExp, cal: drawCal, rec: drawRecent};
   for (const [id, fn] of Object.entries(sections)) {
     content.querySelectorAll(`[id^="${id}-"]`).forEach(el => el.tagName === "SELECT" && el.addEventListener("change", fn));
@@ -321,8 +363,10 @@ function render(data) {
 }
 
 let DATA = null;
+let RAWMODE = false;
 function redraw() {
   const raw = document.getElementById("calmode").value === "raw";
+  RAWMODE = raw || !DATA.picks.some(p => p.pr != null);   // results built before calibration = raw %
   render(Object.assign({}, DATA, {picks: DATA.picks.map(p => raw && p.pr != null ? Object.assign({}, p, {p: p.pr}) : p)}));
 }
 fetch("data/results.json", {cache: "no-store"}).then(r => r.json()).then(data => {
