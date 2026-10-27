@@ -6,7 +6,7 @@ on:
     # before the earliest regular puck drop (weekend matinees ~12:30pm ET = 16:30 UTC).
     # predict.py also skips any game starting within 10 minutes, so a late or manual run
     # can never price a game in progress.
-    - cron: "0 15 * * *"
+    - cron: "13 15 * * *"   # odd minute: runs at :00 are the most often delayed
   workflow_dispatch: {}
 
 permissions:

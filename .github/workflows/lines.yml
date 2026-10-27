@@ -6,8 +6,9 @@ name: Track NHL lines
 # GitHub may start scheduled runs late; lines.py stamps the real time of each observation.
 on:
   schedule:
-    - cron: "*/30 16-23 * * *"
-    - cron: "*/30 0-3 * * *"
+    # Odd minutes on purpose: GitHub drops/delays many scheduled runs at :00 and :30 (its busiest slots).
+    - cron: "7,37 16-23 * * *"
+    - cron: "7,37 0-3 * * *"
   workflow_dispatch: {}
 
 permissions:
