@@ -43,6 +43,7 @@
   <label>Prop: <select id="propSelect"></select></label>
   <label><select id="dateSelect"></select></label>
   <label><select id="teamSelect"></select></label>
+  <label>Probabilities: <select id="calMode"><option value="cal">Calibrated</option><option value="raw">Raw model</option></select></label>
 </div>
 
 <div class="tiptext" id="tierTip" style="display:none">
@@ -69,7 +70,10 @@
 <script>
 let DATA = null;
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const P = p => p.prob_cal ?? p.prob;   // calibrated % when available
+let RAW = false;
+try { RAW = localStorage.getItem("nhlProbMode") === "raw"; } catch (e) {}
+const P = p => RAW ? p.prob : (p.prob_cal ?? p.prob);   // calibrated % unless the toggle says raw
+const P2 = p => RAW ? (p.prob_cal ?? p.prob) : p.prob;   // the other one, for the hover text
 const time = iso => new Date(iso).toLocaleString([], {weekday: "short", hour: "numeric", minute: "2-digit"});
 
 const LIFTS_DEFAULT = {"F1+F2": {over: 1.37, under: 1.32}, "F1+D1": {over: 1.24, under: 1.20}, "D1+D2": {over: 1.17, under: 1.15}};
@@ -129,7 +133,7 @@ function renderTable() {
       <td>${esc(p.player)}</td><td>${tierCell(p)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
       <td>${p.line} <span class="src">(prizepicks)</span></td>
       <td class="num">${p.model_mean.toFixed(2)}</td>
-      <td class="num" title="raw model ${(p.prob * 100).toFixed(1)}%">${(P(p) * 100).toFixed(1)}%</td>
+      <td class="num" title="${RAW ? "calibrated" : "raw model"} ${(P2(p) * 100).toFixed(1)}%">${(P(p) * 100).toFixed(1)}%</td>
       <td class="${p.side}">${p.side === "over" ? "Over" : "Under"}</td>
       <td>${P(p) >= breakeven ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
     </tr>`).join("")
@@ -138,7 +142,9 @@ function renderTable() {
   const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day) && (!team || p.team === team));
   const why = {};
   skipped.forEach(p => (why[p.skip_reason] ||= new Set()).add(`${p.player} (${p.team})`));
-  document.getElementById("notes").innerHTML = (rows.length ? `${rows.length} lines. Model P(Side) is the calibrated chance its side wins, ignoring pushes (hover for the raw model %): the raw model was overconfident, so its distance from 50% is scaled down. ` : "")
+  document.getElementById("notes").innerHTML = (rows.length ? `${rows.length} lines. ${RAW
+      ? "Model P(Side) is the RAW model chance its side wins, ignoring pushes (hover for calibrated). The raw model has been overconfident on graded picks, so CLEARS here is optimistic. "
+      : "Model P(Side) is the calibrated chance its side wins, ignoring pushes (hover for the raw model %): the raw model was overconfident, so its distance from 50% is scaled down. "}` : "")
     + `Only standard two-way lines are priced; goblins and demons (Over-only) never are.`
     + Object.entries(why).map(([r, s]) => `<br><b>Not priced: ${esc(r.replace(/_/g, " "))}</b> — ${[...s].slice(0, 40).map(esc).join(", ")}${s.size > 40 ? " …" : ""}`).join("");
 }
@@ -167,6 +173,12 @@ fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(json => {
 
 ["propSelect", "dateSelect", "teamSelect"].forEach(id => document.getElementById(id).addEventListener("change", renderTable));
 document.getElementById("breakeven").addEventListener("input", renderTable);
+document.getElementById("calMode").value = RAW ? "raw" : "cal";
+document.getElementById("calMode").addEventListener("change", e => {
+  RAW = e.target.value === "raw";
+  try { localStorage.setItem("nhlProbMode", RAW ? "raw" : "cal"); } catch (err) {}
+  if (DATA) renderTable();
+});
 </script>
 </body>
 </html>
