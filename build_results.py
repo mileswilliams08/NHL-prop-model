@@ -19,6 +19,7 @@ import pandas as pd
 
 import model
 import movement
+import pairs
 from common import EXCLUDED_PATH, GRADED_PATH, load_config, norm_name, path, write_json
 
 BUCKETS = [(0.50, 0.55), (0.55, 0.60), (0.60, 0.65), (0.65, 0.70), (0.70, 0.80), (0.80, 1.01)]
@@ -95,6 +96,33 @@ def print_summary(name, sub):
         print(f"   slope (actual-line) on (mean-line): {s[0]:.2f} +/- {1.96 * s[1]:.2f} (95% CI)")
 
 
+def build_graded_pairs(cfg, graded, k):
+    """Correlated TOI pairs from the earliest snapshot of each leg, with each leg's graded result."""
+    res = {(str(r.game_date), str(r.nhl_game_id), str(r.nhl_id)): r.result
+           for r in graded[graded["category"] == "toi"].itertuples()}
+    if not res:
+        return []
+    ranks = None
+    legs = []
+    for (d, gid, pid, cat), (pk, _) in movement._earliest_picks().items():
+        if cat != "toi" or (d, gid, pid) not in res:
+            continue
+        tr = pk.get("tier_rank")
+        if not tr:
+            ranks = ranks if ranks is not None else pairs.pregame_ranks()
+            tr = ranks.get((gid, pid))
+        legs.append({"game_date": d, "nhl_game_id": gid, "team": pk["team"], "player": pk["player"], "tier_rank": tr,
+                     "side": pk["side"], "prob": float(pk["prob"]),
+                     "x": {"hit": "h", "miss": "m", "push": "p"}.get(res[(d, gid, pid)], "v")})
+    lifts = {kk: v for kk, v in (cfg.get("pair_lifts") or {}).items() if kk != "note"}
+    rows = pairs.build_pairs(legs, lifts, k)
+    if rows:
+        hit = sum(r["x"] == "h" for r in rows)
+        print(f"TOI PAIRS: {len(rows)} graded same-direction linked pairs, both hit {hit / len(rows):.1%} "
+              f"(avg estimate {np.mean([r['est'] for r in rows]):.1%}; 2-pick 3x breakeven 33.3%)")
+    return rows
+
+
 def main():
     cfg = load_config()
     df = load_graded()
@@ -124,6 +152,11 @@ def main():
               + ("  <- consider updating config.json" if not lo <= k_used <= hi else ""))
 
     code = {"hit": "h", "miss": "m", "push": "p"}
+    try:
+        pair_rows = build_graded_pairs(cfg, df, k_used)
+    except Exception as e:   # pairs are a bonus; never block the results page
+        print(f"pairs build failed: {e}")
+        pair_rows = []
     picks = [{"d": r.game_date, "pl": r.player, "tm": r.team, "op": r.opp, "c": r.category,
               "l": r.line, "m": round(r.model_mean, 3), "s": r.side, "p": round(0.5 + k_used * (r.prob - 0.5), 4), "pr": round(r.prob, 4),
               "a": round(float(r.actual), 2), "x": code[r.result], "ox": code[r.blind_over], "ux": code[r.blind_under],
@@ -133,7 +166,7 @@ def main():
     write_json(path("docs", "data", "results.json"),
                {"generated_at": pd.Timestamp.now("UTC").isoformat(), "voids": voids, "excluded": n_ex,
                 "labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks,
-                "moves": moves, "calibration": cal})
+                "moves": moves, "calibration": cal, "pairs": pair_rows})
     print(f"results.json: {len(picks)} graded picks ({voids} voids, {n_ex} excluded not shown)")
     print("LINE MOVEMENT headline: " + movement.summarize([m for m in moves if m["hd"]]))
     print("LINE MOVEMENT experimental: " + movement.summarize([m for m in moves if not m["hd"]]))

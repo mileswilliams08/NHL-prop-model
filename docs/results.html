@@ -166,6 +166,13 @@ function render(data) {
         <option value="60">Captured within 60 min</option></select></div>
     <div id="mv-out"></div>
 
+    <h2>Time On Ice correlated pairs (experimental)</h2>
+    <div class="caveat">Every same-team F1 + F2, F1 + D1 or D1 + D2 pair the Props page listed (both TOI legs, model picking the same
+      direction). "Both hit" needs both legs to win; a push or void on either leg drops the pair. It only beats a 3× 2-pick if both-hit
+      clears 33.3%. "Estimated" is what the Props page predicted (leg × leg × lift) — if actual tracks it, the lifts hold up on real lines.</div>
+    <div class="show">Show: <select id="pr-date"></select></div>
+    <div id="pr-out"></div>
+
     <h2>Experimental props</h2>
     <div class="caveat">New props still being validated. Their results are shown only here and are not counted in any other number on this page.</div>
     ${show("exp", exp)}
@@ -354,6 +361,37 @@ function render(data) {
   ["thr-scope", "thr-side", "thr-date", "thr-be"].forEach(id =>
     document.getElementById(id).addEventListener(id === "thr-be" ? "input" : "change", drawThr));
   drawThr();
+
+  const prs = data.pairs || [];
+  const prDates = [...new Set(prs.map(p => p.d))].sort().reverse();
+  document.getElementById("pr-date").innerHTML = `<option value="__all__">All dates</option><option value="last7">Last 7 days</option>
+    <option value="last30">Last 30 days</option>` + prDates.map(d => `<option value="${d}">${d}</option>`).join("");
+  const drawPairs = () => {
+    const rows = prs.filter(p => inDate(p.d, document.getElementById("pr-date").value, prDates[0]));
+    const out = document.getElementById("pr-out");
+    if (!rows.length) { out.innerHTML = `<div class="empty">No graded pairs yet.</div>`; return; }
+    const st = rs => { const h = rs.filter(p => p.x === "h").length;
+      return {n: rs.length, h, rate: rs.length ? h / rs.length : null, est: rs.length ? rs.reduce((a, p) => a + p.est, 0) / rs.length : null}; };
+    const t = st(rows), ci = t.n ? 1.96 * Math.sqrt(Math.max(t.rate * (1 - t.rate), .01) / t.n) : null;
+    let h = `<div class="overall-card">
+        <div><div class="big">${pct(t.rate)}</div><div class="sub">both legs hit (${t.h} of ${t.n} pairs)${ci != null ? ` ±${(ci * 100).toFixed(1)}` : ""}</div></div>
+        <div><div class="big">${pct(t.est)}</div><div class="sub">average estimate</div></div>
+        <div><div class="big">33.3%</div><div class="sub">3× 2-pick breakeven</div></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Pair type</th><th>Direction</th><th class="num">Pairs</th><th class="num">Both hit</th>
+        <th class="num">Avg estimate</th></tr></thead><tbody>`;
+    const keys = [...new Set(rows.map(p => p.kind + "|" + p.s))].sort();
+    for (const k of keys) { const [kind, s] = k.split("|"), r = st(rows.filter(p => p.kind === kind && p.s === s));
+      h += `<tr><td>${kind}</td><td class="${s}">both ${s}</td><td class="num">${r.n}</td><td class="num">${pct(r.rate)}</td><td class="num">${pct(r.est)}</td></tr>`; }
+    h += `</tbody></table></div><div class="table-wrap"><table><thead><tr><th>Date</th><th>Team</th><th>Pair</th><th>Direction</th>
+      <th class="num">Estimate</th><th>Result</th></tr></thead><tbody>
+      ${[...rows].sort((a, b) => b.d.localeCompare(a.d)).slice(0, 60).map(p => `<tr><td>${p.d}</td><td>${esc(p.tm)}</td>
+        <td>${esc(p.a)} + ${esc(p.b)} <span class="caveat">${p.kind}</span></td><td class="${p.s}">both ${p.s}</td>
+        <td class="num">${pct(p.est)}</td><td>${tag(p.x)}</td></tr>`).join("")}</tbody></table></div>
+      ${t.n < 100 ? `<div class="caveat">Only ${t.n} pairs so far — far too few to judge (the ± is the 95% margin).</div>` : ""}`;
+    out.innerHTML = h;
+  };
+  document.getElementById("pr-date").addEventListener("change", drawPairs);
+  drawPairs();
 
   const sections = {ov: drawOverall, side: drawSide, mk: drawMarket, exp: drawExp, cal: drawCal, rec: drawRecent};
   for (const [id, fn] of Object.entries(sections)) {

@@ -53,7 +53,12 @@
   (F1–F3 Top, F4–F9 Mid, F10+ Depth; D1–D2 Top, D3–D4 Mid, D5+ Depth). Measured on 2024–26 data; it doesn't make any single leg more likely.
 </div>
 <div class="table-wrap">
-<table>
+<table id="pairsTable" style="display:none">
+  <thead><tr><th>Team</th><th>Player A</th><th>Player B</th><th>Direction</th><th class="num">Leg A</th>
+    <th class="num">Leg B</th><th class="num">Est. both hit</th><th></th></tr></thead>
+  <tbody id="pairsBody"></tbody>
+</table>
+<table id="propsTable">
   <thead><tr><th>Player</th><th>Tier</th><th>Matchup</th><th>Start</th><th>Line</th><th class="num">Model mean</th>
     <th class="num">Model P(Side)</th><th>Side</th><th></th></tr></thead>
   <tbody id="propsBody"></tbody>
@@ -67,12 +72,52 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;
 const P = p => p.prob_cal ?? p.prob;   // calibrated % when available
 const time = iso => new Date(iso).toLocaleString([], {weekday: "short", hour: "numeric", minute: "2-digit"});
 
+const LIFTS_DEFAULT = {"F1+F2": {over: 1.37, under: 1.32}, "F1+D1": {over: 1.24, under: 1.20}, "D1+D2": {over: 1.17, under: 1.15}};
+const pairKind = (a, b) => { const k = [a, b].sort((x, y) => (x[0] !== "F") - (y[0] !== "F") || x.slice(1) - y.slice(1)).join("+");
+  return LIFTS_DEFAULT[k] ? k : null; };
+
+function renderPairs(day, team, breakeven) {
+  const lifts = DATA.pair_lifts || LIFTS_DEFAULT, joinBE = breakeven * breakeven;
+  const legs = DATA.picks.filter(p => !p.skip_reason && p.category === "toi" && p.tier_rank
+    && (!day || p.game_date === day) && (!team || p.team === team));
+  const groups = {};
+  legs.forEach(p => (groups[`${p.game_date}|${p.team}`] ||= []).push(p));
+  const rows = [];
+  for (const ps of Object.values(groups)) for (let i = 0; i < ps.length; i++) for (let j = i + 1; j < ps.length; j++) {
+    let a = ps[i], b = ps[j];
+    const kind = pairKind(a.tier_rank, b.tier_rank);
+    if (!kind || a.side !== b.side) continue;
+    if (a.tier_rank !== kind.split("+")[0]) [a, b] = [b, a];
+    const lift = (lifts[kind] || {})[a.side] || 1, pa = P(a), pb = P(b);
+    rows.push({a, b, kind, lift, est: Math.min(pa * pb * lift, pa, pb)});
+  }
+  rows.sort((x, y) => y.est - x.est);
+  const leg = p => `${esc(p.player)} <span class="tier tier-${p.tier}">${esc(p.tier_rank)}</span> <span class="src">${p.line}</span>`;
+  document.getElementById("pairsBody").innerHTML = rows.length ? rows.map(r => `<tr>
+      <td>${esc(r.a.team)} v ${esc(r.a.opp)}<br><span class="src">${time(r.a.start_time)}</span></td>
+      <td>${leg(r.a)}</td><td>${leg(r.b)}</td>
+      <td class="${r.a.side}">both ${r.a.side === "over" ? "Over" : "Under"} <span class="src">${r.kind} ×${r.lift}</span></td>
+      <td class="num">${(P(r.a) * 100).toFixed(1)}%</td><td class="num">${(P(r.b) * 100).toFixed(1)}%</td>
+      <td class="num"><b>${(r.est * 100).toFixed(1)}%</b></td>
+      <td>${r.est >= joinBE ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td></tr>`).join("")
+    : `<tr><td colspan="8" class="empty">No linked same-direction TOI pairs for this selection. A pair needs both players' TOI lines on the
+       board, ranked F1 + F2, F1 + D1 or D1 + D2 on the same team, with the model picking the same direction on both.</td></tr>`;
+  document.getElementById("notes").innerHTML = `${rows.length} pairs. Est. both hit = leg A × leg B × lift (how much more often these two
+    players' minutes land the same way than independent legs would; measured on 2024–26 games). Breakeven for two legs =
+    ${(breakeven * 100).toFixed(1)}%² = ${(joinBE * 100).toFixed(1)}%. Experimental: the lifts come from a backtest against each player's own
+    recent average, not real PrizePicks lines, and PrizePicks may restrict some same-team combinations. Results → Pairs tracks how these do.`;
+}
+
 function renderTable() {
   const cat = document.getElementById("propSelect").value;
   const day = document.getElementById("dateSelect").value;
   const team = document.getElementById("teamSelect").value;
-  document.getElementById("tierTip").style.display = cat === "toi" ? "" : "none";
+  document.getElementById("tierTip").style.display = (cat === "toi" || cat === "toi_pairs") ? "" : "none";
   const breakeven = Number(document.getElementById("breakeven").value) / 100;
+  const pairsMode = cat === "toi_pairs";
+  document.getElementById("pairsTable").style.display = pairsMode ? "" : "none";
+  document.getElementById("propsTable").style.display = pairsMode ? "none" : "";
+  if (pairsMode) { renderPairs(day, team, breakeven); return; }
   const tbody = document.getElementById("propsBody");
   // Ranked by the model's own confidence (highest P(side) first) so the most lopsided lines float to the top.
   const rows = DATA.picks.filter(p => !p.skip_reason && p.category === cat && (!day || p.game_date === day)
@@ -109,7 +154,8 @@ fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(json => {
   const headline = c => json.picks.some(p => p.category === c && p.headline);
   cats.sort((a, b) => (priced(b) - priced(a)) || (headline(b) - headline(a)) || (labels[a] || a).localeCompare(labels[b] || b));
   document.getElementById("propSelect").innerHTML = cats.map(c =>
-    `<option value="${c}">${esc(labels[c] || c)}${priced(c) && !headline(c) ? " (experimental)" : ""}</option>`).join("");
+    `<option value="${c}">${esc(labels[c] || c)}${priced(c) && !headline(c) ? " (experimental)" : ""}</option>` +
+    (c === "toi" && priced(c) ? `<option value="toi_pairs">Time On Ice: correlated pairs (experimental)</option>` : "")).join("");
   const dates = [...new Set(json.picks.map(p => p.game_date))].sort();
   document.getElementById("dateSelect").innerHTML = (dates.length > 1 ? `<option value="">All dates</option>` : "") +
     dates.map(d => `<option value="${d}">${d}</option>`).join("");

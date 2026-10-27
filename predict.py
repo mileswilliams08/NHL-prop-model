@@ -152,7 +152,8 @@ def main():
     write_json(path("data", "snapshots", f"{stamp}.json"), snapshot)
     write_json(path("docs", "data", "props.json"),
                {k: snapshot[k] for k in ("generated_at", "slate_dates", "model_version", "history_through")}
-               | {"labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks})
+               | {"labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks,
+                  "pair_lifts": {k: v for k, v in (cfg.get("pair_lifts") or {}).items() if k != "note"}})
     print(f"archived data/snapshots/{stamp}.json and wrote docs/data/props.json "
           f"(slate {', '.join(slate_dates)}, history through {hist_through})")
     return 0
