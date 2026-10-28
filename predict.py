@@ -23,7 +23,7 @@ import player_map
 import prizepicks
 import tiers
 
-MODELED = {"sog", "hits", "blocks", "toi", "saves"}
+MODELED = {"sog", "hits", "blocks", "toi", "saves", "faceoffs"}
 
 
 def nhl_games_by_team(dates):
@@ -111,6 +111,9 @@ def main():
             if cat == "saves":
                 mu, n = walker.goalie_mu(nhl_id, team, opp)
                 min_n = params.get("min_prior_starts", 3)
+            elif cat == "faceoffs":
+                mu, n = walker.fo_mu(nhl_id, opp)
+                min_n = params["min_prior_games"]
             elif cat == "toi":
                 toi, n = walker.player_toi(nhl_id)
                 mu, min_n = (toi / 60 if toi is not None else None), params["min_prior_games"]

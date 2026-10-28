@@ -34,6 +34,9 @@ jobs:
         # Only OFF/FINAL games are written, and rows merge into the committed CSVs.
         run: python nhl_backfill.py --start "$(date -u -d '7 days ago' +%F)" --sleep 0.1
 
+      - name: Add the last week of faceoff counts to history
+        run: python fo_backfill.py --start "$(date -u -d '7 days ago' +%F)" --sleep 0.1 || echo "Faceoff refresh failed - continuing."
+
       - name: Grade archived picks
         run: python grade.py || echo "Grading failed - see log. Continuing."
 
@@ -49,7 +52,7 @@ jobs:
           git config user.name "props-bot"
           git config user.email "props-bot@users.noreply.github.com"
           for f in data/history/games.csv data/history/skater_games.csv data/history/goalie_games.csv \
-                   data/history/players.csv data/player_map.csv data/graded_results.csv \
+                   data/history/players.csv data/history/skater_faceoffs.csv data/player_map.csv data/graded_results.csv \
                    docs/data/props.json docs/data/results.json; do
             if [ -f "$f" ]; then git add "$f"; fi
           done

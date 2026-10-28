@@ -30,7 +30,7 @@
     "faceoffs": {
       "enabled": true,
       "headline": false,
-      "label": "Faceoffs Won (lines recorded, not priced yet)"
+      "label": "Faceoffs Won"
     }
   },
   "pp_stat_types": {
@@ -65,7 +65,12 @@
     "opp_beta": 1.0,
     "nb_r": 14.05,
     "min_prior_games": 5,
-    "min_prior_starts": 3
+    "min_prior_starts": 3,
+    "fo_halflife_games": 3,
+    "fo_prior_games": 3,
+    "fo_prior_draws": 50,
+    "fo_team_prior": 500,
+    "fo_opp_beta": 1.0
   },
   "dist": {
     "sog": {
@@ -79,6 +84,9 @@
     },
     "toi": {
       "sd_min": 2.523
+    },
+    "faceoffs": {
+      "nb_r": 23.06
     },
     "saves": {
       "q_full": 0.7815,

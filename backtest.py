@@ -191,6 +191,17 @@ def main():
     report["props"]["toi"] = toi_report(train, test, {"season-to-date avg": "b_season_toi_sec",
                                                       "last-10 avg": "b_last10_toi_sec"})
 
+    if "mu_fo" in sdf and sdf["mu_fo"].notna().any():
+        fdf = sdf[sdf["mu_fo"].notna() & (sdf["n_fo"] >= base["min_prior_games"]) & (sdf["fo_tpg"] >= 8)].copy()
+        fdf = add_baselines(fdf, "fo_won", "player_id")
+        ftr, fte = fdf[fdf["date"] < a.test_from], fdf[fdf["date"] >= a.test_from]
+        if len(fte) < 500:
+            fte = ftr
+        if len(ftr) >= 500:
+            report["props"]["faceoffs"] = count_report(ftr, fte, "mu_fo", "fo_won", [5.5, 7.5, 9.5, 11.5],
+                                                       {"season-to-date avg": "b_season_fo_won", "last-10 avg": "b_last10_fo_won"})
+            report["props"]["faceoffs"]["note"] = "players projected to take 8+ faceoffs"
+
     gdf = gdf[(gdf["n_prior"] >= 3) & gdf["mu_saves"].notna() & (gdf["date"] >= a.warmup_until)].copy()
     gdf["pos"] = "G"
     gdf = add_baselines(gdf, "saves", "player_id", k=3)

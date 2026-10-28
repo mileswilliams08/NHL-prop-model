@@ -43,6 +43,12 @@ def load_history(cfg=None):
     sk, gm, gk = (d[d["game_type"].isin(types)] for d in (sk, gm, gk))
     for c in ("hits", "blocked"):
         sk[c] = pd.to_numeric(sk[c], errors="coerce").fillna(0)
+    fo_path = os.path.join(HIST_DIR, "skater_faceoffs.csv")
+    if os.path.exists(fo_path):   # faceoffs won/taken (fo_backfill.py); a covered game with no row = took none
+        fo = pd.read_csv(fo_path, usecols=["game_id", "player_id", "fo_won", "fo_taken"])
+        sk = sk.merge(fo, on=["game_id", "player_id"], how="left")
+        sk["has_fo"] = sk["game_id"].isin(set(fo["game_id"]))
+        sk[["fo_won", "fo_taken"]] = sk[["fo_won", "fo_taken"]].fillna(0)
     for c in ("saves", "shots_against"):
         gk[c] = pd.to_numeric(gk[c], errors="coerce").fillna(0)
     return sk, gm, gk
@@ -63,6 +69,10 @@ class Walker:
         self.lg_toi = {g: [0.0, 0.0] for g in ("F", "D")}
         self.lg_shots = [0.0, 0.0]     # decayed [shots, team-games] (shots for == shots against league-wide)
         self.lg_sv = [0.0, 0.0]        # decayed [saves, shots against] for goalies
+        self.dfo = 0.5 ** (1.0 / params.get("fo_halflife_games", 10))
+        self.fo = {}                   # player -> faceoff state
+        self.lg_fo_tpg = [0.0, 0.0]    # decayed [faceoffs taken, games] by regular centers (5+ taken)
+        self.team_fo = {}              # team -> decayed [won, taken, season]
 
     # ---------------------------------------------------------------- baselines
     def rate_prior(self, g, stat):
@@ -114,6 +124,59 @@ class Walker:
         if stat == "sog":
             mu *= self.opp_factor(opp) ** self.p["opp_beta"]
         return mu, n
+
+    # ---------------------------------------------------------------- faceoffs
+    def fo_parts(self, pid, opp):
+        """(projected faceoffs taken, win rate vs this opponent, games of history) or None."""
+        st = self.fo.get(int(pid)) if pid not in (None, "") else None
+        if not st:
+            return None
+        k, n = self.p.get("fo_prior_games", 3), st["n"]
+        lg_tpg = self.lg_fo_tpg[0] / self.lg_fo_tpg[1] if self.lg_fo_tpg[1] > 0 else 12.0
+        tpg = (n * st["tpg"] + k * lg_tpg) / (n + k)
+        m = self.p.get("fo_prior_draws", 200)
+        rate = (st["W"] + 0.5 * m) / (st["T"] + m)
+        beta, t = self.p.get("fo_opp_beta", 1.0), self.team_fo.get(opp)
+        if beta and t:
+            mo = self.p.get("fo_team_prior", 500)
+            orate = (t[0] + 0.5 * mo) / (t[1] + mo)
+            lo = math.log(rate / (1 - rate)) - beta * math.log(orate / (1 - orate))
+            rate = 1.0 / (1.0 + math.exp(-lo))
+        return tpg, rate, n
+
+    def fo_mu(self, pid, opp):
+        """(expected faceoffs won, games of history) or (None, 0)."""
+        f = self.fo_parts(pid, opp)
+        return (None, 0) if f is None else (f[0] * f[1], f[2])
+
+    def update_fo(self, rows):
+        """rows: (pid, team, season, won, taken) for games with faceoff data."""
+        self.lg_fo_tpg = [x * LEAGUE_DECAY for x in self.lg_fo_tpg]
+        carry, team_sum = self.p["season_carry"], {}
+        for pid, team, season, won, taken in rows:
+            ts = team_sum.setdefault((team, season), [0.0, 0.0])
+            ts[0] += won; ts[1] += taken
+            st = self.fo.get(pid)
+            if st is None:
+                if taken <= 0:
+                    continue          # never tracked players who don't take draws
+                st = self.fo[pid] = {"W": 0.0, "T": 0.0, "tpg": float(taken), "n": 0, "season": season}
+            elif st["season"] != season:
+                st["W"] *= carry; st["T"] *= carry; st["season"] = season
+            st["W"] = self.d * st["W"] + won
+            st["T"] = self.d * st["T"] + taken
+            st["tpg"] = self.dfo * st["tpg"] + (1 - self.dfo) * taken if st["n"] else float(taken)
+            st["n"] += 1
+            if taken >= 5:
+                self.lg_fo_tpg[0] += taken; self.lg_fo_tpg[1] += 1
+        for (team, season), (w_, t_) in team_sum.items():
+            t = self.team_fo.get(team)
+            if t is None:
+                t = self.team_fo[team] = [0.0, 0.0, season]
+            elif t[2] != season:
+                t[0] *= carry; t[1] *= carry; t[2] = season
+            t[0] = self.do * t[0] + w_
+            t[1] = self.do * t[1] + t_
 
     # ---------------------------------------------------------------- goalie prediction
     def goalie_mu(self, gid, team, opp):
@@ -203,17 +266,23 @@ def walk(sk, gm, params, gk=None, collect=True):
 
     for d in sorted(set(skd) | set(gmd) | set(gkd)):
         srows, grows, krows = skd.get(d), gmd.get(d), gkd.get(d)
-        tuples, gtuples, ktuples = [], [], []
+        tuples, gtuples, ktuples, fo_rows = [], [], [], []
         if srows is not None:
             for r in srows.itertuples(index=False):
+                has_fo = bool(getattr(r, "has_fo", False))
                 if collect and r.toi_sec > 0:
                     toi_p, n = w.player_toi(r.player_id)
                     mus = {s: w.player_mu(r.player_id, r.opp, s)[0] for s in SKATER_STATS}
+                    f = w.fo_parts(r.player_id, r.opp) if has_fo else None
                     out_s.append((r.date, r.season, r.game_id, r.player_id, r.team, r.opp,
                                   POS_GROUP.get(r.position, "F"), n, mus["sog"], mus["hits"], mus["blocks"],
-                                  toi_p, r.sog, r.hits, r.blocked, r.toi_sec))
+                                  toi_p, r.sog, r.hits, r.blocked, r.toi_sec,
+                                  f[0] * f[1] if f else np.nan, f[0] if f else np.nan, f[2] if f else 0,
+                                  r.fo_won if has_fo else np.nan, r.fo_taken if has_fo else np.nan))
                 tuples.append((int(r.player_id), r.position, r.season, r.toi_sec,
                                {s: getattr(r, c) for s, c in SKATER_STATS.items()}))
+                if has_fo and r.toi_sec > 0:
+                    fo_rows.append((int(r.player_id), r.team, r.season, float(r.fo_won), float(r.fo_taken)))
         if krows is not None:
             for r in krows.itertuples(index=False):
                 if collect and r.toi_sec > 0 and str(r.starter).lower() == "true":
@@ -226,11 +295,14 @@ def walk(sk, gm, params, gk=None, collect=True):
                 gtuples.append((r.away, r.away_sog, r.home_sog, r.season))
                 gtuples.append((r.home, r.home_sog, r.away_sog, r.season))
         w.update(tuples, gtuples, ktuples)
+        if fo_rows:
+            w.update_fo(fo_rows)
 
     if not collect:
         return None, None, w
     sdf = pd.DataFrame(out_s, columns=["date", "season", "game_id", "player_id", "team", "opp", "pos", "n_prior",
-                                       "mu_sog", "mu_hits", "mu_blocks", "toi_proj", "sog", "hits", "blocks", "toi_sec"])
+                                       "mu_sog", "mu_hits", "mu_blocks", "toi_proj", "sog", "hits", "blocks", "toi_sec",
+                                       "mu_fo", "fo_tpg", "n_fo", "fo_won", "fo_taken"])
     gdf = pd.DataFrame(out_g, columns=["date", "season", "game_id", "player_id", "team", "opp", "n_prior", "mu_saves",
                                        "saves", "shots_against", "toi_sec"])
     return sdf, gdf, w
@@ -324,6 +396,6 @@ def dist_for(cfg, cat):
         out = {"q_full": 0.78, "pull_frac": 0.80, "nb_r_full": 50.0, "nb_r_pull": 8.0}
         out.update({k: v for k, v in d.items() if k in out})
         return out
-    defaults = {"hits": {"nb_r": 6.0}, "blocks": {"nb_r": 6.0}, "toi": {"sd_min": 3.0}}
+    defaults = {"hits": {"nb_r": 6.0}, "blocks": {"nb_r": 6.0}, "toi": {"sd_min": 3.0}, "faceoffs": {"nb_r": 20.0}}
     key = "sd_min" if cat == "toi" else "nb_r"
     return d.get(key, defaults.get(cat, {}).get(key))

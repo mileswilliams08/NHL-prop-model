@@ -78,6 +78,12 @@ def main():
     # category -> {(game_id, player_id): (toi_sec, actual)}; TOI props are graded in minutes
     sources = {"sog": index(sk, "sog"), "hits": index(sk, "hits"), "blocks": index(sk, "blocked"),
                "toi": index(sk, "toi_sec", 60.0), "saves": index(gk, "saves")}
+    fo_path = os.path.join(HIST_DIR, "skater_faceoffs.csv")
+    if os.path.exists(fo_path):
+        fo = pd.read_csv(fo_path, usecols=["game_id", "player_id", "fo_won"])
+        covered = sk[sk["game_id"].isin(set(fo["game_id"]))].merge(fo, on=["game_id", "player_id"], how="left")
+        covered["fo_won"] = covered["fo_won"].fillna(0)
+        sources["faceoffs"] = index(covered, "fo_won")
 
     new_rows, pending = [], 0
     for k, (pk, snap_at, mver) in sorted(todo.items()):
