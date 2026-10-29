@@ -22,7 +22,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 63692,Hampus Lindholm,BOS,D,8476854,Hampus Lindholm,exact,2026-10-24,2026-10-27
 347842,JJ Peterka,BOS,F,8482175,JJ Peterka,exact,2026-10-19,2026-10-29
 315262,James Hagens,BOS,F,8485395,James Hagens,exact,2026-10-24,2026-10-27
-218357,Jeremy Swayman,BOS,G,8480280,Jeremy Swayman,exact,2026-10-17,2026-10-27
+218357,Jeremy Swayman,BOS,G,8480280,Jeremy Swayman,exact,2026-10-17,2026-10-29
 219292,Mark Kastelic,BOS,F,8480355,Mark Kastelic,exact,2026-10-20,2026-10-29
 349324,Michael DiPietro,BOS,G,8480022,Michael DiPietro,exact,2026-10-22,2026-10-22
 171836,Morgan Geekie,BOS,F,8479987,Morgan Geekie,exact,2026-10-19,2026-10-27
@@ -386,7 +386,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218341,Jordan Binnington,STL,G,8476412,Jordan Binnington,exact,2026-10-17,2026-10-27
 346303,Mason McTavish,STL,F,8482745,Mason McTavish,exact,2026-10-20,2026-10-29
 218232,Pavel Buchnevich,STL,F,8477402,Pavel Buchnevich,exact,2026-10-17,2026-10-27
-226661,Philip Broberg,STL,D,8481598,Philip Broberg,exact,2026-10-24,2026-10-27
+226661,Philip Broberg,STL,D,8481598,Philip Broberg,exact,2026-10-24,2026-10-29
 58601,Robert Thomas,STL,F,8480023,Robert Thomas,exact,2026-10-17,2026-10-29
 218435,Andrei Vasilevskiy,TB,G,8476883,Andrei Vasilevskiy,exact,2026-10-20,2026-10-29
 218705,Anthony Cirelli,TB,F,8478519,Anthony Cirelli,exact,2026-10-17,2026-10-29
