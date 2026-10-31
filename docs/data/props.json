@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-31T04:04:25.804370+00:00",
+ "generated_at": "2026-10-31T05:23:23.866814+00:00",
  "slate_dates": [
   "2026-10-31"
  ],
@@ -32,6 +32,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 24.7207,
    "p_over": 0.4559,
    "p_under": 0.5441,
@@ -43,7 +44,14 @@
    "prob_cal": 0.5172,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 25.0
+   "recent_toi": 25.0,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 24.369,
+    "side": "under",
+    "prob": 0.6003,
+    "prob_cal": 0.5391
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -63,6 +71,7 @@
    "headline": false,
    "board_time": "2026-10-30T13:32:18.033-04:00",
    "updated_at": "2026-10-30T23:49:49.201-04:00",
+   "is_home": true,
    "model_mean": 21.5661,
    "p_over": 0.4942,
    "p_under": 0.4417,
@@ -91,6 +100,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 20.2948,
    "p_over": 0.3899,
    "p_under": 0.6101,
@@ -102,7 +112,14 @@
    "prob_cal": 0.5429,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 19.9
+   "recent_toi": 19.9,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.095,
+    "side": "under",
+    "prob": 0.6422,
+    "prob_cal": 0.5554
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -122,6 +139,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 20.4847,
    "p_over": 0.4581,
    "p_under": 0.5419,
@@ -133,7 +151,14 @@
    "prob_cal": 0.5163,
    "tier": "Mid",
    "tier_rank": "D3",
-   "recent_toi": 20.3
+   "recent_toi": 20.3,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.362,
+    "side": "under",
+    "prob": 0.5621,
+    "prob_cal": 0.5242
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -153,6 +178,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 20.1972,
    "p_over": 0.4522,
    "p_under": 0.5478,
@@ -164,7 +190,14 @@
    "prob_cal": 0.5186,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 20.5
+   "recent_toi": 20.5,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.396,
+    "side": "under",
+    "prob": 0.5168,
+    "prob_cal": 0.5065
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -184,6 +217,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T21:43:15.538-04:00",
+   "is_home": true,
    "model_mean": 12.0049,
    "p_over": 0.5154,
    "p_under": 0.3892,
@@ -215,6 +249,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 5.8522,
    "p_over": 0.3718,
    "p_under": 0.6282,
@@ -245,7 +280,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T13:44:45.224-04:00",
-   "updated_at": "2026-10-31T00:02:57.695-04:00",
+   "updated_at": "2026-10-31T01:13:48.971-04:00",
+   "is_home": true,
    "model_mean": 3.3392,
    "p_over": 0.42,
    "p_under": 0.58,
@@ -277,6 +313,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 2.3106,
    "p_over": 0.3893,
    "p_under": 0.6107,
@@ -288,7 +325,14 @@
    "prob_cal": 0.5432,
    "tier": "Depth",
    "tier_rank": "F12",
-   "recent_toi": 11.2
+   "recent_toi": 11.2,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.684,
+    "side": "under",
+    "prob": 0.5205,
+    "prob_cal": 0.508
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -308,6 +352,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 2.5818,
    "p_over": 0.4454,
    "p_under": 0.3381,
@@ -319,7 +364,14 @@
    "prob_cal": 0.5267,
    "tier": "Depth",
    "tier_rank": "F10",
-   "recent_toi": 13.2
+   "recent_toi": 13.2,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.698,
+    "side": "over",
+    "prob": 0.6228,
+    "prob_cal": 0.5479
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -338,7 +390,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T20:46:51.619-04:00",
-   "updated_at": "2026-10-30T23:53:50.716-04:00",
+   "updated_at": "2026-10-31T00:09:13.113-04:00",
+   "is_home": false,
    "model_mean": 1.8308,
    "p_over": 0.5313,
    "p_under": 0.4687,
@@ -370,6 +423,7 @@
    "headline": false,
    "board_time": "2026-10-30T22:35:41.216-04:00",
    "updated_at": "2026-10-30T22:35:41.297-04:00",
+   "is_home": true,
    "model_mean": 1.9011,
    "p_over": 0.5437,
    "p_under": 0.4563,
@@ -401,6 +455,7 @@
    "headline": false,
    "board_time": "2026-10-30T22:37:56.136-04:00",
    "updated_at": "2026-10-30T22:37:56.246-04:00",
+   "is_home": false,
    "model_mean": 1.4556,
    "p_over": 0.4163,
    "p_under": 0.5837,
@@ -432,6 +487,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 0.6977,
    "p_over": 0.4792,
    "p_under": 0.5208,
@@ -443,7 +499,14 @@
    "prob_cal": 0.5081,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 20.5
+   "recent_toi": 20.5,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 0.436,
+    "side": "under",
+    "prob": 0.6538,
+    "prob_cal": 0.56
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -463,6 +526,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 25.8587,
    "p_over": 0.5172,
    "p_under": 0.4828,
@@ -474,7 +538,14 @@
    "prob_cal": 0.5067,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 26.2
+   "recent_toi": 26.2,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 25.467,
+    "side": "under",
+    "prob": 0.5454,
+    "prob_cal": 0.5177
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -494,6 +565,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 23.8647,
    "p_over": 0.5575,
    "p_under": 0.4425,
@@ -505,7 +577,14 @@
    "prob_cal": 0.5224,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 24.1
+   "recent_toi": 24.1,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 24.3,
+    "side": "over",
+    "prob": 0.6264,
+    "prob_cal": 0.5493
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -525,6 +604,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 19.5866,
    "p_over": 0.5137,
    "p_under": 0.4863,
@@ -536,7 +616,14 @@
    "prob_cal": 0.5053,
    "tier": "Top",
    "tier_rank": "F3",
-   "recent_toi": 19.8
+   "recent_toi": 19.8,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 19.805,
+    "side": "over",
+    "prob": 0.5488,
+    "prob_cal": 0.519
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -556,6 +643,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 19.6653,
    "p_over": 0.5261,
    "p_under": 0.4739,
@@ -567,7 +655,14 @@
    "prob_cal": 0.5102,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 20.0
+   "recent_toi": 20.0,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 19.657,
+    "side": "over",
+    "prob": 0.5252,
+    "prob_cal": 0.5098
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -587,6 +682,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T21:43:23.628-04:00",
+   "is_home": false,
    "model_mean": 10.622,
    "p_over": 0.4796,
    "p_under": 0.4173,
@@ -618,6 +714,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 6.6102,
    "p_over": 0.3494,
    "p_under": 0.5213,
@@ -649,6 +746,7 @@
    "headline": true,
    "board_time": "2026-10-30T14:44:31.028-04:00",
    "updated_at": "2026-10-31T00:00:55.980-04:00",
+   "is_home": true,
    "model_mean": 3.3964,
    "p_over": 0.4312,
    "p_under": 0.5688,
@@ -680,6 +778,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 2.3475,
    "p_over": 0.3972,
    "p_under": 0.6028,
@@ -691,7 +790,14 @@
    "prob_cal": 0.5401,
    "tier": "Mid",
    "tier_rank": "F7",
-   "recent_toi": 15.3
+   "recent_toi": 15.3,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.455,
+    "side": "under",
+    "prob": 0.5705,
+    "prob_cal": 0.5275
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -711,6 +817,7 @@
    "headline": true,
    "board_time": "2026-10-30T20:46:30.760-04:00",
    "updated_at": "2026-10-30T22:30:50.831-04:00",
+   "is_home": true,
    "model_mean": 2.5212,
    "p_over": 0.4505,
    "p_under": 0.5495,
@@ -742,6 +849,7 @@
    "headline": true,
    "board_time": "2026-10-30T20:46:30.678-04:00",
    "updated_at": "2026-10-30T22:25:20.794-04:00",
+   "is_home": false,
    "model_mean": 1.6626,
    "p_over": 0.4834,
    "p_under": 0.5166,
@@ -773,6 +881,7 @@
    "headline": true,
    "board_time": "2026-10-30T22:28:11.317-04:00",
    "updated_at": "2026-10-30T22:28:11.405-04:00",
+   "is_home": false,
    "model_mean": 1.5884,
    "p_over": 0.4611,
    "p_under": 0.5389,
@@ -790,32 +899,33 @@
    "game_date": "2026-10-31",
    "start_time": "2026-10-31T13:00:00.000-04:00",
    "nhl_game_id": 2026020218,
-   "player": "Justin Faulk",
-   "team": "DET",
-   "opp": "STL",
-   "position": "D",
-   "pp_player_id": "305421",
-   "nhl_id": "8475753",
-   "pp_proj_id": "16454860",
+   "player": "Robert Thomas",
+   "team": "STL",
+   "opp": "DET",
+   "position": "F",
+   "pp_player_id": "58601",
+   "nhl_id": "8480023",
+   "pp_proj_id": "16454816",
    "category": "sog",
    "line": 1.5,
    "odds_type": "standard",
    "adjusted_odds": true,
    "headline": true,
-   "board_time": "2026-10-30T22:31:12.967-04:00",
-   "updated_at": "2026-10-30T22:31:13.056-04:00",
-   "model_mean": 1.5679,
-   "p_over": 0.4548,
-   "p_under": 0.5452,
+   "board_time": "2026-10-30T22:28:51.268-04:00",
+   "updated_at": "2026-10-31T00:58:51.295-04:00",
+   "is_home": false,
+   "model_mean": 1.5262,
+   "p_over": 0.4419,
+   "p_under": 0.5581,
    "p_push": 0.0,
    "side": "under",
-   "prob": 0.5452,
-   "n_prior": 176,
+   "prob": 0.5581,
+   "n_prior": 154,
    "skip_reason": null,
-   "prob_cal": 0.5176,
-   "tier": "Mid",
-   "tier_rank": "D3",
-   "recent_toi": 19.7
+   "prob_cal": 0.5227,
+   "tier": "Top",
+   "tier_rank": "F1",
+   "recent_toi": 20.0
   },
   {
    "game_date": "2026-10-31",
@@ -835,6 +945,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 24.8901,
    "p_over": 0.3666,
    "p_under": 0.6334,
@@ -846,7 +957,14 @@
    "prob_cal": 0.552,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 25.2
+   "recent_toi": 25.2,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 24.778,
+    "side": "under",
+    "prob": 0.6522,
+    "prob_cal": 0.5593
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -866,6 +984,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 21.1041,
    "p_over": 0.4769,
    "p_under": 0.5231,
@@ -877,7 +996,14 @@
    "prob_cal": 0.509,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 21.1
+   "recent_toi": 21.1,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.952,
+    "side": "under",
+    "prob": 0.5478,
+    "prob_cal": 0.5186
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -897,6 +1023,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 21.6601,
    "p_over": 0.6032,
    "p_under": 0.3968,
@@ -908,7 +1035,14 @@
    "prob_cal": 0.5402,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 21.3
+   "recent_toi": 21.3,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 21.505,
+    "side": "over",
+    "prob": 0.5806,
+    "prob_cal": 0.5314
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -928,6 +1062,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 8.8529,
    "p_over": 0.3949,
    "p_under": 0.6051,
@@ -959,6 +1094,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 10.0022,
    "p_over": 0.5202,
    "p_under": 0.4798,
@@ -990,6 +1126,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 3.0207,
    "p_over": 0.3521,
    "p_under": 0.6479,
@@ -1001,7 +1138,46 @@
    "prob_cal": 0.5577,
    "tier": "Mid",
    "tier_rank": "F8",
-   "recent_toi": 15.2
+   "recent_toi": 15.2,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 3.329,
+    "side": "under",
+    "prob": 0.5868,
+    "prob_cal": 0.5338
+   }
+  },
+  {
+   "game_date": "2026-10-31",
+   "start_time": "2026-10-31T14:00:00.000-04:00",
+   "nhl_game_id": 2026020219,
+   "player": "Brandon Hagel",
+   "team": "TBL",
+   "opp": "NSH",
+   "position": "F",
+   "pp_player_id": "218695",
+   "nhl_id": "8479542",
+   "pp_proj_id": "16457635",
+   "category": "sog",
+   "line": 3.5,
+   "odds_type": "standard",
+   "adjusted_odds": true,
+   "headline": true,
+   "board_time": "2026-10-31T00:14:12.624-04:00",
+   "updated_at": "2026-10-31T00:14:12.701-04:00",
+   "is_home": false,
+   "model_mean": 3.6274,
+   "p_over": 0.4753,
+   "p_under": 0.5247,
+   "p_push": 0.0,
+   "side": "under",
+   "prob": 0.5247,
+   "n_prior": 175,
+   "skip_reason": null,
+   "prob_cal": 0.5096,
+   "tier": "Top",
+   "tier_rank": "F1",
+   "recent_toi": 21.3
   },
   {
    "game_date": "2026-10-31",
@@ -1021,6 +1197,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 2.3212,
    "p_over": 0.3916,
    "p_under": 0.6084,
@@ -1032,7 +1209,14 @@
    "prob_cal": 0.5423,
    "tier": "Depth",
    "tier_rank": "F10",
-   "recent_toi": 13.2
+   "recent_toi": 13.2,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.702,
+    "side": "under",
+    "prob": 0.5166,
+    "prob_cal": 0.5065
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1051,7 +1235,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T20:46:20.867-04:00",
-   "updated_at": "2026-10-30T22:50:20.867-04:00",
+   "updated_at": "2026-10-31T00:14:12.170-04:00",
+   "is_home": false,
    "model_mean": 2.8831,
    "p_over": 0.531,
    "p_under": 0.469,
@@ -1083,6 +1268,7 @@
    "headline": false,
    "board_time": "2026-10-30T22:37:56.281-04:00",
    "updated_at": "2026-10-30T22:37:56.357-04:00",
+   "is_home": true,
    "model_mean": 1.5281,
    "p_over": 0.4387,
    "p_under": 0.5613,
@@ -1114,6 +1300,7 @@
    "headline": true,
    "board_time": "2026-10-30T23:07:12.919-04:00",
    "updated_at": "2026-10-30T23:07:13.026-04:00",
+   "is_home": false,
    "model_mean": 1.544,
    "p_over": 0.4474,
    "p_under": 0.5526,
@@ -1126,6 +1313,38 @@
    "tier": "Mid",
    "tier_rank": "F8",
    "recent_toi": 14.4
+  },
+  {
+   "game_date": "2026-10-31",
+   "start_time": "2026-10-31T14:00:00.000-04:00",
+   "nhl_game_id": 2026020219,
+   "player": "Ross Colton",
+   "team": "NSH",
+   "opp": "TBL",
+   "position": "F",
+   "pp_player_id": "347989",
+   "nhl_id": "8479525",
+   "pp_proj_id": "16457633",
+   "category": "sog",
+   "line": 1.5,
+   "odds_type": "standard",
+   "adjusted_odds": true,
+   "headline": true,
+   "board_time": "2026-10-31T00:14:12.230-04:00",
+   "updated_at": "2026-10-31T00:14:12.299-04:00",
+   "is_home": true,
+   "model_mean": 1.6567,
+   "p_over": 0.4816,
+   "p_under": 0.5184,
+   "p_push": 0.0,
+   "side": "under",
+   "prob": 0.5184,
+   "n_prior": 159,
+   "skip_reason": null,
+   "prob_cal": 0.5072,
+   "tier": "Depth",
+   "tier_rank": "F10",
+   "recent_toi": 13.2
   },
   {
    "game_date": "2026-10-31",
@@ -1145,6 +1364,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 27.3323,
    "p_over": 0.5913,
    "p_under": 0.4087,
@@ -1156,7 +1376,14 @@
    "prob_cal": 0.5356,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 27.7
+   "recent_toi": 27.7,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 26.005,
+    "side": "under",
+    "prob": 0.6179,
+    "prob_cal": 0.546
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1176,6 +1403,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 23.135,
    "p_over": 0.5213,
    "p_under": 0.4787,
@@ -1187,7 +1415,14 @@
    "prob_cal": 0.5083,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 23.4
+   "recent_toi": 23.4,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 22.791,
+    "side": "under",
+    "prob": 0.5336,
+    "prob_cal": 0.5131
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1207,6 +1442,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 21.3674,
    "p_over": 0.5186,
    "p_under": 0.4814,
@@ -1218,7 +1454,14 @@
    "prob_cal": 0.5072,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 21.5
+   "recent_toi": 21.5,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.739,
+    "side": "under",
+    "prob": 0.5815,
+    "prob_cal": 0.5318
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1238,6 +1481,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 9.0788,
    "p_over": 0.3191,
    "p_under": 0.5798,
@@ -1269,6 +1513,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 10.1177,
    "p_over": 0.4279,
    "p_under": 0.4678,
@@ -1294,21 +1539,22 @@
    "nhl_id": "8477934",
    "pp_proj_id": "16447749",
    "category": "faceoffs",
-   "line": 9.0,
+   "line": 8.5,
    "odds_type": "standard",
    "adjusted_odds": false,
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
-   "updated_at": "2026-10-30T23:44:34.321-04:00",
+   "updated_at": "2026-10-31T00:25:11.087-04:00",
+   "is_home": false,
    "model_mean": 7.2395,
-   "p_over": 0.2185,
+   "p_over": 0.3148,
    "p_under": 0.6852,
-   "p_push": 0.0962,
+   "p_push": 0.0,
    "side": "under",
-   "prob": 0.7582,
+   "prob": 0.6852,
    "n_prior": 177,
    "skip_reason": null,
-   "prob_cal": 0.6007,
+   "prob_cal": 0.5722,
    "tier": "Top",
    "tier_rank": "F2",
    "recent_toi": 21.7
@@ -1331,6 +1577,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 3.3772,
    "p_over": 0.4129,
    "p_under": 0.5871,
@@ -1342,7 +1589,14 @@
    "prob_cal": 0.534,
    "tier": "Top",
    "tier_rank": "F3",
-   "recent_toi": 18.9
+   "recent_toi": 18.9,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 3.038,
+    "side": "under",
+    "prob": 0.6417,
+    "prob_cal": 0.5553
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1362,6 +1616,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 2.0861,
    "p_over": 0.3401,
    "p_under": 0.6599,
@@ -1373,7 +1628,14 @@
    "prob_cal": 0.5624,
    "tier": "Mid",
    "tier_rank": "F6",
-   "recent_toi": 17.8
+   "recent_toi": 17.8,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.158,
+    "side": "under",
+    "prob": 0.6394,
+    "prob_cal": 0.5544
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1393,6 +1655,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 1.7604,
    "p_over": 0.2655,
    "p_under": 0.7345,
@@ -1404,7 +1667,14 @@
    "prob_cal": 0.5914,
    "tier": "Depth",
    "tier_rank": "F13",
-   "recent_toi": 10.1
+   "recent_toi": 10.1,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.143,
+    "side": "under",
+    "prob": 0.643,
+    "prob_cal": 0.5558
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1424,6 +1694,7 @@
    "headline": true,
    "board_time": "2026-10-30T22:55:20.833-04:00",
    "updated_at": "2026-10-31T00:03:42.300-04:00",
+   "is_home": false,
    "model_mean": 2.5934,
    "p_over": 0.4672,
    "p_under": 0.5328,
@@ -1455,6 +1726,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 1.8438,
    "p_over": 0.2849,
    "p_under": 0.4891,
@@ -1466,7 +1738,14 @@
    "prob_cal": 0.5515,
    "tier": "Mid",
    "tier_rank": "F5",
-   "recent_toi": 16.0
+   "recent_toi": 16.0,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 1.924,
+    "side": "under",
+    "prob": 0.5985,
+    "prob_cal": 0.5384
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1486,6 +1765,7 @@
    "headline": true,
    "board_time": "2026-10-30T20:57:10.805-04:00",
    "updated_at": "2026-10-30T21:24:21.077-04:00",
+   "is_home": true,
    "model_mean": 1.7012,
    "p_over": 0.4947,
    "p_under": 0.5053,
@@ -1498,6 +1778,70 @@
    "tier": "Top",
    "tier_rank": "F3",
    "recent_toi": 16.9
+  },
+  {
+   "game_date": "2026-10-31",
+   "start_time": "2026-10-31T14:00:00.000-04:00",
+   "nhl_game_id": 2026020220,
+   "player": "Emil Heineman",
+   "team": "NYI",
+   "opp": "EDM",
+   "position": "F",
+   "pp_player_id": "268177",
+   "nhl_id": "8482476",
+   "pp_proj_id": "16457484",
+   "category": "sog",
+   "line": 1.5,
+   "odds_type": "standard",
+   "adjusted_odds": true,
+   "headline": true,
+   "board_time": "2026-10-31T00:08:41.276-04:00",
+   "updated_at": "2026-10-31T00:08:41.337-04:00",
+   "is_home": true,
+   "model_mean": 1.8251,
+   "p_over": 0.5298,
+   "p_under": 0.4702,
+   "p_push": 0.0,
+   "side": "over",
+   "prob": 0.5298,
+   "n_prior": 162,
+   "skip_reason": null,
+   "prob_cal": 0.5116,
+   "tier": "Mid",
+   "tier_rank": "F6",
+   "recent_toi": 16.0
+  },
+  {
+   "game_date": "2026-10-31",
+   "start_time": "2026-10-31T14:00:00.000-04:00",
+   "nhl_game_id": 2026020220,
+   "player": "Ryan Pulock",
+   "team": "NYI",
+   "opp": "EDM",
+   "position": "D",
+   "pp_player_id": "59900",
+   "nhl_id": "8477506",
+   "pp_proj_id": "16457499",
+   "category": "blocks",
+   "line": 1.5,
+   "odds_type": "standard",
+   "adjusted_odds": true,
+   "headline": false,
+   "board_time": "2026-10-31T00:08:41.712-04:00",
+   "updated_at": "2026-10-31T00:08:41.798-04:00",
+   "is_home": true,
+   "model_mean": 1.5858,
+   "p_over": 0.4561,
+   "p_under": 0.5439,
+   "p_push": 0.0,
+   "side": "under",
+   "prob": 0.5439,
+   "n_prior": 163,
+   "skip_reason": null,
+   "prob_cal": 0.5171,
+   "tier": "Mid",
+   "tier_rank": "D4",
+   "recent_toi": 17.6
   },
   {
    "game_date": "2026-10-31",
@@ -1517,6 +1861,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 24.5463,
    "p_over": 0.3166,
    "p_under": 0.6834,
@@ -1528,7 +1873,14 @@
    "prob_cal": 0.5715,
    "tier": "Top",
    "tier_rank": "D2",
-   "recent_toi": 24.8
+   "recent_toi": 24.8,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 24.042,
+    "side": "under",
+    "prob": 0.7542,
+    "prob_cal": 0.5991
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1548,6 +1900,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 20.4102,
    "p_over": 0.5253,
    "p_under": 0.4747,
@@ -1559,7 +1912,14 @@
    "prob_cal": 0.5099,
    "tier": "Top",
    "tier_rank": "F2",
-   "recent_toi": 20.7
+   "recent_toi": 20.7,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.279,
+    "side": "over",
+    "prob": 0.5047,
+    "prob_cal": 0.5018
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1579,6 +1939,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 19.0651,
    "p_over": 0.4708,
    "p_under": 0.5292,
@@ -1590,7 +1951,14 @@
    "prob_cal": 0.5114,
    "tier": "Top",
    "tier_rank": "F2",
-   "recent_toi": 19.2
+   "recent_toi": 19.2,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 19.205,
+    "side": "under",
+    "prob": 0.5072,
+    "prob_cal": 0.5028
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1610,6 +1978,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 2.1923,
    "p_over": 0.3637,
    "p_under": 0.6363,
@@ -1621,7 +1990,14 @@
    "prob_cal": 0.5532,
    "tier": "Mid",
    "tier_rank": "F8",
-   "recent_toi": 15.0
+   "recent_toi": 15.0,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.379,
+    "side": "under",
+    "prob": 0.5878,
+    "prob_cal": 0.5342
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1641,6 +2017,7 @@
    "headline": true,
    "board_time": "2026-10-30T21:04:21.370-04:00",
    "updated_at": "2026-10-30T23:14:20.414-04:00",
+   "is_home": false,
    "model_mean": 2.7341,
    "p_over": 0.4989,
    "p_under": 0.5011,
@@ -1653,37 +2030,6 @@
    "tier": "Top",
    "tier_rank": "D2",
    "recent_toi": 24.8
-  },
-  {
-   "game_date": "2026-10-31",
-   "start_time": "2026-10-31T16:00:00.000-04:00",
-   "nhl_game_id": 2026020221,
-   "player": "Jack Quinn",
-   "team": "BUF",
-   "opp": "LAK",
-   "position": "F",
-   "pp_player_id": "92751",
-   "nhl_id": "8482097",
-   "pp_proj_id": "16452261",
-   "category": "sog",
-   "line": 2.5,
-   "odds_type": "standard",
-   "adjusted_odds": true,
-   "headline": true,
-   "board_time": "2026-10-30T21:04:21.409-04:00",
-   "updated_at": "2026-10-31T00:03:42.198-04:00",
-   "model_mean": 2.6706,
-   "p_over": 0.4847,
-   "p_under": 0.5153,
-   "p_push": 0.0,
-   "side": "under",
-   "prob": 0.5153,
-   "n_prior": 182,
-   "skip_reason": null,
-   "prob_cal": 0.506,
-   "tier": "Mid",
-   "tier_rank": "F4",
-   "recent_toi": 19.1
   },
   {
    "game_date": "2026-10-31",
@@ -1703,6 +2049,7 @@
    "headline": true,
    "board_time": "2026-10-30T21:04:21.586-04:00",
    "updated_at": "2026-10-30T23:14:20.367-04:00",
+   "is_home": true,
    "model_mean": 2.7237,
    "p_over": 0.4966,
    "p_under": 0.5034,
@@ -1734,6 +2081,7 @@
    "headline": true,
    "board_time": "2026-10-30T21:04:20.992-04:00",
    "updated_at": "2026-10-30T23:25:00.975-04:00",
+   "is_home": false,
    "model_mean": 1.8081,
    "p_over": 0.5251,
    "p_under": 0.4749,
@@ -1746,6 +2094,38 @@
    "tier": "Mid",
    "tier_rank": "F6",
    "recent_toi": 15.3
+  },
+  {
+   "game_date": "2026-10-31",
+   "start_time": "2026-10-31T16:00:00.000-04:00",
+   "nhl_game_id": 2026020221,
+   "player": "Jason Zucker",
+   "team": "BUF",
+   "opp": "LAK",
+   "position": "F",
+   "pp_player_id": "220168",
+   "nhl_id": "8475722",
+   "pp_proj_id": "16457630",
+   "category": "sog",
+   "line": 1.5,
+   "odds_type": "standard",
+   "adjusted_odds": true,
+   "headline": true,
+   "board_time": "2026-10-31T00:14:12.209-04:00",
+   "updated_at": "2026-10-31T00:14:12.274-04:00",
+   "is_home": false,
+   "model_mean": 1.6806,
+   "p_over": 0.4887,
+   "p_under": 0.5113,
+   "p_push": 0.0,
+   "side": "under",
+   "prob": 0.5113,
+   "n_prior": 152,
+   "skip_reason": null,
+   "prob_cal": 0.5044,
+   "tier": "Depth",
+   "tier_rank": "F11",
+   "recent_toi": 12.3
   },
   {
    "game_date": "2026-10-31",
@@ -1765,6 +2145,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 23.0589,
    "p_over": 0.4306,
    "p_under": 0.5694,
@@ -1776,7 +2157,14 @@
    "prob_cal": 0.5271,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 22.8
+   "recent_toi": 22.8,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 22.901,
+    "side": "under",
+    "prob": 0.5953,
+    "prob_cal": 0.5372
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1796,6 +2184,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 22.4743,
    "p_over": 0.4565,
    "p_under": 0.5435,
@@ -1807,7 +2196,14 @@
    "prob_cal": 0.517,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 23.0
+   "recent_toi": 23.0,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 22.328,
+    "side": "under",
+    "prob": 0.5674,
+    "prob_cal": 0.5263
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1827,6 +2223,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 21.9375,
    "p_over": 0.6074,
    "p_under": 0.3926,
@@ -1838,7 +2235,14 @@
    "prob_cal": 0.5419,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 22.4
+   "recent_toi": 22.4,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.99,
+    "side": "under",
+    "prob": 0.5416,
+    "prob_cal": 0.5162
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1858,6 +2262,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 8.8983,
    "p_over": 0.5116,
    "p_under": 0.3723,
@@ -1889,6 +2294,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 5.7929,
    "p_over": 0.3633,
    "p_under": 0.4941,
@@ -1920,6 +2326,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 2.5952,
    "p_over": 0.2761,
    "p_under": 0.5519,
@@ -1931,7 +2338,14 @@
    "prob_cal": 0.565,
    "tier": "Mid",
    "tier_rank": "F4",
-   "recent_toi": 17.5
+   "recent_toi": 17.5,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.202,
+    "side": "under",
+    "prob": 0.7617,
+    "prob_cal": 0.6021
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -1950,7 +2364,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T23:19:30.688-04:00",
-   "updated_at": "2026-10-31T00:03:42.219-04:00",
+   "updated_at": "2026-10-31T01:03:50.991-04:00",
+   "is_home": false,
    "model_mean": 2.4861,
    "p_over": 0.4423,
    "p_under": 0.5577,
@@ -1982,6 +2397,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 1.8657,
    "p_over": 0.5162,
    "p_under": 0.4838,
@@ -1993,7 +2409,14 @@
    "prob_cal": 0.5063,
    "tier": "Top",
    "tier_rank": "F3",
-   "recent_toi": 18.2
+   "recent_toi": 18.2,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 1.515,
+    "side": "under",
+    "prob": 0.5669,
+    "prob_cal": 0.5261
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2013,6 +2436,7 @@
    "headline": false,
    "board_time": "2026-10-30T22:39:25.718-04:00",
    "updated_at": "2026-10-30T22:39:25.805-04:00",
+   "is_home": true,
    "model_mean": 1.8146,
    "p_over": 0.5209,
    "p_under": 0.4791,
@@ -2044,6 +2468,7 @@
    "headline": false,
    "board_time": "2026-10-31T00:01:56.965-04:00",
    "updated_at": "2026-10-31T00:01:57.029-04:00",
+   "is_home": false,
    "model_mean": 1.8707,
    "p_over": 0.5358,
    "p_under": 0.4642,
@@ -2075,6 +2500,7 @@
    "headline": true,
    "board_time": "2026-10-31T00:01:57.176-04:00",
    "updated_at": "2026-10-31T00:01:57.252-04:00",
+   "is_home": true,
    "model_mean": 1.8881,
    "p_over": 0.5469,
    "p_under": 0.4531,
@@ -2105,7 +2531,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-31T00:02:27.047-04:00",
-   "updated_at": "2026-10-31T00:02:27.127-04:00",
+   "updated_at": "2026-10-31T01:05:21.031-04:00",
+   "is_home": true,
    "model_mean": 1.4699,
    "p_over": 0.4241,
    "p_under": 0.5759,
@@ -2137,6 +2564,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 26.0296,
    "p_over": 0.426,
    "p_under": 0.574,
@@ -2148,7 +2576,14 @@
    "prob_cal": 0.5288,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 25.8
+   "recent_toi": 25.8,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 25.674,
+    "side": "under",
+    "prob": 0.6303,
+    "prob_cal": 0.5508
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2168,6 +2603,7 @@
    "headline": false,
    "board_time": "2026-10-30T15:32:17.456-04:00",
    "updated_at": "2026-10-30T15:32:17.548-04:00",
+   "is_home": true,
    "model_mean": 24.4924,
    "p_over": 0.4336,
    "p_under": 0.5664,
@@ -2196,6 +2632,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 23.8453,
    "p_over": 0.5151,
    "p_under": 0.4849,
@@ -2207,7 +2644,14 @@
    "prob_cal": 0.5059,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 23.9
+   "recent_toi": 23.9,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 24.208,
+    "side": "over",
+    "prob": 0.5731,
+    "prob_cal": 0.5285
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2227,6 +2671,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 19.8421,
    "p_over": 0.4358,
    "p_under": 0.5642,
@@ -2238,7 +2683,14 @@
    "prob_cal": 0.525,
    "tier": "Top",
    "tier_rank": "F2",
-   "recent_toi": 19.8
+   "recent_toi": 19.8,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.513,
+    "side": "over",
+    "prob": 0.5422,
+    "prob_cal": 0.5165
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2258,6 +2710,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 20.1967,
    "p_over": 0.4916,
    "p_under": 0.5084,
@@ -2269,7 +2722,14 @@
    "prob_cal": 0.5033,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 20.1
+   "recent_toi": 20.1,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.047,
+    "side": "under",
+    "prob": 0.5326,
+    "prob_cal": 0.5127
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2289,6 +2749,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 10.0323,
    "p_over": 0.419,
    "p_under": 0.4767,
@@ -2320,6 +2781,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T21:43:33.955-04:00",
+   "is_home": false,
    "model_mean": 9.8748,
    "p_over": 0.5068,
    "p_under": 0.3847,
@@ -2351,6 +2813,7 @@
    "headline": true,
    "board_time": "2026-10-30T15:09:31.698-04:00",
    "updated_at": "2026-10-30T21:50:55.927-04:00",
+   "is_home": false,
    "model_mean": 3.3585,
    "p_over": 0.4238,
    "p_under": 0.5762,
@@ -2382,6 +2845,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 2.509,
    "p_over": 0.2605,
    "p_under": 0.7395,
@@ -2393,7 +2857,14 @@
    "prob_cal": 0.5934,
    "tier": "Depth",
    "tier_rank": "D7",
-   "recent_toi": 12.8
+   "recent_toi": 12.8,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.926,
+    "side": "under",
+    "prob": 0.6632,
+    "prob_cal": 0.5637
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2412,7 +2883,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T15:10:31.194-04:00",
-   "updated_at": "2026-10-30T22:58:20.862-04:00",
+   "updated_at": "2026-10-31T00:16:20.694-04:00",
+   "is_home": false,
    "model_mean": 2.8092,
    "p_over": 0.5153,
    "p_under": 0.4847,
@@ -2443,7 +2915,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T15:29:16.617-04:00",
-   "updated_at": "2026-10-30T21:56:50.799-04:00",
+   "updated_at": "2026-10-31T01:18:51.375-04:00",
+   "is_home": false,
    "model_mean": 2.8988,
    "p_over": 0.5343,
    "p_under": 0.4657,
@@ -2475,6 +2948,7 @@
    "headline": true,
    "board_time": "2026-10-30T15:34:31.552-04:00",
    "updated_at": "2026-10-30T23:25:15.844-04:00",
+   "is_home": true,
    "model_mean": 2.5246,
    "p_over": 0.4513,
    "p_under": 0.5487,
@@ -2506,6 +2980,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 2.5252,
    "p_over": 0.4341,
    "p_under": 0.5659,
@@ -2517,7 +2992,14 @@
    "prob_cal": 0.5257,
    "tier": "Mid",
    "tier_rank": "F9",
-   "recent_toi": 14.1
+   "recent_toi": 14.1,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.556,
+    "side": "under",
+    "prob": 0.548,
+    "prob_cal": 0.5187
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2537,6 +3019,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 1.8305,
    "p_over": 0.2818,
    "p_under": 0.4924,
@@ -2548,7 +3031,14 @@
    "prob_cal": 0.553,
    "tier": "Mid",
    "tier_rank": "F6",
-   "recent_toi": 16.6
+   "recent_toi": 16.6,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 1.812,
+    "side": "under",
+    "prob": 0.6356,
+    "prob_cal": 0.5529
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2568,6 +3058,7 @@
    "headline": true,
    "board_time": "2026-10-30T15:34:32.380-04:00",
    "updated_at": "2026-10-30T23:25:30.445-04:00",
+   "is_home": true,
    "model_mean": 1.6976,
    "p_over": 0.4937,
    "p_under": 0.5063,
@@ -2599,6 +3090,7 @@
    "headline": true,
    "board_time": "2026-10-30T21:50:55.936-04:00",
    "updated_at": "2026-10-30T21:50:56.033-04:00",
+   "is_home": true,
    "model_mean": 1.8654,
    "p_over": 0.5408,
    "p_under": 0.4592,
@@ -2630,6 +3122,7 @@
    "headline": false,
    "board_time": "2026-10-30T21:50:56.088-04:00",
    "updated_at": "2026-10-30T21:50:56.163-04:00",
+   "is_home": false,
    "model_mean": 1.9787,
    "p_over": 0.5634,
    "p_under": 0.4366,
@@ -2661,6 +3154,7 @@
    "headline": false,
    "board_time": "2026-10-30T21:50:56.193-04:00",
    "updated_at": "2026-10-30T21:50:56.295-04:00",
+   "is_home": true,
    "model_mean": 1.6635,
    "p_over": 0.4788,
    "p_under": 0.5212,
@@ -2692,6 +3186,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 0.8968,
    "p_over": 0.5612,
    "p_under": 0.4388,
@@ -2703,7 +3198,14 @@
    "prob_cal": 0.5239,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 23.9
+   "recent_toi": 23.9,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 0.575,
+    "side": "under",
+    "prob": 0.5732,
+    "prob_cal": 0.5285
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2723,6 +3225,7 @@
    "headline": false,
    "board_time": "2026-10-30T15:32:16.337-04:00",
    "updated_at": "2026-10-30T15:32:16.428-04:00",
+   "is_home": true,
    "model_mean": 24.7325,
    "p_over": 0.5639,
    "p_under": 0.4361,
@@ -2751,6 +3254,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 24.0029,
    "p_over": 0.579,
    "p_under": 0.421,
@@ -2762,7 +3266,14 @@
    "prob_cal": 0.5308,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 24.0
+   "recent_toi": 24.0,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 24.454,
+    "side": "over",
+    "prob": 0.6496,
+    "prob_cal": 0.5583
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2782,6 +3293,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 19.1667,
    "p_over": 0.4868,
    "p_under": 0.5132,
@@ -2793,7 +3305,14 @@
    "prob_cal": 0.5051,
    "tier": "Top",
    "tier_rank": "F2",
-   "recent_toi": 19.4
+   "recent_toi": 19.4,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 19.407,
+    "side": "over",
+    "prob": 0.5252,
+    "prob_cal": 0.5098
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2812,7 +3331,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T15:49:32.592-04:00",
-   "updated_at": "2026-10-31T00:02:26.960-04:00",
+   "updated_at": "2026-10-31T00:05:50.613-04:00",
+   "is_home": true,
    "model_mean": 2.861,
    "p_over": 0.3237,
    "p_under": 0.6763,
@@ -2844,6 +3364,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 2.2366,
    "p_over": 0.3733,
    "p_under": 0.4016,
@@ -2855,7 +3376,14 @@
    "prob_cal": 0.5071,
    "tier": "Mid",
    "tier_rank": "D3",
-   "recent_toi": 22.1
+   "recent_toi": 22.1,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 2.17,
+    "side": "under",
+    "prob": 0.5205,
+    "prob_cal": 0.508
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2875,6 +3403,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 1.881,
    "p_over": 0.2934,
    "p_under": 0.4801,
@@ -2886,7 +3415,14 @@
    "prob_cal": 0.5471,
    "tier": "Mid",
    "tier_rank": "F8",
-   "recent_toi": 14.1
+   "recent_toi": 14.1,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 1.974,
+    "side": "under",
+    "prob": 0.5824,
+    "prob_cal": 0.5322
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -2906,6 +3442,7 @@
    "headline": true,
    "board_time": "2026-10-30T15:24:31.418-04:00",
    "updated_at": "2026-10-31T00:01:21.138-04:00",
+   "is_home": false,
    "model_mean": 1.5694,
    "p_over": 0.4552,
    "p_under": 0.5448,
@@ -2937,6 +3474,7 @@
    "headline": true,
    "board_time": "2026-10-30T15:49:32.550-04:00",
    "updated_at": "2026-10-31T00:02:26.925-04:00",
+   "is_home": true,
    "model_mean": 1.694,
    "p_over": 0.4926,
    "p_under": 0.5074,
@@ -2968,6 +3506,7 @@
    "headline": true,
    "board_time": "2026-10-30T15:49:32.688-04:00",
    "updated_at": "2026-10-31T00:02:26.970-04:00",
+   "is_home": true,
    "model_mean": 1.5429,
    "p_over": 0.4471,
    "p_under": 0.5529,
@@ -2998,7 +3537,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T21:16:51.386-04:00",
-   "updated_at": "2026-10-30T21:19:51.707-04:00",
+   "updated_at": "2026-10-31T00:08:21.066-04:00",
+   "is_home": false,
    "model_mean": 1.678,
    "p_over": 0.4879,
    "p_under": 0.5121,
@@ -3030,6 +3570,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 0.9505,
    "p_over": 0.5806,
    "p_under": 0.4194,
@@ -3041,7 +3582,14 @@
    "prob_cal": 0.5314,
    "tier": "Top",
    "tier_rank": "F2",
-   "recent_toi": 19.4
+   "recent_toi": 19.4,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 0.649,
+    "side": "under",
+    "prob": 0.5346,
+    "prob_cal": 0.5135
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3061,6 +3609,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 28.29,
    "p_over": 0.5063,
    "p_under": 0.4937,
@@ -3072,7 +3621,14 @@
    "prob_cal": 0.5025,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 28.9
+   "recent_toi": 28.9,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 26.086,
+    "side": "under",
+    "prob": 0.8082,
+    "prob_cal": 0.6202
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3092,6 +3648,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T21:42:09.975-04:00",
+   "is_home": true,
    "model_mean": 25.1031,
    "p_over": 0.6324,
    "p_under": 0.3676,
@@ -3103,7 +3660,14 @@
    "prob_cal": 0.5516,
    "tier": "Top",
    "tier_rank": "D2",
-   "recent_toi": 25.5
+   "recent_toi": 25.5,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 24.76,
+    "side": "over",
+    "prob": 0.5813,
+    "prob_cal": 0.5317
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3123,6 +3687,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 20.6678,
    "p_over": 0.4476,
    "p_under": 0.5524,
@@ -3134,7 +3699,14 @@
    "prob_cal": 0.5204,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 20.5
+   "recent_toi": 20.5,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 21.503,
+    "side": "over",
+    "prob": 0.5803,
+    "prob_cal": 0.5313
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3154,6 +3726,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T21:43:41.362-04:00",
+   "is_home": false,
    "model_mean": 20.5834,
    "p_over": 0.4737,
    "p_under": 0.5263,
@@ -3165,7 +3738,14 @@
    "prob_cal": 0.5103,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 21.0
+   "recent_toi": 21.0,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 20.292,
+    "side": "under",
+    "prob": 0.5731,
+    "prob_cal": 0.5285
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3185,6 +3765,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 7.639,
    "p_over": 0.3629,
    "p_under": 0.6371,
@@ -3216,6 +3797,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T23:50:10.949-04:00",
+   "is_home": false,
    "model_mean": 3.0078,
    "p_over": 0.3499,
    "p_under": 0.6501,
@@ -3227,7 +3809,14 @@
    "prob_cal": 0.5585,
    "tier": "Mid",
    "tier_rank": "F7",
-   "recent_toi": 15.5
+   "recent_toi": 15.5,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 3.067,
+    "side": "under",
+    "prob": 0.6361,
+    "prob_cal": 0.5531
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3247,6 +3836,7 @@
    "headline": true,
    "board_time": "2026-10-30T16:24:31.176-04:00",
    "updated_at": "2026-10-31T00:03:21.419-04:00",
+   "is_home": true,
    "model_mean": 2.5516,
    "p_over": 0.4576,
    "p_under": 0.5424,
@@ -3278,6 +3868,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 2.0522,
    "p_over": 0.3325,
    "p_under": 0.6675,
@@ -3289,7 +3880,14 @@
    "prob_cal": 0.5653,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 21.0
+   "recent_toi": 21.0,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 1.947,
+    "side": "under",
+    "prob": 0.6905,
+    "prob_cal": 0.5743
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3309,6 +3907,7 @@
    "headline": true,
    "board_time": "2026-10-30T21:30:54.951-04:00",
    "updated_at": "2026-10-31T00:02:55.500-04:00",
+   "is_home": false,
    "model_mean": 2.5181,
    "p_over": 0.4498,
    "p_under": 0.5502,
@@ -3340,6 +3939,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": false,
    "model_mean": 1.5803,
    "p_over": 0.2236,
    "p_under": 0.5578,
@@ -3351,38 +3951,14 @@
    "prob_cal": 0.5834,
    "tier": "Mid",
    "tier_rank": "F8",
-   "recent_toi": 15.2
-  },
-  {
-   "game_date": "2026-10-31",
-   "start_time": "2026-10-31T20:00:00.000-04:00",
-   "nhl_game_id": 2026020225,
-   "player": "Matthew Knies",
-   "team": "CBJ",
-   "opp": "DAL",
-   "position": "F",
-   "pp_player_id": "348690",
-   "nhl_id": "8482720",
-   "pp_proj_id": "16453629",
-   "category": "sog",
-   "line": 1.5,
-   "odds_type": "standard",
-   "adjusted_odds": true,
-   "headline": true,
-   "board_time": "2026-10-30T21:30:54.860-04:00",
-   "updated_at": "2026-10-30T21:30:54.992-04:00",
-   "model_mean": 1.568,
-   "p_over": 0.4548,
-   "p_under": 0.5452,
-   "p_push": 0.0,
-   "side": "under",
-   "prob": 0.5452,
-   "n_prior": 181,
-   "skip_reason": null,
-   "prob_cal": 0.5176,
-   "tier": "Top",
-   "tier_rank": "F3",
-   "recent_toi": 18.3
+   "recent_toi": 15.2,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 1.911,
+    "side": "under",
+    "prob": 0.6029,
+    "prob_cal": 0.5401
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3402,6 +3978,7 @@
    "headline": true,
    "board_time": "2026-10-30T21:30:54.927-04:00",
    "updated_at": "2026-10-30T22:21:57.466-04:00",
+   "is_home": false,
    "model_mean": 1.7406,
    "p_over": 0.5061,
    "p_under": 0.4939,
@@ -3432,7 +4009,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T21:30:55.178-04:00",
-   "updated_at": "2026-10-30T23:04:00.790-04:00",
+   "updated_at": "2026-10-31T00:24:33.262-04:00",
+   "is_home": false,
    "model_mean": 1.5673,
    "p_over": 0.4546,
    "p_under": 0.5454,
@@ -3464,6 +4042,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 23.3185,
    "p_over": 0.5502,
    "p_under": 0.4498,
@@ -3475,7 +4054,14 @@
    "prob_cal": 0.5196,
    "tier": "Top",
    "tier_rank": "D1",
-   "recent_toi": 23.1
+   "recent_toi": 23.1,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 23.941,
+    "side": "over",
+    "prob": 0.6476,
+    "prob_cal": 0.5576
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3495,6 +4081,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T23:15:31.580-04:00",
+   "is_home": true,
    "model_mean": 20.7768,
    "p_over": 0.5437,
    "p_under": 0.4563,
@@ -3506,7 +4093,14 @@
    "prob_cal": 0.517,
    "tier": "Top",
    "tier_rank": "F1",
-   "recent_toi": 21.4
+   "recent_toi": 21.4,
+   "shadow": {
+    "model": "lgbm-1",
+    "mean": 21.048,
+    "side": "over",
+    "prob": 0.5874,
+    "prob_cal": 0.5341
+   }
   },
   {
    "game_date": "2026-10-31",
@@ -3526,6 +4120,7 @@
    "headline": false,
    "board_time": "2026-09-28T20:42:00.000-04:00",
    "updated_at": "2026-10-30T20:43:11.195-04:00",
+   "is_home": true,
    "model_mean": 8.7949,
    "p_over": 0.6168,
    "p_under": 0.3832,
@@ -3556,7 +4151,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T16:24:31.397-04:00",
-   "updated_at": "2026-10-30T23:36:00.677-04:00",
+   "updated_at": "2026-10-31T01:04:11.503-04:00",
+   "is_home": true,
    "model_mean": 2.4775,
    "p_over": 0.4403,
    "p_under": 0.5597,
@@ -3587,7 +4183,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T22:52:20.744-04:00",
-   "updated_at": "2026-10-30T23:36:30.963-04:00",
+   "updated_at": "2026-10-31T01:04:01.153-04:00",
+   "is_home": true,
    "model_mean": 2.6932,
    "p_over": 0.4898,
    "p_under": 0.5102,
@@ -3619,6 +4216,7 @@
    "headline": true,
    "board_time": "2026-10-30T22:50:58.669-04:00",
    "updated_at": "2026-10-30T23:12:25.122-04:00",
+   "is_home": true,
    "model_mean": 2.1235,
    "p_over": 0.354,
    "p_under": 0.3937,
@@ -3649,7 +4247,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T16:34:32.387-04:00",
-   "updated_at": "2026-10-30T23:36:51.047-04:00",
+   "updated_at": "2026-10-31T01:04:11.346-04:00",
+   "is_home": false,
    "model_mean": 1.7351,
    "p_over": 0.5045,
    "p_under": 0.4955,
@@ -3680,7 +4279,8 @@
    "adjusted_odds": true,
    "headline": true,
    "board_time": "2026-10-30T22:50:58.523-04:00",
-   "updated_at": "2026-10-30T22:50:58.600-04:00",
+   "updated_at": "2026-10-31T01:04:21.034-04:00",
+   "is_home": true,
    "model_mean": 1.6528,
    "p_over": 0.4804,
    "p_under": 0.5196,

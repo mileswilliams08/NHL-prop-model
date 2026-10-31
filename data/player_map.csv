@@ -33,7 +33,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218294,Beck Malenstyn,BUF,F,8479359,Beck Malenstyn,exact,2026-10-17,2026-10-29
 272569,Colten Ellis,BUF,G,8481551,Colten Ellis,exact,2026-10-27,2026-10-29
 92751,Jack Quinn,BUF,F,8482097,Jack Quinn,exact,2026-10-17,2026-10-31
-220168,Jason Zucker,BUF,F,8475722,J. Zucker,boxscore_history,2026-10-21,2026-10-29
+220168,Jason Zucker,BUF,F,8475722,J. Zucker,boxscore_history,2026-10-21,2026-10-31
 268183,Josh Doan,BUF,F,8482659,Josh Doan,exact,2026-10-27,2026-10-31
 230933,Josh Norris,BUF,F,8480064,Josh Norris,exact,2026-10-21,2026-10-21
 92038,Mattias Samuelsson,BUF,D,8480807,Mattias Samuelsson,exact,2026-10-17,2026-10-27
@@ -269,7 +269,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 88684,Adam Pelech,NYI,D,8476917,Adam Pelech,exact,2026-10-17,2026-10-25
 218307,Bo Horvat,NYI,F,8477500,Bo Horvat,exact,2026-10-17,2026-10-31
 305209,Brayden Schenn,NYI,F,8475170,Brayden Schenn,exact,2026-10-17,2026-10-31
-268177,Emil Heineman,NYI,F,8482476,Emil Heineman,exact,2026-10-17,2026-10-29
+268177,Emil Heineman,NYI,F,8482476,Emil Heineman,exact,2026-10-17,2026-10-31
 218326,Ilya Sorokin,NYI,G,8478009,Ilya Sorokin,exact,2026-10-17,2026-10-29
 57997,Jean-Gabriel Pageau,NYI,F,8476419,Jean-Gabriel Pageau,exact,2026-10-22,2026-10-31
 268352,Kyle MacLean,NYI,F,8481237,Kyle MacLean,exact,2026-10-31,2026-10-31
@@ -278,7 +278,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 346722,Matias Maccelli,NYI,F,8481711,Matias Maccelli,exact,2026-10-17,2026-10-17
 268326,Matthew Schaefer,NYI,D,8485366,Matthew Schaefer,exact,2026-10-17,2026-10-31
 297011,Ondrej Palat,NYI,F,8476292,Ondrej Palat,exact,2026-10-25,2026-10-25
-59900,Ryan Pulock,NYI,D,8477506,Ryan Pulock,exact,2026-10-20,2026-10-27
+59900,Ryan Pulock,NYI,D,8477506,Ryan Pulock,exact,2026-10-20,2026-10-31
 218690,Semyon Varlamov,NYI,G,8473575,Semyon Varlamov,exact,2026-10-22,2026-10-27
 230679,Simon Holmstrom,NYI,F,8481601,Simon Holmstrom,exact,2026-10-27,2026-10-29
 226861,Tony DeAngelo,NYI,D,8477950,Tony DeAngelo,exact,2026-10-17,2026-10-22
