@@ -19,6 +19,8 @@
   .tier-Top { background: #1f3a5f; color: #79c0ff; }
   .tier-Mid { background: #262c36; color: #c9d1d9; }
   .tier-Depth { background: #2d2a1a; color: #d4a72c; }
+  .sh { display: none; }
+  #propsTable.show-sh .sh { display: table-cell; }
   .tiptext { color: #8b98a5; font-size: 12px; line-height: 1.5; margin: 8px 0 12px; padding: 10px 12px; background: #1c2733; border-radius: 6px; }
 </style>
 </head>
@@ -61,7 +63,7 @@
 </table>
 <table id="propsTable">
   <thead><tr><th>Player</th><th>Tier</th><th>Matchup</th><th>Start</th><th>Line</th><th class="num">Model mean</th>
-    <th class="num">Model P(Side)</th><th>Side</th><th></th></tr></thead>
+    <th class="num">Model P(Side)</th><th>Side</th><th class="sh" title="LightGBM challenger: tracked, never the official pick">LightGBM (shadow)</th><th></th></tr></thead>
   <tbody id="propsBody"></tbody>
 </table>
 </div>
@@ -122,6 +124,7 @@ function renderTable() {
   document.getElementById("pairsTable").style.display = pairsMode ? "" : "none";
   document.getElementById("propsTable").style.display = pairsMode ? "none" : "";
   if (pairsMode) { renderPairs(day, team, breakeven); return; }
+  document.getElementById("propsTable").classList.toggle("show-sh", DATA.picks.some(p => p.category === cat && p.shadow));
   const tbody = document.getElementById("propsBody");
   // Ranked by the model's own confidence (highest P(side) first) so the most lopsided lines float to the top.
   const rows = DATA.picks.filter(p => !p.skip_reason && p.category === cat && (!day || p.game_date === day)
@@ -135,9 +138,11 @@ function renderTable() {
       <td class="num">${p.model_mean.toFixed(2)}</td>
       <td class="num" title="${RAW ? "calibrated" : "raw model"} ${(P2(p) * 100).toFixed(1)}%">${(P(p) * 100).toFixed(1)}%</td>
       <td class="${p.side}">${p.side === "over" ? "Over" : "Under"}</td>
+      <td class="sh">${p.shadow ? `<span class="${p.shadow.side}">${p.shadow.side === "over" ? "Over" : "Under"}</span>
+        ${((RAW ? p.shadow.prob : p.shadow.prob_cal) * 100).toFixed(1)}% <span class="src">${p.shadow.mean.toFixed(2)}</span>${p.shadow.side !== p.side ? ' <span class="src">≠</span>' : ""}` : "—"}</td>
       <td>${P(p) >= breakeven ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
     </tr>`).join("")
-    : `<tr><td colspan="9" class="empty">No priced PrizePicks lines for this prop right now.</td></tr>`;
+    : `<tr><td colspan="10" class="empty">No priced PrizePicks lines for this prop right now.</td></tr>`;
 
   const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day) && (!team || p.team === team));
   const why = {};

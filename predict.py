@@ -18,6 +18,7 @@ from collections import Counter
 from datetime import timedelta
 
 from common import DOCS_DATA, SNAP_DIR, get_json, load_config, nhl_team, parse_ts, path, utcnow, write_json, NHL_BASE
+import gbm
 import model
 import player_map
 import prizepicks
@@ -97,6 +98,7 @@ def main():
                 "category": r["category"], "line": r["line"], "odds_type": r["odds_type"],
                 "adjusted_odds": r["adjusted_odds"], "headline": bool(headline),
                 "board_time": r["board_time"], "updated_at": r["updated_at"],
+                "is_home": bool(g and g["home"] == team),
                 "model_mean": None, "p_over": None, "p_under": None, "p_push": None,
                 "side": None, "prob": None, "n_prior": None, "skip_reason": None}
         reason = None
@@ -144,10 +146,19 @@ def main():
         picks.append(pick)
 
     print("  picks:", dict(reasons))
+    shadow_info = {}
+    try:   # LightGBM challenger: recorded next to the official picks, never replaces them
+        shadow_info = gbm.shadow_predictions(cfg, sk, gm, walker, picks)
+        if shadow_info:
+            n = sum(1 for p in picks if p.get("shadow"))
+            print(f"  shadow ({gbm.VERSION}): {n} picks priced; " + "; ".join(
+                f"{k}: trained through {v['trained_through']}, {v['rounds']} rounds" for k, v in shadow_info.items()))
+    except Exception as e:
+        print(f"  shadow model failed (official picks unaffected): {e!r}")
     stamp = now.strftime("%Y-%m-%dT%H%MZ")
     snapshot = {"generated_at": now.isoformat(), "slate_dates": slate_dates,
                 "model_version": cfg["model_version"], "params": params,
-                "history_through": hist_through,
+                "history_through": hist_through, "shadow": shadow_info,
                 "board_counts": {"rows": len(rows), "enabled_props": len(cand), "eligible": len(elig),
                                  "odds_types": {f"{k[0]}|adj={k[1]}": v for k, v in
                                                 Counter((r["odds_type"], r["adjusted_odds"]) for r in cand).items()}},

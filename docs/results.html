@@ -166,6 +166,13 @@ function render(data) {
         <option value="60">Captured within 60 min</option></select></div>
     <div id="mv-out"></div>
 
+    <h2>Model comparison: current vs LightGBM (shadow)</h2>
+    <div class="caveat">LightGBM prices the same Time On Ice and Hits lines every night but is never the official pick. Both are graded on
+      the same PrizePicks line. What matters: does LightGBM beat the current model — and the better blind side — and who is right when
+      they disagree? Don't switch on fewer than ~100 disagreements per prop.</div>
+    <div class="show">Show: <select id="sh-date"></select> <select id="sh-prop"></select></div>
+    <div id="sh-out"></div>
+
     <h2>Time On Ice correlated pairs (experimental)</h2>
     <div class="caveat">Every same-team F1 + F2, F1 + D1 or D1 + D2 pair the Props page listed (both TOI legs, model picking the same
       direction). "Both hit" needs both legs to win; a push or void on either leg drops the pair. It only beats a 3× 2-pick if both-hit
@@ -361,6 +368,44 @@ function render(data) {
   ["thr-scope", "thr-side", "thr-date", "thr-be"].forEach(id =>
     document.getElementById(id).addEventListener(id === "thr-be" ? "input" : "change", drawThr));
   drawThr();
+
+  const shr = data.shadow || [];
+  const shDates = [...new Set(shr.map(p => p.d))].sort().reverse();
+  document.getElementById("sh-date").innerHTML = `<option value="__all__">All dates</option><option value="last7">Last 7 days</option>
+    <option value="last30">Last 30 days</option>` + shDates.map(d => `<option value="${d}">${d}</option>`).join("");
+  document.getElementById("sh-prop").innerHTML = `<option value="__all__">TOI + Hits</option>` +
+    [...new Set(shr.map(p => p.c))].map(c => `<option value="${c}">${esc(L(c))}</option>`).join("");
+  const drawShadow = () => {
+    const v = id => document.getElementById(id).value;
+    const rows = shr.filter(p => inDate(p.d, v("sh-date"), shDates[0]) && (v("sh-prop") === "__all__" || p.c === v("sh-prop")));
+    const out = document.getElementById("sh-out");
+    if (!rows.length) { out.innerHTML = `<div class="empty">No graded shadow picks yet — LightGBM starts pricing with the next daily run,
+      and its first picks grade the morning after.</div>`; return; }
+    const sp = p => RAWMODE ? p.spr : p.sp;
+    const line = (label, codes, probs) => { const s = summarize(codes);
+      const ap = probs ? probs.reduce((a, x) => a + x, 0) / probs.length : null;
+      return `<tr><td>${label}</td><td class="num">${s.n}</td><td class="num">${pct(s.rate)}</td><td class="num">${probs ? pct(ap) : "—"}</td></tr>`; };
+    const dis = rows.filter(p => p.s !== p.ss);
+    let h = `<div class="table-wrap"><table><thead><tr><th>Method (same lines)</th><th class="num">Decided</th><th class="num">Hit rate</th>
+        <th class="num">Avg stated prob</th></tr></thead><tbody>
+      ${line("Current model (official)", rows.map(p => p.x), rows.map(p => p.p))}
+      ${line("LightGBM (shadow)", rows.map(p => p.sx), rows.map(sp))}
+      ${line("Blind Over", rows.map(p => p.ox))}
+      ${line("Blind Under", rows.map(p => p.ux))}
+      ${line(`When they disagree (${dis.length}): current model`, dis.map(p => p.x))}
+      ${line(`When they disagree (${dis.length}): LightGBM`, dis.map(p => p.sx))}
+      </tbody></table></div>
+      <div class="table-wrap"><table><thead><tr><th>Date</th><th>Player</th><th>Prop</th><th class="num">Line</th><th class="num">Actual</th>
+        <th>Current</th><th>LightGBM</th></tr></thead><tbody>
+      ${[...rows].sort((a, b) => b.d.localeCompare(a.d) || (a.s === a.ss) - (b.s === b.ss)).slice(0, 80).map(p => `<tr><td>${p.d}</td><td>${esc(p.pl)}</td>
+        <td>${esc(L(p.c))}</td><td class="num">${p.l}</td><td class="num">${p.a}</td>
+        <td><span class="${p.s}">${p.s}</span> ${p.m.toFixed(2)} ${tag(p.x)}</td>
+        <td><span class="${p.ss}">${p.ss}</span> ${p.sm.toFixed(2)} ${tag(p.sx)}${p.s !== p.ss ? ' <span class="caveat">disagree</span>' : ""}</td></tr>`).join("")}
+      </tbody></table></div>`;
+    out.innerHTML = h;
+  };
+  ["sh-date", "sh-prop"].forEach(id => document.getElementById(id).addEventListener("change", drawShadow));
+  drawShadow();
 
   const prs = data.pairs || [];
   const prDates = [...new Set(prs.map(p => p.d))].sort().reverse();

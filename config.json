@@ -115,5 +115,13 @@
       "under": 1.15
     },
     "note": "TOI only. Measured 2024-26 regular seasons vs each player's prior 10-game average (pairs.py)."
+  },
+  "shadow": {
+    "enabled": true,
+    "props": [
+      "toi",
+      "hits"
+    ],
+    "note": "LightGBM challenger (gbm.py). Priced and graded beside the official model; never shown as the official pick."
   }
 }

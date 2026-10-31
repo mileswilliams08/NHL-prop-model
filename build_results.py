@@ -96,6 +96,33 @@ def print_summary(name, sub):
         print(f"   slope (actual-line) on (mean-line): {s[0]:.2f} +/- {1.96 * s[1]:.2f} (95% CI)")
 
 
+def build_shadow(graded, k):
+    """Official vs LightGBM shadow pick on the same line, from each pick's earliest snapshot."""
+    res = {(str(r.game_date), str(r.nhl_game_id), str(r.nhl_id), r.category): r for r in graded.itertuples()}
+    out = []
+    for key, (pk, _) in movement._earliest_picks().items():
+        sh = pk.get("shadow")
+        r = res.get(key)
+        if not sh or r is None or r.result not in ("hit", "miss", "push"):
+            continue
+        a, L = float(r.actual), float(r.line)
+        sx = "p" if a == L else ("h" if (a > L) == (sh["side"] == "over") else "m")
+        out.append({"d": key[0], "c": key[3], "pl": r.player, "tm": r.team, "l": L, "a": round(a, 2),
+                    "s": r.side, "x": {"hit": "h", "miss": "m", "push": "p"}[r.result],
+                    "p": round(0.5 + k * (float(r.prob) - 0.5), 4), "pr": round(float(r.prob), 4), "m": round(float(r.model_mean), 3),
+                    "ss": sh["side"], "sx": sx, "sp": round(0.5 + k * (sh["prob"] - 0.5), 4), "spr": sh["prob"],
+                    "sm": sh["mean"], "ox": {"hit": "h", "miss": "m", "push": "p"}.get(r.blind_over, "p"),
+                    "ux": {"hit": "h", "miss": "m", "push": "p"}.get(r.blind_under, "p"), "v": sh.get("model")})
+    if out:
+        dec = [o for o in out if o["x"] != "p"]
+        cur = sum(o["x"] == "h" for o in dec) / max(1, len(dec))
+        shd = sum(o["sx"] == "h" for o in out if o["sx"] != "p") / max(1, sum(o["sx"] != "p" for o in out))
+        dis = [o for o in out if o["s"] != o["ss"]]
+        print(f"SHADOW: {len(out)} graded picks with a LightGBM shadow; current {cur:.1%} vs LightGBM {shd:.1%}; "
+              f"they disagreed on {len(dis)}")
+    return out
+
+
 def build_graded_pairs(cfg, graded, k):
     """Correlated TOI pairs from the earliest snapshot of each leg, with each leg's graded result."""
     res = {(str(r.game_date), str(r.nhl_game_id), str(r.nhl_id)): r.result
@@ -153,6 +180,11 @@ def main():
 
     code = {"hit": "h", "miss": "m", "push": "p"}
     try:
+        shadow_rows = build_shadow(df, k_used)
+    except Exception as e:   # the comparison is a bonus; never block the results page
+        print(f"shadow comparison failed: {e}")
+        shadow_rows = []
+    try:
         pair_rows = build_graded_pairs(cfg, df, k_used)
     except Exception as e:   # pairs are a bonus; never block the results page
         print(f"pairs build failed: {e}")
@@ -166,7 +198,8 @@ def main():
     write_json(path("docs", "data", "results.json"),
                {"generated_at": pd.Timestamp.now("UTC").isoformat(), "voids": voids, "excluded": n_ex,
                 "labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks,
-                "moves": moves, "calibration": cal, "pairs": pair_rows})
+                "moves": moves, "calibration": cal, "pairs": pair_rows,
+                "shadow": shadow_rows})
     print(f"results.json: {len(picks)} graded picks ({voids} voids, {n_ex} excluded not shown)")
     print("LINE MOVEMENT headline: " + movement.summarize([m for m in moves if m["hd"]]))
     print("LINE MOVEMENT experimental: " + movement.summarize([m for m in moves if not m["hd"]]))
