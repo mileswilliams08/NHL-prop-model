@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slip Builder</title>
+<link rel="stylesheet" href="site.css">
+<script src="slip.js"></script>
+<style>
+  .slipbox { background: var(--panel); border-radius: 6px; padding: 14px 16px; margin: 12px 0; }
+  .slipbox pre { margin: 0 0 12px; font-family: inherit; font-size: 15px; line-height: 1.7; white-space: pre-wrap; }
+  .btn { background: #262c36; color: var(--text); border: 1px solid #33414f; border-radius: 4px; padding: 6px 12px;
+         font-size: 13px; cursor: pointer; margin-right: 8px; }
+  .btn:hover { border-color: var(--good); }
+  .btn.primary { background: #1a4620; border-color: #1a4620; color: var(--good); font-weight: 700; }
+  .side-btn { border: 1px solid #33414f; background: transparent; border-radius: 4px; padding: 2px 8px; cursor: pointer;
+              font-weight: 700; font-size: 12px; }
+  .side-btn.over { color: var(--good); } .side-btn.under { color: var(--accent); }
+  .x { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; }
+  .x:hover { color: var(--bad); }
+  .flag { color: var(--warn); font-size: 11px; }
+  .warns div { color: var(--warn); font-size: 13px; margin: 4px 0; }
+  .opts { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
+  .opts label { margin-right: 14px; }
+</style>
+</head>
+<body>
+<h1>NHL Prop Tracker</h1>
+<nav>
+  <a href="index.html">Props</a>
+  <a href="results.html">Results</a>
+  <a href="backtest.html">Backtest</a>
+  <a href="slip.html" class="active">Slip Builder<span id="slipCount"></span></a>
+</nav>
+<div class="meta" id="meta">Add picks with the <b>+</b> button on the Props page. Your slip is saved in this browser only.</div>
+
+<div class="table-wrap">
+<table>
+  <thead><tr><th>#</th><th>Player</th><th>Matchup</th><th>Start</th><th>Prop</th><th>Line</th><th>Side</th>
+    <th class="num">Model P(Side)</th><th></th><th></th></tr></thead>
+  <tbody id="slipBody"></tbody>
+</table>
+</div>
+<div class="warns" id="warns"></div>
+
+<div class="slipbox">
+  <div class="opts">
+    <label><input type="checkbox" id="optMatch"> Include matchup</label>
+    <label><input type="checkbox" id="optProb"> Include model %</label>
+  </div>
+  <pre id="slipText"></pre>
+  <button class="btn primary" id="copyBtn">Copy slip</button>
+  <button class="btn" id="pruneBtn">Remove started games</button>
+  <button class="btn" id="clearBtn">Clear slip</button>
+</div>
+<div class="note" id="notes"></div>
+
+<script>
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const time = iso => new Date(iso).toLocaleString([], {weekday: "short", hour: "numeric", minute: "2-digit"});
+let RAW = false;
+try { RAW = localStorage.getItem("nhlProbMode") === "raw"; } catch (e) {}
+let LABELS = {"sog": "Shots On Goal", "hits": "Hits", "blocks": "Blocked Shots", "toi": "Time On Ice",
+              "saves": "Goalie Saves", "faceoffs": "Faceoffs Won"};
+let BOARD = null;   // current props.json picks by projection id (null until loaded)
+
+// Chance the chosen side wins. Stored probs are for the model's side; the other side is 1 - that (pushes ignored).
+const sideProb = s => { const p = RAW ? s.prob : (s.prob_cal ?? s.prob); return s.side === s.model_side ? p : 1 - p; };
+const started = s => new Date(s.start_time) <= new Date();
+
+function status(s) {
+  if (started(s)) return "game started";
+  if (BOARD && s.pp_proj_id && !BOARD[s.pp_proj_id]) return "not on the board right now";
+  const f = [];
+  if (s.was_line != null) f.push(`line moved from ${s.was_line}`);
+  if (s.side !== s.model_side) f.push(`model picks ${s.model_side === "over" ? "Over" : "Under"}`);
+  return f.join(" · ");
+}
+
+function render() {
+  const items = slipLoad();
+  document.getElementById("slipBody").innerHTML = items.length ? items.map((s, i) => `<tr>
+      <td>${i + 1}</td><td>${esc(s.player)}</td><td>${esc(s.team)} v ${esc(s.opp)}</td><td>${time(s.start_time)}</td>
+      <td>${esc(LABELS[s.category] || s.category)}</td><td>${s.line}</td>
+      <td><button class="side-btn ${s.side}" data-i="${i}" title="Click to switch Over/Under">${s.side === "over" ? "OVER" : "UNDER"}</button></td>
+      <td class="num">${(sideProb(s) * 100).toFixed(1)}%</td>
+      <td class="flag">${esc(status(s))}</td>
+      <td><button class="x" data-i="${i}" title="Remove">×</button></td></tr>`).join("")
+    : `<tr><td colspan="10" class="empty">Your slip is empty. Use the + button on the Props page to add picks.</td></tr>`;
+
+  const matchup = document.getElementById("optMatch").checked, withP = document.getElementById("optProb").checked;
+  document.getElementById("slipText").textContent = items.length ? "Props in this slip:\n" + items.map((s, i) =>
+      `${i + 1}. ${s.player} - ${s.side.toUpperCase()} ${s.line} ${LABELS[s.category] || s.category}` +
+      (matchup ? ` (${s.team} v ${s.opp})` : "") + (withP ? ` [${(sideProb(s) * 100).toFixed(1)}%]` : "")).join("\n") : "";
+
+  const w = [];
+  if (items.length > SLIP_MAX) w.push(`${items.length} picks: PrizePicks entries max out at ${SLIP_MAX}.`);
+  if (items.length === 1) w.push("PrizePicks entries need at least 2 picks.");
+  if (items.length >= 2 && new Set(items.map(s => s.team)).size < 2) w.push("All picks are from one team: PrizePicks usually requires at least two different teams.");
+  const dupes = [...new Set(items.map(s => s.player).filter((p, i, a) => a.indexOf(p) !== i))];
+  if (dupes.length) w.push(`Same player more than once (${dupes.map(esc).join(", ")}): PrizePicks won't allow that in one entry.`);
+  const old = items.filter(started).length;
+  if (old) w.push(`${old} pick${old > 1 ? "s are" : " is"} from a game that already started.`);
+  document.getElementById("warns").innerHTML = w.map(x => `<div>⚠ ${x}</div>`).join("");
+
+  const all = items.reduce((a, s) => a * sideProb(s), 1);
+  document.getElementById("notes").innerHTML = items.length >= 2
+    ? `Chance all ${items.length} hit if the legs were independent: <b>${(all * 100).toFixed(1)}%</b>
+       (${RAW ? "raw model" : "calibrated"} probabilities; same-team Time On Ice pairs can be more linked than this, see Props → correlated pairs).
+       Tracking only: this is a list for typing picks in by hand, not a recommendation.`
+    : "";
+  slipBadge();
+}
+
+document.addEventListener("click", e => {
+  const items = slipLoad();
+  const side = e.target.closest(".side-btn"), x = e.target.closest(".x");
+  if (side) { const s = items[side.dataset.i]; s.side = s.side === "over" ? "under" : "over"; slipSave(items); render(); }
+  if (x) { items.splice(x.dataset.i, 1); slipSave(items); render(); }
+});
+document.getElementById("clearBtn").addEventListener("click", () => { slipSave([]); render(); });
+document.getElementById("pruneBtn").addEventListener("click", () => { slipSave(slipLoad().filter(s => !started(s))); render(); });
+["optMatch", "optProb"].forEach(id => document.getElementById(id).addEventListener("change", render));
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const text = document.getElementById("slipText").textContent, b = document.getElementById("copyBtn");
+  if (!text) return;
+  try { await navigator.clipboard.writeText(text); }
+  catch (e) {   // older browsers / no clipboard permission: select the text so Ctrl+C works
+    const r = document.createRange(); r.selectNodeContents(document.getElementById("slipText"));
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    b.textContent = "Press Ctrl+C"; setTimeout(() => b.textContent = "Copy slip", 2000); return;
+  }
+  b.textContent = "Copied!"; setTimeout(() => b.textContent = "Copy slip", 1500);
+});
+window.addEventListener("storage", e => { if (e.key === SLIP_KEY) render(); });
+
+render();
+// Refresh lines and model probabilities from the current board (lines move during the day).
+fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(json => {
+  LABELS = Object.assign(LABELS, json.labels || {});
+  BOARD = {};
+  json.picks.filter(p => !p.skip_reason && p.pp_proj_id).forEach(p => BOARD[p.pp_proj_id] = p);
+  const items = slipLoad();
+  const byName = {};
+  json.picks.filter(p => !p.skip_reason).forEach(p => byName[`${p.game_date}|${p.player}|${p.category}`] = p);
+  items.forEach(s => {
+    // same projection id, or (if PrizePicks re-posted the line under a new id) same player, prop and date
+    const p = BOARD[s.pp_proj_id] || byName[`${s.game_date}|${s.player}|${s.category}`];
+    if (!p) return;
+    if (p.pp_proj_id !== s.pp_proj_id) { s.pp_proj_id = p.pp_proj_id; s.key = slipKey(p); }
+    if (p.line !== s.line) { s.was_line = s.was_line ?? s.line; s.line = p.line; }
+    if (s.was_line === s.line) delete s.was_line;
+    Object.assign(s, {prob: p.prob, prob_cal: p.prob_cal, model_side: p.side, start_time: p.start_time});
+  });
+  slipSave(items);
+  render();
+}).catch(() => {});
+</script>
+</body>
+</html>

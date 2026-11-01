@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NHL Prop Tracker</title>
 <link rel="stylesheet" href="site.css">
+<script src="slip.js"></script>
 <style>
   .breakeven { margin-bottom: 16px; padding: 12px; background: #1c2733; border-radius: 6px; font-size: 16px; }
   .breakeven input { width: 60px; background: #fff; color: #000; border: 1px solid #33414f; border-radius: 3px; padding: 2px 4px; font-size: 14px; }
@@ -21,6 +22,10 @@
   .tier-Depth { background: #2d2a1a; color: #d4a72c; }
   .sh { display: none; }
   #propsTable.show-sh .sh { display: table-cell; }
+  .addbtn { background: #262c36; color: var(--text); border: 1px solid #33414f; border-radius: 4px; width: 26px; height: 24px;
+            font-size: 15px; line-height: 1; cursor: pointer; padding: 0; }
+  .addbtn:hover { border-color: var(--good); }
+  .addbtn.in { background: #1a4620; color: var(--good); border-color: #1a4620; }
   .tiptext { color: #8b98a5; font-size: 12px; line-height: 1.5; margin: 8px 0 12px; padding: 10px 12px; background: #1c2733; border-radius: 6px; }
 </style>
 </head>
@@ -30,6 +35,7 @@
   <a href="index.html" class="active">Props</a>
   <a href="results.html">Results</a>
   <a href="backtest.html">Backtest</a>
+  <a href="slip.html">Slip Builder<span id="slipCount"></span></a>
 </nav>
 <div class="meta" id="meta">Loading...</div>
 
@@ -58,12 +64,12 @@
 <div class="table-wrap">
 <table id="pairsTable" style="display:none">
   <thead><tr><th>Team</th><th>Player A</th><th>Player B</th><th>Direction</th><th class="num">Leg A</th>
-    <th class="num">Leg B</th><th class="num">Est. both hit</th><th></th></tr></thead>
+    <th class="num">Leg B</th><th class="num">Est. both hit</th><th></th><th title="Add both legs to the Slip Builder"></th></tr></thead>
   <tbody id="pairsBody"></tbody>
 </table>
 <table id="propsTable">
   <thead><tr><th>Player</th><th>Tier</th><th>Matchup</th><th>Start</th><th>Line</th><th class="num">Model mean</th>
-    <th class="num">Model P(Side)</th><th>Side</th><th class="sh" title="LightGBM challenger: tracked, never the official pick">LightGBM (shadow)</th><th></th></tr></thead>
+    <th class="num">Model P(Side)</th><th>Side</th><th class="sh" title="LightGBM challenger: tracked, never the official pick">LightGBM (shadow)</th><th></th><th title="Add to the Slip Builder"></th></tr></thead>
   <tbody id="propsBody"></tbody>
 </table>
 </div>
@@ -81,6 +87,23 @@ const time = iso => new Date(iso).toLocaleString([], {weekday: "short", hour: "n
 const LIFTS_DEFAULT = {"F1+F2": {over: 1.37, under: 1.32}, "F1+D1": {over: 1.24, under: 1.20}, "D1+D2": {over: 1.17, under: 1.15}};
 const pairKind = (a, b) => { const k = [a, b].sort((x, y) => (x[0] !== "F") - (y[0] !== "F") || x.slice(1) - y.slice(1)).join("+");
   return LIFTS_DEFAULT[k] ? k : null; };
+
+// "+" adds the pick (or both legs of a pair) to the Slip Builder; "✓" means it's already there (click to remove).
+const SHOWN = {};
+function addBtn(ps) {
+  ps.forEach(p => SHOWN[slipKey(p)] = p);
+  const keys = ps.map(slipKey).join(","), inSlip = ps.every(slipHas);
+  return `<button class="addbtn${inSlip ? " in" : ""}" data-keys="${esc(keys)}"
+    title="${inSlip ? "In your slip: click to remove" : ps.length > 1 ? "Add both legs to the Slip Builder" : "Add to the Slip Builder"}">${inSlip ? "✓" : "+"}</button>`;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest(".addbtn");
+  if (!b) return;
+  const ps = b.dataset.keys.split(",").map(k => SHOWN[k]).filter(Boolean);
+  const inSlip = ps.every(slipHas);
+  ps.forEach(p => { if (slipHas(p) === inSlip) slipToggle(p); });   // pair: add both, or remove both
+  renderTable();
+});
 
 function renderPairs(day, team, breakeven) {
   const lifts = DATA.pair_lifts || LIFTS_DEFAULT, joinBE = breakeven * breakeven;
@@ -105,8 +128,9 @@ function renderPairs(day, team, breakeven) {
       <td class="${r.a.side}">both ${r.a.side === "over" ? "Over" : "Under"} <span class="src">${r.kind} ×${r.lift}</span></td>
       <td class="num">${(P(r.a) * 100).toFixed(1)}%</td><td class="num">${(P(r.b) * 100).toFixed(1)}%</td>
       <td class="num"><b>${(r.est * 100).toFixed(1)}%</b></td>
-      <td>${r.est >= joinBE ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td></tr>`).join("")
-    : `<tr><td colspan="8" class="empty">No linked same-direction TOI pairs for this selection. A pair needs both players' TOI lines on the
+      <td>${r.est >= joinBE ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
+      <td>${addBtn([r.a, r.b])}</td></tr>`).join("")
+    : `<tr><td colspan="9" class="empty">No linked same-direction TOI pairs for this selection. A pair needs both players' TOI lines on the
        board, ranked F1 + F2, F1 + D1 or D1 + D2 on the same team, with the model picking the same direction on both.</td></tr>`;
   document.getElementById("notes").innerHTML = `${rows.length} pairs. Est. both hit = leg A × leg B × lift (how much more often these two
     players' minutes land the same way than independent legs would; measured on 2024–26 games). Breakeven for two legs =
@@ -141,8 +165,9 @@ function renderTable() {
       <td class="sh">${p.shadow ? `<span class="${p.shadow.side}">${p.shadow.side === "over" ? "Over" : "Under"}</span>
         ${((RAW ? p.shadow.prob : p.shadow.prob_cal) * 100).toFixed(1)}% <span class="src">${p.shadow.mean.toFixed(2)}</span>${p.shadow.side !== p.side ? ' <span class="src">≠</span>' : ""}` : "—"}</td>
       <td>${P(p) >= breakeven ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
+      <td>${addBtn([p])}</td>
     </tr>`).join("")
-    : `<tr><td colspan="10" class="empty">No priced PrizePicks lines for this prop right now.</td></tr>`;
+    : `<tr><td colspan="11" class="empty">No priced PrizePicks lines for this prop right now.</td></tr>`;
 
   const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day) && (!team || p.team === team));
   const why = {};
