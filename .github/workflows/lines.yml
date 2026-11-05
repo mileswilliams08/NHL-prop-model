@@ -1,8 +1,8 @@
 name: Track NHL lines
 
 # Records the PrizePicks board every 30 minutes through game hours so each pick can be compared with
-# the last line before puck drop. Records only (never prices or grades); games already started are
-# skipped by lines.py. 16:00-03:30 UTC covers weekend matinees through West Coast late games.
+# the last line before puck drop, and reprices moved lines for the site (docs/data/board.json). Never grades;
+# games already started are skipped by lines.py. 16:00-03:30 UTC covers weekend matinees through West Coast late games.
 # GitHub may start scheduled runs late; lines.py stamps the real time of each observation.
 on:
   schedule:
@@ -23,7 +23,7 @@ concurrency:
 jobs:
   track:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
 
@@ -32,7 +32,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests numpy pandas scipy   # scipy etc. to reprice moved lines (board.json)
 
       - name: Record board
         run: python lines.py
@@ -42,6 +42,7 @@ jobs:
           git config user.name "props-bot"
           git config user.email "props-bot@users.noreply.github.com"
           if ls data/lines/*.json >/dev/null 2>&1; then git add data/lines/*.json; fi
+          if [ -f docs/data/board.json ]; then git add docs/data/board.json; fi
           if git diff --cached --quiet; then echo "No changes."; exit 0; fi
           git commit -m "Track NHL lines"
           for i in 1 2 3; do

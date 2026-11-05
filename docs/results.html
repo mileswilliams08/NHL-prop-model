@@ -44,6 +44,9 @@
 <div class="show" id="calbar" style="display:none">Probabilities:
   <select id="calmode"><option value="cal">Calibrated</option><option value="raw">Raw model</option></select>
   <span class="caveat" id="calnote" style="margin:0"></span></div>
+<div class="show">Grade at: <div class="seg" id="linetabs">
+  <button type="button" data-mode="open" class="on">Opening line</button><button type="button" data-mode="close">Closing line</button></div></div>
+<div class="caveat" id="linenote"></div>
 <div id="content"></div>
 
 <script>
@@ -167,6 +170,15 @@ function render(data) {
       <select id="mv-win"><option value="99999">Captured any time before puck drop</option><option value="180">Captured within 3 h of puck drop</option>
         <option value="60">Captured within 60 min</option></select></div>
     <div id="mv-out"></div>
+
+    <h2>First line vs last line before puck drop</h2>
+    <div class="caveat">The same picks graded twice. <b>First line</b> = the first line a model run priced that day (the official record
+      everywhere else on this page). <b>Last line</b> = the last line seen before puck drop, with the side the model takes at that line.
+      The model's projection doesn't change when a line moves, so if the line crosses the projection the side switches (e.g. projection 23.4:
+      Under 23.5, Over 22.5). The last line is closer to what you can actually play late in the day.</div>
+    <div class="show">Show: <select id="cl-date"></select> <select id="cl-prop"></select>
+      <select id="cl-grp"><option value="all">Headline + experimental</option><option value="hd">Headline props</option><option value="exp">Experimental props</option></select></div>
+    <div id="cl-out"></div>
 
     <h2>Model comparison: current vs LightGBM (shadow)</h2>
     <div class="caveat">LightGBM prices the same Time On Ice and Hits lines every night but is never the official pick. Both are graded on
@@ -440,6 +452,52 @@ function render(data) {
   document.getElementById("pr-date").addEventListener("change", drawPairs);
   drawPairs();
 
+  const closing = (data.moves || []).filter(p => p.xc);
+  const clDates = [...new Set(closing.map(p => p.d))].sort().reverse();
+  document.getElementById("cl-date").innerHTML = `<option value="__all__">All dates</option><option value="last7">Last 7 days</option>
+    <option value="last30">Last 30 days</option>` + clDates.map(d => `<option value="${d}">${d}</option>`).join("");
+  document.getElementById("cl-prop").innerHTML = `<option value="__all__">All props</option>` +
+    [...new Set(closing.map(p => p.c))].map(c => `<option value="${c}">${esc(L(c))}</option>`).join("");
+  const drawClosing = () => {
+    const v = k => document.getElementById(`cl-${k}`).value;
+    const rows = closing.filter(p => inDate(p.d, v("date"), clDates[0]) && (v("prop") === "__all__" || p.c === v("prop"))
+      && (v("grp") === "all" || (v("grp") === "hd" ? p.hd : !p.hd)));
+    const out = document.getElementById("cl-out");
+    if (!rows.length) { out.innerHTML = `<div class="empty">No graded picks with a recorded last line for this selection yet.</div>`; return; }
+    const rec = (rs, key) => { const s = summarize(rs.map(p => p[key])); return {s, txt: `${s.hits}-${s.n - s.hits}-${s.pushes}`}; };
+    const card = (rs, key, label) => { const r = rec(rs, key);
+      return `<div><div class="big">${pct(r.s.rate)}</div><div class="sub">${label} (${r.txt})</div></div>`; };
+    const moved = rows.filter(p => p.lc !== p.l0), flipped = moved.filter(p => p.sc !== p.s);
+    let h = `<div class="overall-card">${card(rows, "x0", "model at first line")}${card(rows, "xc", "model at last line")}
+        ${card(rows, "oc", "blind Over at last line")}${card(rows, "uc", "blind Under at last line")}
+        <div><div class="big">${moved.length}</div><div class="sub">lines moved · side switched on ${flipped.length}</div></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Prop</th><th class="num">Picks</th><th class="num">Model, first line</th>
+        <th class="num">Model, last line</th><th class="num">Blind Over, last</th><th class="num">Blind Under, last</th>
+        <th class="num">Lines moved</th><th class="num">Side switched</th></tr></thead><tbody>`;
+    for (const c of [...new Set(rows.map(p => p.c))]) {
+      const rs = rows.filter(p => p.c === c), mv = rs.filter(p => p.lc !== p.l0);
+      h += `<tr><td>${esc(L(c))}</td><td class="num">${rs.length}</td><td class="num">${pct(rec(rs, "x0").s.rate)}</td>
+        <td class="num">${pct(rec(rs, "xc").s.rate)}</td><td class="num">${pct(rec(rs, "oc").s.rate)}</td><td class="num">${pct(rec(rs, "uc").s.rate)}</td>
+        <td class="num">${mv.length}</td><td class="num">${mv.filter(p => p.sc !== p.s).length}</td></tr>`;
+    }
+    h += `</tbody></table></div>`;
+    if (moved.length) {
+      const mvr = moved.slice().sort((a, b) => b.d.localeCompare(a.d) || a.pl.localeCompare(b.pl)).slice(0, 60);
+      h += `<div class="caveat">Picks whose line moved (${moved.length}${moved.length > 60 ? ", latest 60 shown" : ""}).
+        On moved lines only: model ${pct(rec(moved, "x0").s.rate)} at the first line vs ${pct(rec(moved, "xc").s.rate)} at the last line.</div>
+        <div class="table-wrap"><table><thead><tr><th>Date</th><th>Player</th><th>Prop</th><th class="num">Model mean</th>
+        <th>First line</th><th></th><th>Last line</th><th></th><th class="num">Actual</th></tr></thead><tbody>
+        ${mvr.map(p => `<tr><td>${p.d}</td><td>${esc(p.pl)}</td><td>${esc(L(p.c))}</td><td class="num">${p.m}</td>
+          <td><span class="${p.s}">${p.s === "over" ? "Over" : "Under"}</span> ${p.l0}</td><td>${tag(p.x0)}</td>
+          <td><span class="${p.sc}">${p.sc === "over" ? "Over" : "Under"}</span> ${p.lc} <span class="caveat" style="margin:0">${pct(RAWMODE ? p.pc : p.pcc)}</span>${p.sc !== p.s ? " ⇄" : ""}</td>
+          <td>${tag(p.xc)}</td><td class="num">${p.a}</td></tr>`).join("")}</tbody></table></div>
+        <div class="caveat">⇄ = side switched because the line crossed the projection. Still small samples: treat as noise until there are ~100 moved lines per prop.</div>`;
+    }
+    out.innerHTML = h;
+  };
+  ["cl-date", "cl-prop", "cl-grp"].forEach(id => document.getElementById(id).addEventListener("change", drawClosing));
+  drawClosing();
+
   const sections = {ov: drawOverall, side: drawSide, mk: drawMarket, exp: drawExp, cal: drawCal, rec: drawRecent};
   for (const [id, fn] of Object.entries(sections)) {
     content.querySelectorAll(`[id^="${id}-"]`).forEach(el => el.tagName === "SELECT" && el.addEventListener("change", fn));
@@ -449,11 +507,48 @@ function render(data) {
 
 let DATA = null;
 let RAWMODE = false;
+let LINEMODE = "open";
+try { if (localStorage.getItem("nhlLineMode") === "close") LINEMODE = "close"; } catch (e) {}
+
+// Closing-line view: every pick regraded at the last line seen before puck drop, with the side the model
+// takes at that line (same projection, repriced). Picks with no recorded closing line keep their opening line.
+function atClosing(picks) {
+  const cl = {};
+  (DATA.moves || []).forEach(m => { if (m.xc) cl[`${m.d}|${m.pl}|${m.c}`] = m; });
+  let n = 0;
+  const out = picks.map(p => {
+    const m = cl[`${p.d}|${p.pl}|${p.c}`];
+    if (!m) return p;
+    if (m.lc !== m.l0) n++;
+    return Object.assign({}, p, {l: m.lc, s: m.sc, p: m.pcc, pr: m.pc, x: m.xc, ox: m.oc, ux: m.uc});
+  });
+  return {out, n, matched: picks.filter(p => cl[`${p.d}|${p.pl}|${p.c}`]).length};
+}
+
 function redraw() {
   const raw = document.getElementById("calmode").value === "raw";
   RAWMODE = raw || !DATA.picks.some(p => p.pr != null);   // results built before calibration = raw %
-  render(Object.assign({}, DATA, {picks: DATA.picks.map(p => raw && p.pr != null ? Object.assign({}, p, {p: p.pr}) : p)}));
+  let picks = DATA.picks, note = "";
+  if (LINEMODE === "close") {
+    const c = atClosing(picks);
+    picks = c.out;
+    note = `<b>Closing line:</b> every hit-rate section grades each pick at the last line seen before puck drop, with the side
+      the model takes at that line (${c.n} picks graded at a different line than they opened, ${picks.length - c.matched} with no recorded
+      closing line kept at their opening line). The line movement, LightGBM, pairs and first-vs-last sections don't change.`;
+  } else {
+    note = `<b>Opening line:</b> each pick graded at the first line a model run priced that day (the official record).`;
+  }
+  document.getElementById("linenote").innerHTML = note;
+  document.querySelectorAll("#linetabs button").forEach(b => b.classList.toggle("on", b.dataset.mode === LINEMODE));
+  render(Object.assign({}, DATA, {picks: picks.map(p => raw && p.pr != null ? Object.assign({}, p, {p: p.pr}) : p)}));
 }
+document.getElementById("linetabs").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b || b.dataset.mode === LINEMODE) return;
+  LINEMODE = b.dataset.mode;
+  try { localStorage.setItem("nhlLineMode", LINEMODE); } catch (err) {}
+  if (DATA) redraw();
+});
 fetch("data/results.json", {cache: "no-store"}).then(r => r.json()).then(data => {
   DATA = data;
   const c = data.calibration;
@@ -462,7 +557,12 @@ fetch("data/results.json", {cache: "no-store"}).then(r => r.json()).then(data =>
     document.getElementById("calnote").textContent = `Calibrated = 50% + ${c.k_used} × (model % − 50%), because the raw model was overconfident.` +
       (c.k_fit != null ? ` Current best fit on ${c.n} graded picks: ${c.k_fit} (95% ${c.k_lo}–${c.k_hi}).` : "") +
       " Sides and hit rates are identical either way; only the stated % changes.";
-    document.getElementById("calmode").addEventListener("change", redraw);
+    try { if (localStorage.getItem("nhlProbMode") === "raw") document.getElementById("calmode").value = "raw"; } catch (e) {}
+    segmented(document.getElementById("calmode"));
+    document.getElementById("calmode").addEventListener("change", e => {
+      try { localStorage.setItem("nhlProbMode", e.target.value); } catch (err) {}
+      redraw();
+    });
   }
   redraw();
 })

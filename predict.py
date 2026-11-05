@@ -14,6 +14,8 @@ Guards (lessons from the PGA version):
 
     python predict.py
 """
+import glob
+import json
 from collections import Counter
 from datetime import timedelta
 
@@ -42,6 +44,31 @@ def nhl_games_by_team(dates):
                 out[(d, info["away"])] = info
                 out[(d, info["home"])] = info
     return out
+
+
+def add_open_lines(picks):
+    """Line-move flag: for picks whose line differs from the first line an earlier model run priced today
+    (same player, prop and date), store that opening line/side/prob. Same opening line grading uses."""
+    first = {}
+    for f in sorted(glob.glob(path("data", "snapshots", "*.json"))):
+        with open(f, encoding="utf-8") as fh:
+            s = json.load(fh)
+        for pk in s.get("picks", []):
+            if pk.get("skip_reason") or pk.get("side") is None:
+                continue
+            k = (pk["game_date"], str(pk["pp_player_id"]), pk["category"])
+            if k not in first or s["generated_at"] < first[k][1]:
+                first[k] = (pk, s["generated_at"])
+    n = 0
+    for p in picks:
+        o = first.get((p["game_date"], str(p["pp_player_id"]), p["category"]))
+        if p.get("side") is None or not o or float(o[0]["line"]) == float(p["line"]):
+            continue
+        pk = o[0]
+        p.update(open_line=pk["line"], open_side=pk["side"], open_prob=pk["prob"],
+                 open_prob_cal=pk.get("prob_cal"), open_mean=pk["model_mean"], open_at=o[1])
+        n += 1
+    print(f"  {n} picks' lines moved since the first model run of the day")
 
 
 def main():
@@ -146,6 +173,7 @@ def main():
         picks.append(pick)
 
     print("  picks:", dict(reasons))
+    add_open_lines(picks)
     shadow_info = {}
     try:   # LightGBM challenger: recorded next to the official picks, never replaces them
         shadow_info = gbm.shadow_predictions(cfg, sk, gm, walker, picks)

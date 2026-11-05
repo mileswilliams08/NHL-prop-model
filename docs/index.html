@@ -16,6 +16,7 @@
   .bet-yes { background: #1a4620; color: #3fb950; }
   .bet-no { background: #2d1a1a; color: #f85149; }
   td.src { color: #8b98a5; font-size: 11px; }
+  .moved { display: block; color: #d4a72c; font-size: 11px; margin-top: 2px; }
   .tier { padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: 700; white-space: nowrap; }
   .tier-Top { background: #1f3a5f; color: #79c0ff; }
   .tier-Mid { background: #262c36; color: #c9d1d9; }
@@ -51,7 +52,7 @@
   <label>Prop: <select id="propSelect"></select></label>
   <label><select id="dateSelect"></select></label>
   <label><select id="teamSelect"></select></label>
-  <label>Probabilities: <select id="calMode"><option value="cal">Calibrated</option><option value="raw">Raw model</option></select></label>
+  <span style="display:flex;align-items:center;gap:6px">Probabilities: <select id="calMode"><option value="cal">Calibrated</option><option value="raw">Raw model</option></select></span>
 </div>
 
 <div class="tiptext" id="tierTip" style="display:none">
@@ -158,7 +159,7 @@ function renderTable() {
   const tierCell = p => p.tier ? `<span class="tier tier-${p.tier}" title="${p.recent_toi} min avg, last 10 games">${esc(p.tier_rank)} · ${p.tier}</span>` : "";
   tbody.innerHTML = rows.length ? rows.map(p => `<tr>
       <td>${esc(p.player)}</td><td>${tierCell(p)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
-      <td>${p.line} <span class="src">(prizepicks)</span></td>
+      <td>${p.line} <span class="src">(prizepicks)</span>${moveNote(p) ? `<span class="moved">${esc(moveNote(p))}</span>` : ""}</td>
       <td class="num">${p.model_mean.toFixed(2)}</td>
       <td class="num" title="${RAW ? "calibrated" : "raw model"} ${(P2(p) * 100).toFixed(1)}%">${(P(p) * 100).toFixed(1)}%</td>
       <td class="${p.side}">${p.side === "over" ? "Over" : "Under"}</td>
@@ -175,15 +176,20 @@ function renderTable() {
   document.getElementById("notes").innerHTML = (rows.length ? `${rows.length} lines. ${RAW
       ? "Model P(Side) is the RAW model chance its side wins, ignoring pushes (hover for calibrated). The raw model has been overconfident on graded picks, so CLEARS here is optimistic. "
       : "Model P(Side) is the calibrated chance its side wins, ignoring pushes (hover for the raw model %): the raw model was overconfident, so its distance from 50% is scaled down. "}` : "")
-    + `Only standard two-way lines are priced; goblins and demons (Over-only) never are.`
+    + `Only standard two-way lines are priced; goblins and demons (Over-only) never are. `
+    + `When a line moves, its probability is recomputed from the same projection; if the line crosses the projection the side switches.`
     + Object.entries(why).map(([r, s]) => `<br><b>Not priced: ${esc(r.replace(/_/g, " "))}</b> — ${[...s].slice(0, 40).map(esc).join(", ")}${s.size > 40 ? " …" : ""}`).join("");
 }
 
-fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(json => {
+fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(async json => {
+  const board = await loadBoard();
+  const nLive = applyBoard(json, board);
   DATA = json;
   const labels = json.labels || {};
   document.getElementById("meta").textContent =
-    `Slate ${json.slate_dates.join(", ")} — updated ${new Date(json.generated_at).toLocaleString()} · history through ${json.history_through}`;
+    `Slate ${json.slate_dates.join(", ")} — updated ${new Date(json.generated_at).toLocaleString()} · history through ${json.history_through}` +
+    (board && new Date(board.updated_at) > new Date(json.generated_at)
+      ? ` · lines rechecked ${new Date(board.updated_at).toLocaleTimeString([], {hour: "numeric", minute: "2-digit"})}${nLive ? ` (${nLive} moved and repriced)` : ""}` : "");
   // headline props first, then experimental, then anything recorded but not priced
   const cats = [...new Set(json.picks.map(p => p.category))];
   const priced = c => json.picks.some(p => p.category === c && !p.skip_reason);
@@ -204,6 +210,7 @@ fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(json => {
 ["propSelect", "dateSelect", "teamSelect"].forEach(id => document.getElementById(id).addEventListener("change", renderTable));
 document.getElementById("breakeven").addEventListener("input", renderTable);
 document.getElementById("calMode").value = RAW ? "raw" : "cal";
+segmented(document.getElementById("calMode"));
 document.getElementById("calMode").addEventListener("change", e => {
   RAW = e.target.value === "raw";
   try { localStorage.setItem("nhlProbMode", RAW ? "raw" : "cal"); } catch (err) {}

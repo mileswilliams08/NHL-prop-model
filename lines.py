@@ -6,7 +6,10 @@ can be compared with the LAST line posted before puck drop (the "closing line").
 
 Runs every 30 minutes through game hours (.github/workflows/lines.yml). The daily run's snapshots
 (data/snapshots/) also count as line observations, so predict.py doesn't write here.
-It never prices anything and never touches the site's props/results data.
+It also writes docs/data/board.json: the current line for every pick on the Props page, repriced from
+that pick's stored model mean (model.price, same math as predict.py). The Props page and Slip Builder
+overlay it, so a line that moved since the last model run shows its real current line and probability.
+It never changes props.json, results or snapshots (grading still uses the model runs' snapshots).
 
 Only lines for games that haven't started are recorded, so a run during games can't record a live
 line. Storage per slate date (US Eastern date from start_time), one entry per player + prop:
@@ -46,6 +49,7 @@ def record(rows, cfg, now=None):
     for r in keep:
         by_date.setdefault(r["start_time"][:10], []).append(r)
 
+    publish_board(keep, cfg, now)
     seen, moves = 0, 0
     for date, rs in by_date.items():
         doc = _load(date)
@@ -67,6 +71,31 @@ def record(rows, cfg, now=None):
         doc["updated_at"] = stamp
         write_json(os.path.join(LINES_DIR, f"{date}.json"), doc)
     return seen, moves
+
+
+def publish_board(rows, cfg, now):
+    """docs/data/board.json: {"updated_at", "lines": {"<game_date>|<pp_player_id>|<cat>": {line, side,
+    prob, prob_cal, p_over, p_under}}} for the picks currently on the Props page. Never fatal."""
+    try:
+        import model
+        from common import DOCS_DATA
+        with open(os.path.join(DOCS_DATA, "props.json"), encoding="utf-8") as f:
+            props = json.load(f)
+        mean = {(p["game_date"], str(p["pp_player_id"]), p["category"]): p["model_mean"]
+                for p in props.get("picks", []) if p.get("model_mean") is not None and not p.get("skip_reason")}
+        out = {}
+        for r in rows:
+            k = (r["start_time"][:10], str(r["pp_player_id"]), r["category"])
+            if k not in mean:
+                continue
+            side, prob, po, pu = model.price(cfg, r["category"], mean[k], r["line"])
+            out["|".join(k)] = {"line": r["line"], "side": side, "prob": round(prob, 4),
+                                "prob_cal": round(model.calibrate(prob, cfg), 4),
+                                "p_over": round(po, 4), "p_under": round(pu, 4), "pp_proj_id": r["pp_proj_id"]}
+        write_json(os.path.join(DOCS_DATA, "board.json"), {"updated_at": now.strftime(TS), "lines": out})
+        print(f"board.json: {len(out)} current lines repriced")
+    except Exception as e:   # the overlay is a bonus; line recording must never fail because of it
+        print(f"board.json not written: {e!r}")
 
 
 def main():

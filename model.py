@@ -399,3 +399,18 @@ def dist_for(cfg, cat):
     defaults = {"hits": {"nb_r": 6.0}, "blocks": {"nb_r": 6.0}, "toi": {"sd_min": 3.0}, "faceoffs": {"nb_r": 20.0}}
     key = "sd_min" if cat == "toi" else "nb_r"
     return d.get(key, defaults.get(cat, {}).get(key))
+
+
+def price(cfg, cat, mean, line):
+    """Price any line from a pick's stored model mean (the number shown on the site; for saves the
+    pull-adjusted mean). Same distributions as predict.py, so a moved line gets exactly the probability
+    the model would have given it. Returns (side, prob, p_over, p_under)."""
+    d = dist_for(cfg, cat)
+    if cat == "toi":
+        po, pu, _ = normal_probs(float(mean), line, d)
+    elif cat == "saves":
+        po, pu, _ = saves_probs(float(mean) / (d["q_full"] + (1 - d["q_full"]) * d["pull_frac"]), line, d)
+    else:
+        po, pu, _ = line_probs(float(mean), line, d)
+    side, prob = pick_side(po, pu)
+    return side, prob, po, pu

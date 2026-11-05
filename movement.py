@@ -60,11 +60,14 @@ def _earliest_picks():
 
 def build_moves(cfg, excluded_keys=frozenset(), now=None):
     """Compact rows for the results page: d date, pl player, c prop, s side, p prob, m model mean,
-    l0 pick line, lc closing line, cm minutes between last observation and puck drop, hd headline."""
+    l0 pick line, lc closing line, cm minutes between last observation and puck drop, hd headline,
+    sc / pc the model's side and raw probability at the closing line (same model mean, repriced),
+    g / id NHL game and player ids (to join the graded result)."""
+    import model
     now = now or utcnow()
     obs = _observations()
     rows = []
-    for (date, _, _, cat), (pk, made_at) in _earliest_picks().items():
+    for (date, gid, pid, cat), (pk, made_at) in _earliest_picks().items():
         start = parse_ts(pk["start_time"])
         if start > now:
             continue
@@ -79,7 +82,12 @@ def build_moves(cfg, excluded_keys=frozenset(), now=None):
         rows.append({"d": date, "pl": pk["player"], "tm": pk["team"], "c": cat, "s": pk["side"],
                      "p": round(float(pk["prob"]), 4), "m": round(float(pk["model_mean"]), 3),
                      "l0": float(pk["line"]), "lc": lc, "cm": int((start - t_close).total_seconds() // 60),
-                     "hd": 1 if hd else 0})
+                     "hd": 1 if hd else 0, "g": gid, "id": pid})
+        if lc == float(pk["line"]):
+            rows[-1].update(sc=pk["side"], pc=round(float(pk["prob"]), 4))
+        else:
+            sc, pc, _, _ = model.price(cfg, cat, pk["model_mean"], lc)
+            rows[-1].update(sc=sc, pc=round(pc, 4))
     return rows
 
 

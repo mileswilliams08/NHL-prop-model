@@ -150,6 +150,31 @@ def build_graded_pairs(cfg, graded, k):
     return rows
 
 
+def add_closing_results(moves, graded, k):
+    """Second grading of the same picks: at the LAST line seen before puck drop, with the side the model
+    takes at that line (same mean, repriced). The official record (everything else on the page) stays
+    graded at the first line. Adds to each graded move row: a actual, x0 result at the first line,
+    xc result at the closing line, oc / uc blind Over / Under at the closing line, pcc calibrated pc."""
+    import grade
+    res = {(str(r.game_date), str(r.nhl_game_id), str(r.nhl_id), r.category): r for r in graded.itertuples()}
+    code = {"hit": "h", "miss": "m", "push": "p"}
+    n = flips = 0
+    for m in moves:
+        r = res.get((m["d"], str(m["g"]), str(m["id"]), m["c"]))
+        if r is None or r.result not in code or pd.isna(r.actual):
+            continue
+        a = float(r.actual)
+        m.update(a=round(a, 2), x0=code[r.result], xc=code[grade.outcome(a, m["lc"], m["sc"])],
+                 oc=code[grade.outcome(a, m["lc"], "over")], uc=code[grade.outcome(a, m["lc"], "under")],
+                 pcc=round(0.5 + k * (m["pc"] - 0.5), 4))
+        n += 1
+        flips += m["sc"] != m["s"]
+    if n:
+        f = lambda key: sum(m.get(key) == "h" for m in moves) / max(1, sum(m.get(key) in ("h", "m") for m in moves))
+        print(f"CLOSING LINE: {n} graded picks; model at first line {f('x0'):.1%}, at last line before puck drop "
+              f"{f('xc'):.1%}; side changed on {flips}")
+
+
 def main():
     cfg = load_config()
     df = load_graded()
@@ -184,6 +209,10 @@ def main():
     except Exception as e:   # the comparison is a bonus; never block the results page
         print(f"shadow comparison failed: {e}")
         shadow_rows = []
+    try:
+        add_closing_results(moves, df, k_used)
+    except Exception as e:   # bonus section; never block the results page
+        print(f"closing-line grading failed: {e!r}")
     try:
         pair_rows = build_graded_pairs(cfg, df, k_used)
     except Exception as e:   # pairs are a bonus; never block the results page
