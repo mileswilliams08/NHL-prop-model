@@ -9,7 +9,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 349006,Judd Caulfield,ANA,F,8481538,Judd Caulfield,exact,2026-10-27,2026-10-27
 360351,Laurent Brossoit,ANA,G,8476316,Laurent Brossoit,exact,2026-11-01,2026-11-05
 173423,Leo Carlsson,ANA,F,8484153,Leo Carlsson,exact,2026-10-19,2026-11-06
-218441,Lukas Dostal,ANA,G,8480843,Lukas Dostal,exact,2026-10-20,2026-10-27
+218441,Lukas Dostal,ANA,G,8480843,Lukas Dostal,exact,2026-10-20,2026-11-06
 267739,Mikael Granlund,ANA,F,8475798,Mikael Granlund,exact,2026-10-19,2026-11-06
 268892,Nikita Nesterenko,ANA,F,8481754,Nikita Nesterenko,exact,2026-10-27,2026-10-27
 176774,Pavel Mintyukov,ANA,D,8483490,Pavel Mintyukov,exact,2026-11-05,2026-11-05
@@ -36,7 +36,8 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218294,Beck Malenstyn,BUF,F,8479359,Beck Malenstyn,exact,2026-10-17,2026-11-06
 272569,Colten Ellis,BUF,G,8481551,Colten Ellis,exact,2026-10-27,2026-11-04
 92751,Jack Quinn,BUF,F,8482097,Jack Quinn,exact,2026-10-17,2026-11-06
-220168,Jason Zucker,BUF,F,8475722,J. Zucker,boxscore_history,2026-10-21,2026-10-31
+220168,Jason Zucker,BUF,F,8475722,J. Zucker,boxscore_history,2026-10-21,2026-11-06
+233637,Jiri Kulich,BUF,F,8483468,Jiri Kulich,exact,2026-11-06,2026-11-06
 268183,Josh Doan,BUF,F,8482659,Josh Doan,exact,2026-10-27,2026-11-06
 230933,Josh Norris,BUF,F,8480064,Josh Norris,exact,2026-10-21,2026-10-21
 92038,Mattias Samuelsson,BUF,D,8480807,Mattias Samuelsson,exact,2026-10-17,2026-11-06
@@ -47,7 +48,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 215149,Ryan McLeod,BUF,F,8480802,Ryan McLeod,exact,2026-10-21,2026-10-27
 218270,Tage Thompson,BUF,F,8479420,Tage Thompson,exact,2026-10-17,2026-11-06
 268825,Tyson Kozak,BUF,F,8482896,Tyson Kozak,exact,2026-10-24,2026-10-24
-218332,Ukko-Pekka Luukkonen,BUF,G,8480045,Ukko-Pekka Luukkonen,exact,2026-10-17,2026-10-24
+218332,Ukko-Pekka Luukkonen,BUF,G,8480045,Ukko-Pekka Luukkonen,exact,2026-10-17,2026-11-06
 180709,Zach Benson,BUF,F,8484145,Zach Benson,exact,2026-10-21,2026-11-06
 218693,Andrei Svechnikov,CAR,F,8480830,Andrei Svechnikov,exact,2026-10-17,2026-11-05
 273387,Bradly Nadeau,CAR,F,8484203,Bradly Nadeau,exact,2026-10-18,2026-10-20
@@ -76,10 +77,10 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 176541,Damon Severson,CBJ,D,8476923,D. Severson,boxscore_history,2026-10-20,2026-11-03
 271232,Denton Mateychuk,CBJ,D,8483485,Denton Mateychuk,exact,2026-10-20,2026-11-03
 182263,Dmitri Voronkov,CBJ,F,8481716,Dmitri Voronkov,exact,2026-10-20,2026-10-20
-172391,Ivan Provorov,CBJ,D,8478500,Ivan Provorov,exact,2026-11-03,2026-11-03
-127804,Jet Greaves,CBJ,G,8482982,Jet Greaves,exact,2026-10-17,2026-10-31
+172391,Ivan Provorov,CBJ,D,8478500,Ivan Provorov,exact,2026-11-03,2026-11-06
+127804,Jet Greaves,CBJ,G,8482982,Jet Greaves,exact,2026-10-17,2026-11-06
 88056,Kent Johnson,CBJ,F,8482660,Kent Johnson,exact,2026-10-20,2026-11-03
-218320,Mathieu Olivier,CBJ,F,8479671,Mathieu Olivier,exact,2026-10-17,2026-11-05
+218320,Mathieu Olivier,CBJ,F,8479671,Mathieu Olivier,exact,2026-10-17,2026-11-06
 348690,Matthew Knies,CBJ,F,8482720,Matthew Knies,exact,2026-10-18,2026-11-06
 218259,Sean Monahan,CBJ,F,8477497,Sean Monahan,exact,2026-10-17,2026-11-06
 346508,Valeri Nichushkin,CBJ,F,8477501,Valeri Nichushkin,exact,2026-10-20,2026-11-06
@@ -88,7 +89,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 360187,Arsenii Sergeev,CGY,G,8482949,Arsenii Sergeev,exact,2026-10-31,2026-10-31
 312575,Aydar Suniev,CGY,F,8484234,Aydar Suniev,exact,2026-10-30,2026-11-06
 270379,Devin Cooley,CGY,G,8482445,Devin Cooley,exact,2026-10-18,2026-10-28
-218336,Dustin Wolf,CGY,G,8481692,Dustin Wolf,exact,2026-10-30,2026-11-04
+218336,Dustin Wolf,CGY,G,8481692,Dustin Wolf,exact,2026-10-30,2026-11-06
 348817,Jake Middleton,CGY,D,8478136,Jake Middleton,exact,2026-10-22,2026-11-02
 231996,Joel Farabee,CGY,F,8480797,Joel Farabee,exact,2026-10-22,2026-11-06
 223168,Kevin Bahl,CGY,D,8480860,Kevin Bahl,exact,2026-10-26,2026-11-02
@@ -200,7 +201,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 292038,Sandis Vilmanis,FLA,F,8483771,Sandis Vilmanis,exact,2026-11-02,2026-11-02
 230116,Seth Jones,FLA,D,8477495,Seth Jones,exact,2026-10-17,2026-11-04
 57769,Adrian Kempe,LA,F,8477960,Adrian Kempe,exact,2026-10-17,2026-10-31
-173242,Alex Laferriere,LA,F,8482155,Alex Laferriere,exact,2026-10-17,2026-11-04
+173242,Alex Laferriere,LA,F,8482155,Alex Laferriere,exact,2026-10-17,2026-11-06
 268369,Anton Forsberg,LA,G,8476341,Anton Forsberg,exact,2026-10-17,2026-10-27
 302130,Artemi Panarin,LA,F,8478550,Artemi Panarin,exact,2026-10-17,2026-11-04
 221574,Brandt Clarke,LA,D,8482730,Brandt Clarke,exact,2026-10-22,2026-10-29
@@ -220,7 +221,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 352820,Calvin Pickard,MIN,G,8475717,Calvin Pickard,exact,2026-10-25,2026-10-25
 315141,Danila Yurov,MIN,F,8483525,Danila Yurov,exact,2026-10-20,2026-11-06
 61116,Jared Spurgeon,MIN,D,8474716,Jared Spurgeon,exact,2026-10-24,2026-10-29
-184136,Jesper Wallstedt,MIN,G,8482661,Jesper Wallstedt,exact,2026-10-18,2026-11-03
+184136,Jesper Wallstedt,MIN,G,8482661,Jesper Wallstedt,exact,2026-10-18,2026-11-06
 218247,Joel Eriksson Ek,MIN,F,8478493,Joel Eriksson Ek,exact,2026-10-18,2026-11-06
 61319,Jonas Brodin,MIN,D,8476463,Jonas Brodin,exact,2026-10-18,2026-10-29
 218246,Kirill Kaprizov,MIN,F,8478864,Kirill Kaprizov,exact,2026-10-18,2026-11-06
@@ -229,7 +230,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 304792,Michael McCarron,MIN,F,8477446,Michael McCarron,exact,2026-10-20,2026-11-06
 348314,Olli Maatta,MIN,D,8476874,Olli Maatta,exact,2026-10-29,2026-11-06
 286557,Quinn Hughes,MIN,D,8480800,Quinn Hughes,exact,2026-10-18,2026-11-06
-58157,Ryan Hartman,MIN,F,8477451,Ryan Hartman,exact,2026-10-20,2026-10-25
+58157,Ryan Hartman,MIN,F,8477451,Ryan Hartman,exact,2026-10-20,2026-11-06
 226491,Yakov Trenin,MIN,F,8478508,Yakov Trenin,exact,2026-10-18,2026-11-06
 171835,Alex Newhook,MTL,F,8481618,Alex Newhook,exact,2026-10-17,2026-10-31
 267913,Alexandre Carrier,MTL,D,8478851,Alexandre Carrier,exact,2026-10-23,2026-10-23
@@ -386,7 +387,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 219884,Ryker Evans,SEA,D,8482858,Ryker Evans,exact,2026-10-30,2026-10-30
 58835,Vince Dunn,SEA,D,8478407,Vince Dunn,exact,2026-10-20,2026-11-04
 268356,Adam Gaudette,SJ,F,8478874,Adam Gaudette,exact,2026-11-06,2026-11-06
-268534,Alex Nedeljkovic,SJ,G,8477968,Alex Nedeljkovic,exact,2026-10-17,2026-10-24
+268534,Alex Nedeljkovic,SJ,G,8477968,Alex Nedeljkovic,exact,2026-10-17,2026-11-06
 271186,Alexander Wennberg,SJ,F,8477505,Alexander Wennberg,exact,2026-10-17,2026-10-19
 268427,Barclay Goodrow,SJ,F,8476624,Barclay Goodrow,exact,2026-10-24,2026-11-04
 268357,Collin Graf,SJ,F,8484911,Collin Graf,exact,2026-10-24,2026-10-29
@@ -399,9 +400,10 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218257,Macklin Celebrini,SJ,F,8484801,Macklin Celebrini,exact,2026-10-17,2026-11-06
 348311,Mason Marchment,SJ,F,8478975,Mason Marchment,exact,2026-10-17,2026-11-06
 348312,Michael Kesselring,SJ,D,8480891,Michael Kesselring,exact,2026-10-20,2026-11-02
+272283,Sam Dickinson,SJ,D,8484806,Sam Dickinson,exact,2026-11-06,2026-11-06
 218658,Tyler Toffoli,SJ,F,8475726,Tyler Toffoli,exact,2026-10-19,2026-11-02
 216154,Will Smith,SJ,F,8484227,Will Smith,exact,2026-10-17,2026-11-06
-219956,Yaroslav Askarov,SJ,G,8482137,Yaroslav Askarov,exact,2026-10-19,2026-11-04
+219956,Yaroslav Askarov,SJ,G,8482137,Yaroslav Askarov,exact,2026-10-19,2026-11-06
 277826,Zack Ostapchuk,SJ,F,8482859,Zack Ostapchuk,exact,2026-10-17,2026-10-17
 87966,Alexey Toropchenko,STL,F,8480281,Alexey Toropchenko,exact,2026-10-29,2026-10-29
 348325,Brandon Carlo,STL,D,8478443,Brandon Carlo,exact,2026-11-03,2026-11-05
