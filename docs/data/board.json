@@ -1,843 +1,6 @@
 {
- "updated_at": "2026-11-10T00:07Z",
+ "updated_at": "2026-11-10T07:09Z",
  "lines": {
-  "2026-11-09|58024|toi": {
-   "line": 24.75,
-   "side": "over",
-   "prob": 0.608,
-   "prob_cal": 0.5421,
-   "p_over": 0.608,
-   "p_under": 0.392,
-   "pp_proj_id": "16811242"
-  },
-  "2026-11-09|309284|saves": {
-   "line": 24.5,
-   "side": "under",
-   "prob": 0.5645,
-   "prob_cal": 0.5252,
-   "p_over": 0.4355,
-   "p_under": 0.5645,
-   "pp_proj_id": "16832715"
-  },
-  "2026-11-09|218657|toi": {
-   "line": 24.25,
-   "side": "under",
-   "prob": 0.6103,
-   "prob_cal": 0.543,
-   "p_over": 0.3897,
-   "p_under": 0.6103,
-   "pp_proj_id": "16811239"
-  },
-  "2026-11-09|57827|toi": {
-   "line": 23.5,
-   "side": "over",
-   "prob": 0.5206,
-   "prob_cal": 0.508,
-   "p_over": 0.5206,
-   "p_under": 0.4794,
-   "pp_proj_id": "16811241"
-  },
-  "2026-11-09|348862|saves": {
-   "line": 22.5,
-   "side": "under",
-   "prob": 0.5571,
-   "prob_cal": 0.5223,
-   "p_over": 0.4429,
-   "p_under": 0.5571,
-   "pp_proj_id": "16831455"
-  },
-  "2026-11-09|218655|toi": {
-   "line": 20.25,
-   "side": "over",
-   "prob": 0.5079,
-   "prob_cal": 0.5031,
-   "p_over": 0.5079,
-   "p_under": 0.4921,
-   "pp_proj_id": "16811240"
-  },
-  "2026-11-09|234283|faceoffs": {
-   "line": 9.5,
-   "side": "over",
-   "prob": 0.5135,
-   "prob_cal": 0.5053,
-   "p_over": 0.5135,
-   "p_under": 0.4865,
-   "pp_proj_id": "16812181"
-  },
-  "2026-11-09|218685|hits": {
-   "line": 3.5,
-   "side": "under",
-   "prob": 0.5589,
-   "prob_cal": 0.523,
-   "p_over": 0.4411,
-   "p_under": 0.5589,
-   "pp_proj_id": "16811632"
-  },
-  "2026-11-09|57827|sog": {
-   "line": 3.0,
-   "side": "under",
-   "prob": 0.5065,
-   "prob_cal": 0.5025,
-   "p_over": 0.3938,
-   "p_under": 0.4042,
-   "pp_proj_id": "16829620"
-  },
-  "2026-11-09|346724|sog": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.5573,
-   "prob_cal": 0.5223,
-   "p_over": 0.4427,
-   "p_under": 0.5573,
-   "pp_proj_id": "16807268"
-  },
-  "2026-11-09|303677|hits": {
-   "line": 2.5,
-   "side": "over",
-   "prob": 0.5095,
-   "prob_cal": 0.5037,
-   "p_over": 0.5095,
-   "p_under": 0.4905,
-   "pp_proj_id": "16811633"
-  },
-  "2026-11-09|236292|hits": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.6934,
-   "prob_cal": 0.5754,
-   "p_over": 0.3066,
-   "p_under": 0.6934,
-   "pp_proj_id": "16811647"
-  },
-  "2026-11-09|348257|hits": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.6636,
-   "prob_cal": 0.5638,
-   "p_over": 0.3364,
-   "p_under": 0.6636,
-   "pp_proj_id": "16811649"
-  },
-  "2026-11-09|286720|hits": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.6615,
-   "prob_cal": 0.563,
-   "p_over": 0.2626,
-   "p_under": 0.5132,
-   "pp_proj_id": "16811648"
-  },
-  "2026-11-09|240350|hits": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.5394,
-   "prob_cal": 0.5154,
-   "p_over": 0.3565,
-   "p_under": 0.4174,
-   "pp_proj_id": "16811650"
-  },
-  "2026-11-09|59488|sog": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.535,
-   "prob_cal": 0.5136,
-   "p_over": 0.3476,
-   "p_under": 0.3999,
-   "pp_proj_id": "16829621"
-  },
-  "2026-11-09|218655|sog": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.5162,
-   "prob_cal": 0.5063,
-   "p_over": 0.362,
-   "p_under": 0.3862,
-   "pp_proj_id": "16829622"
-  },
-  "2026-11-09|346719|hits": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5629,
-   "prob_cal": 0.5245,
-   "p_over": 0.4371,
-   "p_under": 0.5629,
-   "pp_proj_id": "16811634"
-  },
-  "2026-11-09|218657|sog": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5654,
-   "prob_cal": 0.5255,
-   "p_over": 0.4346,
-   "p_under": 0.5654,
-   "pp_proj_id": "16814008"
-  },
-  "2026-11-09|218685|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5464,
-   "prob_cal": 0.5181,
-   "p_over": 0.5464,
-   "p_under": 0.4536,
-   "pp_proj_id": "16815814"
-  },
-  "2026-11-09|303677|sog": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5459,
-   "prob_cal": 0.5179,
-   "p_over": 0.4541,
-   "p_under": 0.5459,
-   "pp_proj_id": "16823880"
-  },
-  "2026-11-09|240350|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5295,
-   "prob_cal": 0.5115,
-   "p_over": 0.5295,
-   "p_under": 0.4705,
-   "pp_proj_id": "16825584"
-  },
-  "2026-11-09|237359|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5232,
-   "prob_cal": 0.5091,
-   "p_over": 0.5232,
-   "p_under": 0.4768,
-   "pp_proj_id": "16830228"
-  },
-  "2026-11-09|125451|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.6264,
-   "prob_cal": 0.5493,
-   "p_over": 0.3736,
-   "p_under": 0.6264,
-   "pp_proj_id": "16833605"
-  },
-  "2026-11-09|58024|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.6687,
-   "prob_cal": 0.5658,
-   "p_over": 0.3313,
-   "p_under": 0.6687,
-   "pp_proj_id": "16833612"
-  },
-  "2026-11-09|346719|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5007,
-   "prob_cal": 0.5003,
-   "p_over": 0.4993,
-   "p_under": 0.5007,
-   "pp_proj_id": "16829667"
-  },
-  "2026-11-09|234283|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5697,
-   "prob_cal": 0.5272,
-   "p_over": 0.4303,
-   "p_under": 0.5697,
-   "pp_proj_id": "16829668"
-  },
-  "2026-11-09|218655|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5191,
-   "prob_cal": 0.5074,
-   "p_over": 0.4809,
-   "p_under": 0.5191,
-   "pp_proj_id": "16829669"
-  },
-  "2026-11-09|57827|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.6231,
-   "prob_cal": 0.548,
-   "p_over": 0.3769,
-   "p_under": 0.6231,
-   "pp_proj_id": "16829673"
-  },
-  "2026-11-09|171358|toi": {
-   "line": 27.0,
-   "side": "under",
-   "prob": 0.5537,
-   "prob_cal": 0.521,
-   "p_over": 0.4463,
-   "p_under": 0.5537,
-   "pp_proj_id": "16811245"
-  },
-  "2026-11-09|218272|toi": {
-   "line": 24.0,
-   "side": "over",
-   "prob": 0.575,
-   "prob_cal": 0.5292,
-   "p_over": 0.575,
-   "p_under": 0.425,
-   "pp_proj_id": "16811243"
-  },
-  "2026-11-09|349287|saves": {
-   "line": 23.5,
-   "side": "under",
-   "prob": 0.5173,
-   "prob_cal": 0.5068,
-   "p_over": 0.4827,
-   "p_under": 0.5173,
-   "pp_proj_id": "16832493"
-  },
-  "2026-11-09|349247|saves": {
-   "line": 22.5,
-   "side": "under",
-   "prob": 0.5999,
-   "prob_cal": 0.539,
-   "p_over": 0.4001,
-   "p_under": 0.5999,
-   "pp_proj_id": "16827862"
-  },
-  "2026-11-09|57905|toi": {
-   "line": 20.0,
-   "side": "under",
-   "prob": 0.5984,
-   "prob_cal": 0.5384,
-   "p_over": 0.4016,
-   "p_under": 0.5984,
-   "pp_proj_id": "16811246"
-  },
-  "2026-11-09|268081|toi": {
-   "line": 19.0,
-   "side": "under",
-   "prob": 0.5562,
-   "prob_cal": 0.5219,
-   "p_over": 0.4438,
-   "p_under": 0.5562,
-   "pp_proj_id": "16811244"
-  },
-  "2026-11-09|268079|faceoffs": {
-   "line": 9.0,
-   "side": "under",
-   "prob": 0.5715,
-   "prob_cal": 0.5279,
-   "p_over": 0.3808,
-   "p_under": 0.5079,
-   "pp_proj_id": "16812182"
-  },
-  "2026-11-09|60583|hits": {
-   "line": 3.5,
-   "side": "under",
-   "prob": 0.7609,
-   "prob_cal": 0.6017,
-   "p_over": 0.2391,
-   "p_under": 0.7609,
-   "pp_proj_id": "16811666"
-  },
-  "2026-11-09|348179|hits": {
-   "line": 3.5,
-   "side": "under",
-   "prob": 0.7209,
-   "prob_cal": 0.5862,
-   "p_over": 0.2791,
-   "p_under": 0.7209,
-   "pp_proj_id": "16811667"
-  },
-  "2026-11-09|268081|sog": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.5235,
-   "prob_cal": 0.5092,
-   "p_over": 0.3564,
-   "p_under": 0.3915,
-   "pp_proj_id": "16829623"
-  },
-  "2026-11-09|126919|sog": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.5323,
-   "prob_cal": 0.5126,
-   "p_over": 0.3496,
-   "p_under": 0.3979,
-   "pp_proj_id": "16829624"
-  },
-  "2026-11-09|57905|sog": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.5629,
-   "prob_cal": 0.5245,
-   "p_over": 0.3265,
-   "p_under": 0.4205,
-   "pp_proj_id": "16829625"
-  },
-  "2026-11-09|311148|hits": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.53,
-   "prob_cal": 0.5117,
-   "p_over": 0.47,
-   "p_under": 0.53,
-   "pp_proj_id": "16811655"
-  },
-  "2026-11-09|126919|hits": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5589,
-   "prob_cal": 0.523,
-   "p_over": 0.4411,
-   "p_under": 0.5589,
-   "pp_proj_id": "16811656"
-  },
-  "2026-11-09|58181|hits": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5638,
-   "prob_cal": 0.5249,
-   "p_over": 0.4362,
-   "p_under": 0.5638,
-   "pp_proj_id": "16811670"
-  },
-  "2026-11-09|268365|sog": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.521,
-   "prob_cal": 0.5082,
-   "p_over": 0.479,
-   "p_under": 0.521,
-   "pp_proj_id": "16814085"
-  },
-  "2026-11-09|218272|blocks": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5694,
-   "prob_cal": 0.5271,
-   "p_over": 0.5694,
-   "p_under": 0.4306,
-   "pp_proj_id": "16814092"
-  },
-  "2026-11-09|268079|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.532,
-   "prob_cal": 0.5125,
-   "p_over": 0.532,
-   "p_under": 0.468,
-   "pp_proj_id": "16814111"
-  },
-  "2026-11-09|286558|sog": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.6133,
-   "prob_cal": 0.5442,
-   "p_over": 0.3867,
-   "p_under": 0.6133,
-   "pp_proj_id": "16833236"
-  },
-  "2026-11-09|171358|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5399,
-   "prob_cal": 0.5156,
-   "p_over": 0.4601,
-   "p_under": 0.5399,
-   "pp_proj_id": "16833611"
-  },
-  "2026-11-09|89321|blocks": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5704,
-   "prob_cal": 0.5275,
-   "p_over": 0.5704,
-   "p_under": 0.4296,
-   "pp_proj_id": "16833619"
-  },
-  "2026-11-09|185311|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5283,
-   "prob_cal": 0.511,
-   "p_over": 0.4717,
-   "p_under": 0.5283,
-   "pp_proj_id": "16833654"
-  },
-  "2026-11-09|218272|hits": {
-   "line": 0.5,
-   "side": "over",
-   "prob": 0.5171,
-   "prob_cal": 0.5067,
-   "p_over": 0.5171,
-   "p_under": 0.4829,
-   "pp_proj_id": "16811658"
-  },
-  "2026-11-09|268079|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5137,
-   "prob_cal": 0.5053,
-   "p_over": 0.4863,
-   "p_under": 0.5137,
-   "pp_proj_id": "16829675"
-  },
-  "2026-11-09|126919|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5128,
-   "prob_cal": 0.505,
-   "p_over": 0.4872,
-   "p_under": 0.5128,
-   "pp_proj_id": "16829676"
-  },
-  "2026-11-09|218221|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5853,
-   "prob_cal": 0.5333,
-   "p_over": 0.4147,
-   "p_under": 0.5853,
-   "pp_proj_id": "16829677"
-  },
-  "2026-11-09|218222|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.6218,
-   "prob_cal": 0.5475,
-   "p_over": 0.3782,
-   "p_under": 0.6218,
-   "pp_proj_id": "16829678"
-  },
-  "2026-11-09|268081|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.6263,
-   "prob_cal": 0.5493,
-   "p_over": 0.3737,
-   "p_under": 0.6263,
-   "pp_proj_id": "16829679"
-  },
-  "2026-11-09|268326|toi": {
-   "line": 27.5,
-   "side": "under",
-   "prob": 0.6066,
-   "prob_cal": 0.5416,
-   "p_over": 0.3934,
-   "p_under": 0.6066,
-   "pp_proj_id": "16811247"
-  },
-  "2026-11-09|218257|toi": {
-   "line": 23.5,
-   "side": "under",
-   "prob": 0.538,
-   "prob_cal": 0.5148,
-   "p_over": 0.462,
-   "p_under": 0.538,
-   "pp_proj_id": "16811250"
-  },
-  "2026-11-09|218326|saves": {
-   "line": 23.5,
-   "side": "under",
-   "prob": 0.5043,
-   "prob_cal": 0.5017,
-   "p_over": 0.4957,
-   "p_under": 0.5043,
-   "pp_proj_id": "16834740"
-  },
-  "2026-11-09|219956|saves": {
-   "line": 23.5,
-   "side": "over",
-   "prob": 0.5206,
-   "prob_cal": 0.508,
-   "p_over": 0.5206,
-   "p_under": 0.4794,
-   "pp_proj_id": "16834947"
-  },
-  "2026-11-09|348310|toi": {
-   "line": 22.5,
-   "side": "under",
-   "prob": 0.592,
-   "prob_cal": 0.5359,
-   "p_over": 0.408,
-   "p_under": 0.592,
-   "pp_proj_id": "16811249"
-  },
-  "2026-11-09|218307|toi": {
-   "line": 20.75,
-   "side": "over",
-   "prob": 0.5539,
-   "prob_cal": 0.521,
-   "p_over": 0.5539,
-   "p_under": 0.4461,
-   "pp_proj_id": "16811248"
-  },
-  "2026-11-09|218307|faceoffs": {
-   "line": 10.0,
-   "side": "under",
-   "prob": 0.654,
-   "prob_cal": 0.5601,
-   "p_over": 0.3112,
-   "p_under": 0.5883,
-   "pp_proj_id": "16812183"
-  },
-  "2026-11-09|295018|hits": {
-   "line": 4.5,
-   "side": "under",
-   "prob": 0.5786,
-   "prob_cal": 0.5307,
-   "p_over": 0.4214,
-   "p_under": 0.5786,
-   "pp_proj_id": "16811690"
-  },
-  "2026-11-09|218257|sog": {
-   "line": 3.5,
-   "side": "over",
-   "prob": 0.5232,
-   "prob_cal": 0.5091,
-   "p_over": 0.5232,
-   "p_under": 0.4768,
-   "pp_proj_id": "16814010"
-  },
-  "2026-11-09|268326|sog": {
-   "line": 3.0,
-   "side": "under",
-   "prob": 0.5047,
-   "prob_cal": 0.5018,
-   "p_over": 0.3952,
-   "p_under": 0.4028,
-   "pp_proj_id": "16829628"
-  },
-  "2026-11-09|268177|hits": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.6031,
-   "prob_cal": 0.5402,
-   "p_over": 0.3969,
-   "p_under": 0.6031,
-   "pp_proj_id": "16811674"
-  },
-  "2026-11-09|305209|hits": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.6394,
-   "prob_cal": 0.5544,
-   "p_over": 0.3606,
-   "p_under": 0.6394,
-   "pp_proj_id": "16811675"
-  },
-  "2026-11-09|268352|hits": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.726,
-   "prob_cal": 0.5881,
-   "p_over": 0.274,
-   "p_under": 0.726,
-   "pp_proj_id": "16811676"
-  },
-  "2026-11-09|57997|hits": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.7074,
-   "prob_cal": 0.5809,
-   "p_over": 0.2926,
-   "p_under": 0.7074,
-   "pp_proj_id": "16811678"
-  },
-  "2026-11-09|277826|hits": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.6566,
-   "prob_cal": 0.5611,
-   "p_over": 0.3434,
-   "p_under": 0.6566,
-   "pp_proj_id": "16811691"
-  },
-  "2026-11-09|58112|sog": {
-   "line": 2.0,
-   "side": "over",
-   "prob": 0.5153,
-   "prob_cal": 0.506,
-   "p_over": 0.3866,
-   "p_under": 0.3636,
-   "pp_proj_id": "16829626"
-  },
-  "2026-11-09|230679|sog": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.6298,
-   "prob_cal": 0.5506,
-   "p_over": 0.2772,
-   "p_under": 0.4717,
-   "pp_proj_id": "16829627"
-  },
-  "2026-11-09|297011|hits": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5205,
-   "prob_cal": 0.508,
-   "p_over": 0.4795,
-   "p_under": 0.5205,
-   "pp_proj_id": "16811679"
-  },
-  "2026-11-09|348311|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.536,
-   "prob_cal": 0.514,
-   "p_over": 0.536,
-   "p_under": 0.464,
-   "pp_proj_id": "16812574"
-  },
-  "2026-11-09|348699|sog": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5406,
-   "prob_cal": 0.5158,
-   "p_over": 0.4594,
-   "p_under": 0.5406,
-   "pp_proj_id": "16814398"
-  },
-  "2026-11-09|305209|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5158,
-   "prob_cal": 0.5061,
-   "p_over": 0.5158,
-   "p_under": 0.4842,
-   "pp_proj_id": "16814400"
-  },
-  "2026-11-09|268177|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5066,
-   "prob_cal": 0.5026,
-   "p_over": 0.5066,
-   "p_under": 0.4934,
-   "pp_proj_id": "16815381"
-  },
-  "2026-11-09|348540|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5409,
-   "prob_cal": 0.516,
-   "p_over": 0.4591,
-   "p_under": 0.5409,
-   "pp_proj_id": "16818782"
-  },
-  "2026-11-09|313780|sog": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5134,
-   "prob_cal": 0.5052,
-   "p_over": 0.4866,
-   "p_under": 0.5134,
-   "pp_proj_id": "16822128"
-  },
-  "2026-11-09|226861|sog": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5266,
-   "prob_cal": 0.5104,
-   "p_over": 0.4734,
-   "p_under": 0.5266,
-   "pp_proj_id": "16830099"
-  },
-  "2026-11-09|348310|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5147,
-   "prob_cal": 0.5057,
-   "p_over": 0.4853,
-   "p_under": 0.5147,
-   "pp_proj_id": "16833315"
-  },
-  "2026-11-09|268326|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.6418,
-   "prob_cal": 0.5553,
-   "p_over": 0.3582,
-   "p_under": 0.6418,
-   "pp_proj_id": "16833376"
-  },
-  "2026-11-09|295018|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5848,
-   "prob_cal": 0.5331,
-   "p_over": 0.5848,
-   "p_under": 0.4152,
-   "pp_proj_id": "16838620"
-  },
-  "2026-11-09|226861|hits": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5894,
-   "prob_cal": 0.5349,
-   "p_over": 0.4106,
-   "p_under": 0.5894,
-   "pp_proj_id": "16811684"
-  },
-  "2026-11-09|268326|hits": {
-   "line": 0.5,
-   "side": "over",
-   "prob": 0.5048,
-   "prob_cal": 0.5019,
-   "p_over": 0.5048,
-   "p_under": 0.4952,
-   "pp_proj_id": "16811685"
-  },
-  "2026-11-09|269496|hits": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5283,
-   "prob_cal": 0.511,
-   "p_over": 0.4717,
-   "p_under": 0.5283,
-   "pp_proj_id": "16811686"
-  },
-  "2026-11-09|218257|hits": {
-   "line": 0.5,
-   "side": "over",
-   "prob": 0.5578,
-   "prob_cal": 0.5225,
-   "p_over": 0.5578,
-   "p_under": 0.4422,
-   "pp_proj_id": "16811689"
-  },
-  "2026-11-09|268427|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5477,
-   "prob_cal": 0.5186,
-   "p_over": 0.4523,
-   "p_under": 0.5477,
-   "pp_proj_id": "16829690"
-  },
-  "2026-11-09|218257|blocks": {
-   "line": 0.5,
-   "side": "over",
-   "prob": 0.5243,
-   "prob_cal": 0.5095,
-   "p_over": 0.5243,
-   "p_under": 0.4757,
-   "pp_proj_id": "16829691"
-  },
-  "2026-11-09|348311|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5949,
-   "prob_cal": 0.537,
-   "p_over": 0.4051,
-   "p_under": 0.5949,
-   "pp_proj_id": "16829692"
-  },
-  "2026-11-10|218354|toi": {
-   "line": 24.0,
-   "side": "over",
-   "prob": 0.5306,
-   "prob_cal": 0.5119,
-   "p_over": 0.5306,
-   "p_under": 0.4694,
-   "pp_proj_id": "16831631"
-  },
   "2026-11-10|218324|toi": {
    "line": 21.75,
    "side": "under",
@@ -947,12 +110,12 @@
    "pp_proj_id": "16831277"
   },
   "2026-11-10|218286|toi": {
-   "line": 23.25,
-   "side": "over",
-   "prob": 0.5534,
-   "prob_cal": 0.5208,
-   "p_over": 0.5534,
-   "p_under": 0.4466,
+   "line": 23.75,
+   "side": "under",
+   "prob": 0.5255,
+   "prob_cal": 0.5099,
+   "p_over": 0.4745,
+   "p_under": 0.5255,
    "pp_proj_id": "16831275"
   },
   "2026-11-10|218285|toi": {
@@ -1000,6 +163,15 @@
    "p_under": 0.6848,
    "pp_proj_id": "16831470"
   },
+  "2026-11-10|348518|hits": {
+   "line": 2.5,
+   "side": "under",
+   "prob": 0.7266,
+   "prob_cal": 0.5884,
+   "p_over": 0.2734,
+   "p_under": 0.7266,
+   "pp_proj_id": "16831469"
+  },
   "2026-11-10|348254|hits": {
    "line": 2.5,
    "side": "under",
@@ -1008,15 +180,6 @@
    "p_over": 0.3346,
    "p_under": 0.6654,
    "pp_proj_id": "16831471"
-  },
-  "2026-11-10|348518|hits": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.6472,
-   "prob_cal": 0.5574,
-   "p_over": 0.2734,
-   "p_under": 0.5014,
-   "pp_proj_id": "16831469"
   },
   "2026-11-10|349896|hits": {
    "line": 2.0,
@@ -1037,12 +200,12 @@
    "pp_proj_id": "16840219"
   },
   "2026-11-10|218267|toi": {
-   "line": 24.25,
+   "line": 24.75,
    "side": "under",
-   "prob": 0.5101,
-   "prob_cal": 0.5039,
-   "p_over": 0.4899,
-   "p_under": 0.5101,
+   "prob": 0.5884,
+   "prob_cal": 0.5345,
+   "p_over": 0.4116,
+   "p_under": 0.5884,
    "pp_proj_id": "16840221"
   },
   "2026-11-10|218246|toi": {
@@ -1100,12 +263,12 @@
    "pp_proj_id": "16840345"
   },
   "2026-11-10|219643|toi": {
-   "line": 23.75,
-   "side": "over",
-   "prob": 0.5547,
-   "prob_cal": 0.5213,
-   "p_over": 0.5547,
-   "p_under": 0.4453,
+   "line": 24.5,
+   "side": "under",
+   "prob": 0.5634,
+   "prob_cal": 0.5247,
+   "p_over": 0.4366,
+   "p_under": 0.5634,
    "pp_proj_id": "16830688"
   },
   "2026-11-10|218660|toi": {
@@ -1235,12 +398,12 @@
    "pp_proj_id": "16841290"
   },
   "2026-11-10|348251|hits": {
-   "line": 4.0,
+   "line": 4.5,
    "side": "under",
-   "prob": 0.6693,
-   "prob_cal": 0.566,
+   "prob": 0.7158,
+   "prob_cal": 0.5842,
    "p_over": 0.2842,
-   "p_under": 0.5753,
+   "p_under": 0.7158,
    "pp_proj_id": "16841324"
   },
   "2026-11-10|346715|hits": {
@@ -1351,22 +514,13 @@
    "p_under": 0.4869,
    "pp_proj_id": "16842708"
   },
-  "2026-11-10|171511|sog": {
+  "2026-11-10|346304|hits": {
    "line": 3.5,
    "side": "under",
-   "prob": 0.5657,
-   "prob_cal": 0.5256,
-   "p_over": 0.4343,
-   "p_under": 0.5657,
-   "pp_proj_id": "16837988"
-  },
-  "2026-11-10|346304|hits": {
-   "line": 3.0,
-   "side": "under",
-   "prob": 0.6681,
-   "prob_cal": 0.5656,
+   "prob": 0.7252,
+   "prob_cal": 0.5878,
    "p_over": 0.2748,
-   "p_under": 0.5533,
+   "p_under": 0.7252,
    "pp_proj_id": "16842850"
   },
   "2026-11-10|218575|sog": {
@@ -1378,6 +532,15 @@
    "p_under": 0.5278,
    "pp_proj_id": "16837900"
   },
+  "2026-11-10|87966|hits": {
+   "line": 2.5,
+   "side": "under",
+   "prob": 0.7004,
+   "prob_cal": 0.5782,
+   "p_over": 0.2996,
+   "p_under": 0.7004,
+   "pp_proj_id": "16842851"
+  },
   "2026-11-10|218312|hits": {
    "line": 2.5,
    "side": "under",
@@ -1386,15 +549,6 @@
    "p_over": 0.4162,
    "p_under": 0.5838,
    "pp_proj_id": "16842852"
-  },
-  "2026-11-10|87966|hits": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.6126,
-   "prob_cal": 0.5439,
-   "p_over": 0.2996,
-   "p_under": 0.4737,
-   "pp_proj_id": "16842851"
   },
   "2026-11-10|226661|sog": {
    "line": 1.5,
@@ -1441,15 +595,6 @@
    "p_under": 0.6571,
    "pp_proj_id": "16842940"
   },
-  "2026-11-10|86998|faceoffs": {
-   "line": 9.5,
-   "side": "under",
-   "prob": 0.5859,
-   "prob_cal": 0.5335,
-   "p_over": 0.4141,
-   "p_under": 0.5859,
-   "pp_proj_id": "16842953"
-  },
   "2026-11-10|218086|faceoffs": {
    "line": 9.5,
    "side": "under",
@@ -1458,6 +603,15 @@
    "p_over": 0.4047,
    "p_under": 0.5953,
    "pp_proj_id": "16842954"
+  },
+  "2026-11-10|86998|faceoffs": {
+   "line": 9.0,
+   "side": "under",
+   "prob": 0.5339,
+   "prob_cal": 0.5132,
+   "p_over": 0.4141,
+   "p_under": 0.4743,
+   "pp_proj_id": "16842953"
   },
   "2026-11-10|348111|hits": {
    "line": 3.5,
