@@ -220,7 +220,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 217672,Joel Edmundson,LA,D,8476441,Joel Edmundson,exact,2026-10-22,2026-11-04
 86990,Kevin Fiala,LA,F,8477942,Kevin Fiala,exact,2026-11-12,2026-11-12
 348297,Mats Zuccarello,LA,F,8475692,Mats Zuccarello,exact,2026-10-22,2026-11-12
-59496,Mikey Anderson,LA,D,8479998,Mikey Anderson,exact,2026-10-24,2026-10-24
+59496,Mikey Anderson,LA,D,8479998,Mikey Anderson,exact,2026-10-24,2026-11-12
 86998,Quinton Byfield,LA,F,8482124,Quinton Byfield,exact,2026-10-17,2026-11-12
 267635,Samuel Helenius,LA,F,8482726,Samuel Helenius,exact,2026-10-20,2026-11-12
 305206,Scott Laughton,LA,F,8476872,Scott Laughton,exact,2026-10-26,2026-11-12
@@ -296,7 +296,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218086,Ryan O'Reilly,NSH,F,8475158,Ryan O'Reilly,exact,2026-10-17,2026-11-12
 360855,Shane Wright,NSH,F,8483524,Shane Wright,exact,2026-11-07,2026-11-07
 216156,Steven Stamkos,NSH,F,8474564,Steven Stamkos,exact,2026-10-17,2026-11-12
-88684,Adam Pelech,NYI,D,8476917,Adam Pelech,exact,2026-10-17,2026-11-07
+88684,Adam Pelech,NYI,D,8476917,Adam Pelech,exact,2026-10-17,2026-11-12
 218307,Bo Horvat,NYI,F,8477500,Bo Horvat,exact,2026-10-17,2026-11-12
 305209,Brayden Schenn,NYI,F,8475170,Brayden Schenn,exact,2026-10-17,2026-11-12
 268177,Emil Heineman,NYI,F,8482476,Emil Heineman,exact,2026-10-17,2026-11-12
@@ -559,7 +559,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 184753,Aliaksei Protas,WSH,F,8481656,Aliaksei Protas,exact,2026-10-17,2026-11-07
 347841,Boone Jenner,WSH,F,8476432,Boone Jenner,exact,2026-10-28,2026-11-10
 87148,Charlie Lindgren,WSH,G,8479292,Charlie Lindgren,exact,2026-10-24,2026-10-24
-308187,Cole Hutson,WSH,D,8484873,Cole Hutson,exact,2026-10-17,2026-11-10
+308187,Cole Hutson,WSH,D,8484873,Cole Hutson,exact,2026-10-17,2026-11-12
 87042,Dylan Strome,WSH,F,8478440,Dylan Strome,exact,2026-10-17,2026-11-12
 219643,Jakob Chychrun,WSH,D,8479345,Jakob Chychrun,exact,2026-10-17,2026-11-12
 347843,Jordan Kyrou,WSH,F,8479385,Jordan Kyrou,exact,2026-10-20,2026-11-10
