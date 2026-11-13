@@ -102,7 +102,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 173353,Matt Coronato,CGY,F,8482679,Matt Coronato,exact,2026-10-18,2026-11-10
 267802,Matvei Gridin,CGY,F,8484860,Matvei Gridin,exact,2026-10-18,2026-11-11
 218240,Mikael Backlund,CGY,F,8474150,Mikael Backlund,exact,2026-10-18,2026-11-11
-226754,Morgan Frost,CGY,F,8480028,Morgan Frost,exact,2026-10-17,2026-11-11
+226754,Morgan Frost,CGY,F,8480028,Morgan Frost,exact,2026-10-17,2026-11-13
 305207,Ryan Strome,CGY,F,8476458,Ryan Strome,exact,2026-10-30,2026-11-06
 348317,Simon Nemec,CGY,D,8483495,Simon Nemec,exact,2026-10-22,2026-11-11
 218650,Yegor Sharangovich,CGY,F,8481068,Yegor Sharangovich,exact,2026-10-18,2026-11-11
@@ -211,7 +211,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 173242,Alex Laferriere,LA,F,8482155,Alex Laferriere,exact,2026-10-17,2026-11-12
 268369,Anton Forsberg,LA,G,8476341,Anton Forsberg,exact,2026-10-17,2026-11-10
 302130,Artemi Panarin,LA,F,8478550,Artemi Panarin,exact,2026-10-17,2026-11-10
-221574,Brandt Clarke,LA,D,8482730,Brandt Clarke,exact,2026-10-22,2026-11-12
+221574,Brandt Clarke,LA,D,8482730,Brandt Clarke,exact,2026-10-22,2026-11-13
 267800,Corey Perry,LA,F,8470621,Corey Perry,exact,2026-11-04,2026-11-10
 218122,Darcy Kuemper,LA,G,8475311,Darcy Kuemper,exact,2026-10-20,2026-11-12
 57763,Drew Doughty,LA,D,8474563,Drew Doughty,exact,2026-10-20,2026-11-12
@@ -440,7 +440,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218341,Jordan Binnington,STL,G,8476412,Jordan Binnington,exact,2026-10-17,2026-11-05
 346303,Mason McTavish,STL,F,8482745,Mason McTavish,exact,2026-10-20,2026-11-12
 218232,Pavel Buchnevich,STL,F,8477402,Pavel Buchnevich,exact,2026-10-17,2026-11-10
-226661,Philip Broberg,STL,D,8481598,Philip Broberg,exact,2026-10-24,2026-11-12
+226661,Philip Broberg,STL,D,8481598,Philip Broberg,exact,2026-10-24,2026-11-13
 58601,Robert Thomas,STL,F,8480023,Robert Thomas,exact,2026-10-17,2026-11-12
 346304,Ross Johnston,STL,F,8477527,Ross Johnston,exact,2026-11-05,2026-11-10
 218435,Andrei Vasilevskiy,TB,G,8476883,Andrei Vasilevskiy,exact,2026-10-20,2026-11-11
