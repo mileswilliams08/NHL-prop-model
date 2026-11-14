@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-14T21:41:04.808706+00:00",
+ "generated_at": "2026-11-14T22:39:47.362086+00:00",
  "voids": 83,
  "excluded": 0,
  "labels": {
@@ -8,7 +8,9 @@
   "blocks": "Blocked Shots",
   "toi": "Time On Ice",
   "saves": "Goalie Saves",
-  "faceoffs": "Faceoffs Won"
+  "faceoffs": "Faceoffs Won",
+  "sog_combo": "Shots On Goal (Combo)",
+  "saves_combo": "Goalie Saves (Combo)"
  },
  "picks": [
   {
