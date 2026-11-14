@@ -109,7 +109,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 348317,Simon Nemec,CGY,D,8483495,Simon Nemec,exact,2026-10-22,2026-11-11
 218650,Yegor Sharangovich,CGY,F,8481068,Yegor Sharangovich,exact,2026-10-18,2026-11-14
 294810,Zach Whitecloud,CGY,D,8480727,Zach Whitecloud,exact,2026-10-24,2026-11-11
-269050,Zayne Parekh,CGY,D,8484768,Zayne Parekh,exact,2026-10-22,2026-11-11
+269050,Zayne Parekh,CGY,D,8484768,Zayne Parekh,exact,2026-10-22,2026-11-14
 179254,Alex Vlasic,CHI,D,8481568,Alex Vlasic,exact,2026-10-17,2026-11-12
 309659,Anton Frondell,CHI,F,8485391,Anton Frondell,exact,2026-10-23,2026-11-12
 269749,Artyom Levshunov,CHI,D,8484783,Artyom Levshunov,exact,2026-10-23,2026-11-05
@@ -272,7 +272,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 268189,Arseny Gritsyuk,NJ,F,8481721,Arseny Gritsyuk,exact,2026-10-17,2026-11-12
 214948,Brenden Dillon,NJ,D,8475455,Brenden Dillon,exact,2026-10-20,2026-11-14
 218075,Brett Pesce,NJ,D,8477488,Brett Pesce,exact,2026-11-03,2026-11-10
-268024,Connor Brown,NJ,F,8477015,Connor Brown,exact,2026-10-24,2026-11-12
+268024,Connor Brown,NJ,F,8477015,Connor Brown,exact,2026-10-24,2026-11-14
 358022,Connor Hellebuyck,NJ,G,8476945,Connor Hellebuyck,exact,2026-10-27,2026-11-12
 58481,Dawson Mercer,NJ,F,8482110,Dawson Mercer,exact,2026-10-22,2026-10-22
 218074,Dougie Hamilton,NJ,D,8476462,Dougie Hamilton,exact,2026-10-17,2026-11-10
@@ -568,7 +568,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 184753,Aliaksei Protas,WSH,F,8481656,Aliaksei Protas,exact,2026-10-17,2026-11-14
 347841,Boone Jenner,WSH,F,8476432,Boone Jenner,exact,2026-10-28,2026-11-14
 87148,Charlie Lindgren,WSH,G,8479292,Charlie Lindgren,exact,2026-10-24,2026-10-24
-308187,Cole Hutson,WSH,D,8484873,Cole Hutson,exact,2026-10-17,2026-11-12
+308187,Cole Hutson,WSH,D,8484873,Cole Hutson,exact,2026-10-17,2026-11-14
 87042,Dylan Strome,WSH,F,8478440,Dylan Strome,exact,2026-10-17,2026-11-14
 219643,Jakob Chychrun,WSH,D,8479345,Jakob Chychrun,exact,2026-10-17,2026-11-14
 347843,Jordan Kyrou,WSH,F,8479385,Jordan Kyrou,exact,2026-10-20,2026-11-10
