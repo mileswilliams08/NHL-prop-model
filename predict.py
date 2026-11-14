@@ -35,6 +35,8 @@ import tiers
 import underdog
 
 MODELED = {"sog", "hits", "blocks", "toi", "saves", "faceoffs"}
+COMBOS = {"sog_combo", "saves_combo"}   # PrizePicks "(Combo)" props: the sum of 2+ players (model.combo_probs)
+LEG_MAP_PATH = path("data", "combo_leg_map.csv")   # combo leg name + team -> NHL id (own file: see player_map)
 
 
 def nhl_games_by_team(dates):
@@ -88,7 +90,8 @@ def pp_rows(cfg, cutoff):
     print("  by odds_type/adjusted:", dict(Counter((r["odds_type"], r["adjusted_odds"]) for r in cand)))
 
     def eligible(r):
-        return (r["odds_type"] == "standard" and not r["combo"] and r["status"] == "pre_game"
+        combo_ok = r["category"] in COMBOS if r["combo"] else r["category"] not in COMBOS
+        return (r["odds_type"] == "standard" and combo_ok and r["status"] == "pre_game"
                 and not r["is_live"] and (r["projection_type"] in (None, "Single Stat"))
                 and r["start_time"] and parse_ts(r["start_time"]) > cutoff)
 
@@ -114,6 +117,84 @@ def ud_rows(cfg, cutoff):
           + (f", {dropped} extra lines for a player/prop already listed" if dropped else "") + ")")
     print("  by type of each side sold:", dict(Counter(t for r in elig for t in (r["type_over"], r["type_under"]) if t)))
     return rows, cand, elig
+
+
+def combo_legs(r, cfg):
+    """'David Pastrnak + Cole Caufield', team 'BOS/MTL', opponents (description) 'MIN/COL' -> one dict per leg.
+    PrizePicks lists names, teams and opponents in the same order. None if the counts don't line up."""
+    names = [x.strip() for x in r["player"].split(" + ")]
+    teams = [x.strip() for x in (r["team"] or "").split("/")]
+    opps = [x.strip() for x in (r["opp"] or "").split("/")]
+    if len(names) < 2 or not (len(names) == len(teams) == len(opps)):
+        return None
+    return [{"name": n, "pp_team": t, "team": nhl_team(t, cfg), "opp": nhl_team(o, cfg)} for n, t, o in zip(names, teams, opps)]
+
+
+def price_combos(rows, cfg, games, walker, params, reasons):
+    """Combo props: each leg is matched to an NHL player and priced with its single-player model; the
+    line is priced on the sum (model.combo_probs). A combo is priced only if every leg is."""
+    leg_rows, parsed = [], []
+    for r in rows:
+        legs = combo_legs(r, cfg)
+        parsed.append(legs)
+        for leg in legs or []:
+            leg["key"] = f"leg|{leg['name']}|{leg['pp_team']}"
+            leg_rows.append({"pp_player_id": leg["key"], "player": leg["name"], "team": leg["pp_team"],
+                             "position": "G" if r["category"] == "saves_combo" else ""})
+    ids = player_map.resolve(leg_rows, cfg, verbose=True, map_path=LEG_MAP_PATH) if leg_rows else {}
+    out = []
+    for r, legs in zip(rows, parsed):
+        cat = r["category"]
+        d = r.get("game_date") or r["start_time"][:10]
+        pick = {"game_date": d, "start_time": r["start_time"], "nhl_game_id": None, "nhl_id": "",
+                "player": r["player"], "team": "/".join(l["team"] for l in legs or []) or r["team"],
+                "opp": "/".join(l["opp"] for l in legs or []) or r["opp"], "position": r["position"],
+                "pp_player_id": r["pp_player_id"], "pp_proj_id": r["pp_proj_id"], "category": cat,
+                "line": r["line"], "odds_type": r["odds_type"], "adjusted_odds": r["adjusted_odds"],
+                "headline": False, "board_time": r["board_time"], "updated_at": r["updated_at"], "is_home": False,
+                "combo": True, "legs": [], "model_mean": None, "p_over": None, "p_under": None, "p_push": None,
+                "side": None, "prob": None, "n_prior": None, "skip_reason": None}
+        reason = None if legs else "combo_unreadable"
+        for leg in legs or []:
+            nid = ids.get(leg["key"], "")
+            g = games.get((d, leg["team"]))
+            info = {"name": leg["name"], "team": leg["team"], "opp": leg["opp"], "nhl_id": nid,
+                    "nhl_game_id": g["game_id"] if g else None, "mu": None, "n_prior": None}
+            pick["legs"].append(info)
+            if reason:
+                continue
+            if not nid:
+                reason = "unmatched_player"
+            elif not g:
+                reason = "no_nhl_game"
+            else:
+                if cat == "saves_combo":
+                    mu, n = walker.goalie_mu(nid, leg["team"], leg["opp"])
+                    min_n = params.get("min_prior_starts", 3)
+                else:
+                    mu, n = walker.player_mu(nid, leg["opp"], "sog")
+                    min_n = params["min_prior_games"]
+                info.update(mu=None if mu is None else round(mu, 4), n_prior=n)
+                if mu is None or n < min_n:
+                    reason = "insufficient_history"
+        if not reason:
+            legs_in = [{"mu": l["mu"], "team": l["team"], "game": l["nhl_game_id"]} for l in pick["legs"]]
+            po, pu, pp, mean = model.combo_probs(cfg, cat, legs_in, r["line"])
+            side, prob = model.pick_side(po, pu)
+            if cat == "saves_combo":   # show each goalie's pull-adjusted expectation, like single saves
+                dd = model.dist_for(cfg, "saves")
+                for l in pick["legs"]:
+                    l["mean"] = round(model.saves_mean(l["mu"], dd), 3)
+            else:
+                for l in pick["legs"]:
+                    l["mean"] = l["mu"]
+            pick.update(model_mean=round(mean, 4), p_over=round(po, 4), p_under=round(pu, 4), p_push=round(pp, 4),
+                        side=side, prob=round(prob, 4), prob_cal=round(model.calibrate(prob, cfg), 4),
+                        n_prior=min(l["n_prior"] for l in pick["legs"]))
+        pick["skip_reason"] = reason
+        reasons[f"{cat}:{reason or 'modeled'}"] += 1
+        out.append(pick)
+    return out
 
 
 def main():
@@ -152,7 +233,9 @@ def run_book(book, cfg, now, shared):
               f"Keeping existing docs/data/{book['props_json']}; no snapshot archived.")
         return
 
-    nhl_ids = player_map.resolve(elig, cfg, map_path=book["player_map"])
+    singles = [r for r in elig if r["category"] not in COMBOS]
+    combos = [r for r in elig if r["category"] in COMBOS]
+    nhl_ids = player_map.resolve(singles, cfg, map_path=book["player_map"]) if singles else {}
     slate_dates = sorted({r.get("game_date") or r["start_time"][:10] for r in elig})   # US Eastern dates
     games = nhl_games_by_team(slate_dates)
 
@@ -161,7 +244,9 @@ def run_book(book, cfg, now, shared):
     params = cfg["model"]
 
     picks, reasons = [], Counter()
-    for r in elig:
+    if combos:
+        picks += price_combos(combos, cfg, games, walker, params, reasons)
+    for r in singles:
         team, opp = nhl_team(r["team"], cfg), nhl_team(r["opp"], cfg)
         d = r.get("game_date") or r["start_time"][:10]
         g = games.get((d, team))

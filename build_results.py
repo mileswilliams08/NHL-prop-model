@@ -213,6 +213,26 @@ def build_underdog(cfg):
             print_summary(f"UNDERDOG {t} / experimental {cat}", s2)
 
 
+def combo_rows(cfg, k_used):
+    """data/graded_combos.csv -> compact pick rows for the page (experimental: hd 0) + a printed summary."""
+    import grade
+    if not os.path.exists(grade.COMBO_PATH):
+        return [], 0
+    df = pd.read_csv(grade.COMBO_PATH, dtype={"combo_key": str})
+    for c in ("line", "model_mean", "prob", "actual"):
+        df[c] = pd.to_numeric(df[c], errors="coerce")
+    voids = int((df["result"] == "void").sum())
+    df = df[df["result"] != "void"]
+    df, _ = apply_exclusions(df)
+    code = {"hit": "h", "miss": "m", "push": "p"}
+    for cat, sub in df.groupby("category"):
+        print_summary(f"COMBO {cat}", sub)
+    return [{"d": r.game_date, "pl": r.player, "tm": r.team, "op": r.opp, "c": r.category, "l": r.line,
+             "m": round(r.model_mean, 3), "s": r.side, "p": round(0.5 + k_used * (r.prob - 0.5), 4), "pr": round(r.prob, 4),
+             "a": round(float(r.actual), 2), "x": code[r.result], "ox": code[r.blind_over], "ux": code[r.blind_under],
+             "hd": 0, "adj": 0, "v": r.model_version, "cb": 1} for r in df.itertuples()], voids
+
+
 def main():
     cfg = load_config()
     try:
@@ -260,12 +280,18 @@ def main():
     except Exception as e:   # pairs are a bonus; never block the results page
         print(f"pairs build failed: {e}")
         pair_rows = []
+    try:
+        cpicks, cvoids = combo_rows(cfg, k_used)
+    except Exception as e:   # combos are a bonus; never block the results page
+        print(f"combo results failed: {e!r}")
+        cpicks, cvoids = [], 0
     picks = [{"d": r.game_date, "pl": r.player, "tm": r.team, "op": r.opp, "c": r.category,
               "l": r.line, "m": round(r.model_mean, 3), "s": r.side, "p": round(0.5 + k_used * (r.prob - 0.5), 4), "pr": round(r.prob, 4),
               "a": round(float(r.actual), 2), "x": code[r.result], "ox": code[r.blind_over], "ux": code[r.blind_under],
               "hd": 1 if r.headline else 0, "adj": 1 if str(r.adjusted_odds).lower() == "true" else 0,
               "v": r.model_version}
-             for r in df.itertuples()]
+             for r in df.itertuples()] + cpicks
+    voids += cvoids
     write_json(path("docs", "data", "results.json"),
                {"generated_at": pd.Timestamp.now("UTC").isoformat(), "voids": voids, "excluded": n_ex,
                 "labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks,

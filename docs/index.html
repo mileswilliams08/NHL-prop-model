@@ -99,6 +99,8 @@ function payoutNote(p) {
   const one = (p.sides || []).length === 1 ? ` <span class="src">${sideName(p.sides[0], p)} only</span>` : "";
   return ` <span class="src" title="Payout multiplier of the picked side; ×1 is Underdog's standard payout">${p.mult != null ? "×" + p.mult : ""}</span>${t}${one}`;
 }
+// combos list their teams as "BOS/MTL": a team filter matches any leg
+const onTeam = (p, team) => String(p.team || "").split("/").includes(team);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let RAW = false;
 try { RAW = localStorage.getItem("nhlProbMode") === "raw"; } catch (e) {}
@@ -175,14 +177,15 @@ function renderTable() {
   // Ranked by the model's own confidence (highest P(side) first) so the most lopsided lines float to the top.
   const ltype = UD() ? document.getElementById("typeSelect").value : "";
   const rows = DATA.picks.filter(p => !p.skip_reason && p.category === cat && (!day || p.game_date === day)
-      && (!team || p.team === team) && (!ltype || p.line_type === ltype))
+      && (!team || onTeam(p, team)) && (!ltype || p.line_type === ltype))
     .sort(team ? ((a, b) => (a.tier_rank || "Z").localeCompare(b.tier_rank || "Z", undefined, {numeric: true}))
                : ((a, b) => P(b) - P(a)));
   const tierCell = p => p.tier ? `<span class="tier tier-${p.tier}" title="${p.recent_toi} min avg, last 10 games">${esc(p.tier_rank)} · ${p.tier}</span>` : "";
   tbody.innerHTML = rows.length ? rows.map(p => `<tr>
       <td>${esc(p.player)}${usedTag(p)}</td><td>${tierCell(p)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
       <td>${p.line} <span class="src">(${BOOKNAME().toLowerCase()})</span>${payoutNote(p)}${moveNote(p) ? `<span class="moved">${esc(moveNote(p))}</span>` : ""}</td>
-      <td class="num">${p.model_mean.toFixed(2)}</td>
+      <td class="num"${p.legs ? ` title="${esc(p.legs.map(l => `${l.name} ${Number(l.mean).toFixed(2)}`).join(" + "))}"` : ""}>${p.model_mean.toFixed(2)}${p.legs
+        ? `<span class="moved" style="color:#8b98a5">${p.legs.map(l => Number(l.mean).toFixed(1)).join(" + ")}</span>` : ""}</td>
       <td class="num" title="${RAW ? "calibrated" : "raw model"} ${(P2(p) * 100).toFixed(1)}%">${(P(p) * 100).toFixed(1)}%</td>
       <td class="${p.side}">${sideName(p.side, p)}</td>
       <td class="sh">${p.shadow ? `<span class="${p.shadow.side}">${p.shadow.side === "over" ? "Over" : "Under"}</span>
@@ -192,7 +195,7 @@ function renderTable() {
     </tr>`).join("")
     : `<tr><td colspan="11" class="empty">No priced ${BOOKNAME()} lines for this selection right now.</td></tr>`;
 
-  const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day) && (!team || p.team === team));
+  const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day) && (!team || onTeam(p, team)));
   const why = {};
   skipped.forEach(p => (why[p.skip_reason] ||= new Set()).add(`${p.player} (${p.team})`));
   document.getElementById("notes").innerHTML = (rows.length ? `${rows.length} lines. ${RAW
@@ -203,7 +206,10 @@ function renderTable() {
          as Underdog's feed gives it (×1 = the standard payout, below ×1 pays less, above ×1 pays more), and GOBLIN / DEMON mark
          sides paying less / more than standard. Most Underdog lines are tilted this way: the likelier side usually pays less. The model can only pick a side Underdog sells, so a
          "Higher only" line can show a chance below 50%. Underdog picks are tracked separately from PrizePicks (Results → Underdog). `
-      : `Only standard two-way lines are priced; goblins and demons (Over-only) never are. `
+      : (cat.endsWith("_combo") ? `Combo = the players' totals added together. Model mean is the sum of each player's projection (shown
+          underneath, hover for names), priced with how much the players' numbers move together: goalies in the same game move in
+          opposite directions, so their combined saves vary less; shooters are close to independent. Experimental. ` : "")
+        + `Only standard two-way lines are priced; goblins and demons (Over-only) never are. `
         + `When a line moves, its probability is recomputed from the same projection; if the line crosses the projection the side switches.`)
     + Object.entries(why).map(([r, s]) => `<br><b>Not priced: ${esc(r.replace(/_/g, " "))}</b> — ${[...s].slice(0, 40).map(esc).join(", ")}${s.size > 40 ? " …" : ""}`).join("");
 }
@@ -235,7 +241,7 @@ function loadBook() {
     const dates = [...new Set(json.picks.map(p => p.game_date))].sort();
     document.getElementById("dateSelect").innerHTML = (dates.length > 1 ? `<option value="">All dates</option>` : "") +
       dates.map(d => `<option value="${d}">${d}</option>`).join("");
-    const teams = [...new Set(json.picks.map(p => p.team))].sort();
+    const teams = [...new Set(json.picks.flatMap(p => String(p.team || "").split("/")))].filter(Boolean).sort();
     document.getElementById("teamSelect").innerHTML = `<option value="">All teams</option>` +
       teams.map(t => `<option value="${t}">${esc(t)}</option>`).join("");
     renderTable();

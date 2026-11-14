@@ -31,6 +31,16 @@
       "enabled": true,
       "headline": false,
       "label": "Faceoffs Won"
+    },
+    "sog_combo": {
+      "enabled": true,
+      "headline": false,
+      "label": "Shots On Goal (Combo)"
+    },
+    "saves_combo": {
+      "enabled": true,
+      "headline": false,
+      "label": "Goalie Saves (Combo)"
     }
   },
   "pp_stat_types": {
@@ -40,7 +50,9 @@
     "Time On Ice": "toi",
     "Goalie Saves": "saves",
     "Saves": "saves",
-    "Faceoffs Won": "faceoffs"
+    "Faceoffs Won": "faceoffs",
+    "Shots On Goal (Combo)": "sog_combo",
+    "Goalie Saves (Combo)": "saves_combo"
   },
   "headline_requires_unadjusted": false,
   "team_map": {
@@ -156,5 +168,20 @@
     "standard_multiplier": null,
     "multiplier_tolerance": 0.005,
     "note": "Underdog pick'em board (underdog.py). standard_multiplier null = auto (the most common payout multiplier on the whole board). A side paying less than standard is a goblin, more is a demon; all are priced and graded, tagged by type."
+  },
+  "combos": {
+    "sog_combo": {
+      "leg": "sog",
+      "rho_same_team": 0.04,
+      "rho_same_game": 0.0,
+      "rho_other": 0.0
+    },
+    "saves_combo": {
+      "leg": "saves",
+      "rho_same_team": 0.0,
+      "rho_same_game": -0.135,
+      "rho_other": 0.04
+    },
+    "note": "Combo = sum of the legs' projections. Each leg uses its single-player model; the sum's spread is scaled for how much the legs move together (measured on 2024-26 games: opposing goalies -0.135, fit 2024-25 and checked out of sample on 2025-26; shooter pairs ~0). Points/Goals combos are not modeled."
   }
 }

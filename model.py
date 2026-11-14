@@ -414,3 +414,64 @@ def price(cfg, cat, mean, line):
         po, pu, _ = line_probs(float(mean), line, d)
     side, prob = pick_side(po, pu)
     return side, prob, po, pu
+
+
+# ---------------------------------------------------------------------------- combos
+def leg_pmf(cfg, leg_cat, mu, kmax=160):
+    """pmf over 0..kmax-1 for one leg. sog: NB(mu); saves: the full-game / pulled mixture (mu = full-game mean)."""
+    k = np.arange(kmax)
+    d = dist_for(cfg, leg_cat)
+    if leg_cat == "saves":
+        full = _dist(mu, d["nb_r_full"]).pmf(k)
+        pull = _dist(mu * d["pull_frac"], d["nb_r_pull"]).pmf(k)
+        return d["q_full"] * full + (1 - d["q_full"]) * pull
+    return _dist(mu, d).pmf(k)
+
+
+def _scale_spread(p, s):
+    """Stretch (s > 1) or squeeze (s < 1) a pmf around its mean, spreading mass to the neighbouring integers."""
+    if abs(s - 1) < 1e-9:
+        return p
+    k = np.arange(len(p))
+    m = (k * p).sum()
+    x = m + (k - m) * s
+    lo = np.floor(x).astype(int)
+    w = x - lo
+    out = np.zeros(len(p))
+    np.add.at(out, np.clip(lo, 0, len(p) - 1), p * (1 - w))
+    np.add.at(out, np.clip(lo + 1, 0, len(p) - 1), p * w)
+    return out / out.sum()
+
+
+def combo_pmf(cfg, cat, legs):
+    """pmf of the sum of the legs. legs: dicts with mu, team, game. Legs are convolved as independent, then the
+    spread is scaled by sqrt(1 + average pairwise correlation x (n-1)) - a variance correction for how much the
+    legs move together (config "combos": same team, same game (opponents), different games)."""
+    spec = cfg["combos"][cat]
+    p = np.array([1.0])
+    for leg in legs:
+        p = np.convolve(p, leg_pmf(cfg, spec["leg"], leg["mu"]))
+    rhos = []
+    for i in range(len(legs)):
+        for j in range(i + 1, len(legs)):
+            a, b = legs[i], legs[j]
+            rhos.append(spec["rho_same_team"] if a["team"] == b["team"] else
+                        spec["rho_same_game"] if a["game"] == b["game"] else spec["rho_other"])
+    n = len(legs)
+    if rhos and n > 1:
+        s = math.sqrt(max(1e-6, 1 + (n - 1) * float(np.mean(rhos))))
+        p = _scale_spread(p, s)
+    return p
+
+
+def combo_probs(cfg, cat, legs, line):
+    """(P over, P under, P push, mean) for a combo line."""
+    p = combo_pmf(cfg, cat, legs)
+    k = np.arange(len(p))
+    line = float(line)
+    if line.is_integer():
+        push = float(p[int(line)]) if int(line) < len(p) else 0.0
+        under = float(p[:int(line)].sum())
+    else:
+        push, under = 0.0, float(p[:math.floor(line) + 1].sum())
+    return 1.0 - under - push, under, push, float((k * p).sum())
