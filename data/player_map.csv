@@ -97,7 +97,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 360187,Arsenii Sergeev,CGY,G,8482949,Arsenii Sergeev,exact,2026-10-31,2026-10-31
 312575,Aydar Suniev,CGY,F,8484234,Aydar Suniev,exact,2026-10-30,2026-11-11
 270379,Devin Cooley,CGY,G,8482445,Devin Cooley,exact,2026-10-18,2026-11-11
-218336,Dustin Wolf,CGY,G,8481692,Dustin Wolf,exact,2026-10-30,2026-11-11
+218336,Dustin Wolf,CGY,G,8481692,Dustin Wolf,exact,2026-10-30,2026-11-14
 348817,Jake Middleton,CGY,D,8478136,Jake Middleton,exact,2026-10-22,2026-11-14
 231996,Joel Farabee,CGY,F,8480797,Joel Farabee,exact,2026-10-22,2026-11-14
 229541,Joel Hanley,CGY,D,8477810,Joel Hanley,exact,2026-11-14,2026-11-14
@@ -251,8 +251,8 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 58157,Ryan Hartman,MIN,F,8477451,Ryan Hartman,exact,2026-10-20,2026-11-06
 271547,Tyler Pitlick,MIN,F,8475752,Tyler Pitlick,exact,2026-11-07,2026-11-07
 226491,Yakov Trenin,MIN,F,8478508,Yakov Trenin,exact,2026-10-18,2026-11-14
-171835,Alex Newhook,MTL,F,8481618,Alex Newhook,exact,2026-10-17,2026-10-31
-267913,Alexandre Carrier,MTL,D,8478851,Alexandre Carrier,exact,2026-10-23,2026-10-23
+171835,Alex Newhook,MTL,F,8481618,Alex Newhook,exact,2026-10-17,2026-11-14
+267913,Alexandre Carrier,MTL,D,8478851,Alexandre Carrier,exact,2026-10-23,2026-11-14
 282765,Alexandre Texier,MTL,F,8480074,Alexandre Texier,exact,2026-10-20,2026-11-14
 218293,Arber Xhekaj,MTL,D,8482964,Arber Xhekaj,exact,2026-11-12,2026-11-14
 348177,Chris Kreider,MTL,F,8475184,Chris Kreider,exact,2026-10-20,2026-10-23
