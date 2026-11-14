@@ -122,7 +122,7 @@ function renderPairs(day, team, breakeven) {
     rows.push({a, b, kind, lift, est: Math.min(pa * pb * lift, pa, pb)});
   }
   rows.sort((x, y) => y.est - x.est);
-  const leg = p => `${esc(p.player)} <span class="tier tier-${p.tier}">${esc(p.tier_rank)}</span> <span class="src">${p.line}</span>`;
+  const leg = p => `${esc(p.player)}${usedTag(p)} <span class="tier tier-${p.tier}">${esc(p.tier_rank)}</span> <span class="src">${p.line}</span>`;
   document.getElementById("pairsBody").innerHTML = rows.length ? rows.map(r => `<tr>
       <td>${esc(r.a.team)} v ${esc(r.a.opp)}<br><span class="src">${time(r.a.start_time)}</span></td>
       <td>${leg(r.a)}</td><td>${leg(r.b)}</td>
@@ -158,7 +158,7 @@ function renderTable() {
                : ((a, b) => P(b) - P(a)));
   const tierCell = p => p.tier ? `<span class="tier tier-${p.tier}" title="${p.recent_toi} min avg, last 10 games">${esc(p.tier_rank)} · ${p.tier}</span>` : "";
   tbody.innerHTML = rows.length ? rows.map(p => `<tr>
-      <td>${esc(p.player)}</td><td>${tierCell(p)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
+      <td>${esc(p.player)}${usedTag(p)}</td><td>${tierCell(p)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
       <td>${p.line} <span class="src">(prizepicks)</span>${moveNote(p) ? `<span class="moved">${esc(moveNote(p))}</span>` : ""}</td>
       <td class="num">${p.model_mean.toFixed(2)}</td>
       <td class="num" title="${RAW ? "calibrated" : "raw model"} ${(P2(p) * 100).toFixed(1)}%">${(P(p) * 100).toFixed(1)}%</td>

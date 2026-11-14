@@ -38,3 +38,5 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .seg button { background: none; border: none; color: var(--muted); font-size: 13px; font-weight: 600; padding: 6px 14px;
               border-radius: 6px; cursor: pointer; }
 .seg button.on { background: #263140; color: var(--text); }
+.used-tag { background: #2a2140; color: #b39ddb; border-radius: 4px; padding: 1px 6px; font-size: 10px; font-weight: 700;
+            letter-spacing: .04em; vertical-align: middle; cursor: help; }

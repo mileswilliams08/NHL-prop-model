@@ -84,3 +84,30 @@ function segmented(sel) {
   sync();
   return sync;
 }
+
+// "Used" picks: props you've already put into a slip you played. Marked from the Slip Builder
+// ("Mark slip as used"), shown as a USED tag on the Props page. Browser-only like the slip itself;
+// keyed by date + player + prop so a moved line still counts as the same prop. Kept 3 days.
+const USED_KEY = "nhlUsed";
+const usedKey = p => `${p.game_date}|${p.player}|${p.category}`;
+function usedLoad() {
+  let u = [];
+  try { u = JSON.parse(localStorage.getItem(USED_KEY)) || []; } catch (e) {}
+  const cutoff = new Date(Date.now() - 3 * 864e5).toISOString().slice(0, 10);
+  return u.filter(x => x.game_date >= cutoff);
+}
+function usedSave(u) { try { localStorage.setItem(USED_KEY, JSON.stringify(u)); } catch (e) {} }
+const usedGet = p => usedLoad().filter(x => x.k === usedKey(p));   // every time this prop was used
+function usedMark(items) {
+  const u = usedLoad(), at = new Date().toISOString();
+  items.forEach(s => u.push({k: usedKey(s), game_date: s.game_date, player: s.player, team: s.team, opp: s.opp,
+                             category: s.category, line: s.line, side: s.side, used_at: at}));
+  usedSave(u);
+}
+// Tag for the Props page: "USED" (or "USED ×2"), hover shows the line/side and when.
+function usedTag(p) {
+  const u = usedGet(p);
+  if (!u.length) return "";
+  const t = u.map(x => `${x.side === "over" ? "Over" : "Under"} ${x.line}, ${new Date(x.used_at).toLocaleString([], {weekday: "short", hour: "numeric", minute: "2-digit"})}`).join("\n");
+  return ` <span class="used-tag" title="Used in a slip:\n${t}">USED${u.length > 1 ? " ×" + u.length : ""}</span>`;
+}

@@ -50,10 +50,18 @@
   </div>
   <pre id="slipText"></pre>
   <button class="btn primary" id="copyBtn">Copy slip</button>
+  <button class="btn" id="usedBtn" title="Tag these props USED on the Props page, then clear the slip">Mark slip as used</button>
   <button class="btn" id="pruneBtn">Remove started games</button>
   <button class="btn" id="clearBtn">Clear slip</button>
 </div>
 <div class="note" id="notes"></div>
+
+<h2 style="font-size:16px;color:var(--muted);margin:28px 0 8px">Used props <span id="usedCount"></span></h2>
+<div class="opts">Props from slips you marked as used. They show a <span class="used-tag">USED</span> tag on the Props page. Kept for 3 days.</div>
+<div class="table-wrap"><table>
+  <thead><tr><th>Date</th><th>Player</th><th>Matchup</th><th>Prop</th><th>Line used</th><th>Marked</th><th></th></tr></thead>
+  <tbody id="usedBody"></tbody></table></div>
+<button class="btn" id="clearUsedBtn" style="margin-top:8px">Clear used list</button>
 
 <script>
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -72,6 +80,7 @@ function status(s) {
   const f = [];
   if (started(s)) f.push("game started");
   else if (BOARD && s.pp_proj_id && !BOARD[s.pp_proj_id]) f.push("not on the board right now");
+  if (usedGet(s).length) f.push("already used in a slip");
   if (s.was_line != null) f.push(`line moved ${s.was_line} → ${s.line}`);
   if (s.side !== s.model_side) f.push(`model now picks ${s.model_side === "over" ? "Over" : "Under"}` +
     (s.m != null ? ` (projection ${Number(s.m).toFixed(1)} unchanged)` : ""));
@@ -110,6 +119,13 @@ function render() {
        (${RAW ? "raw model" : "calibrated"} probabilities; same-team Time On Ice pairs can be more linked than this, see Props → correlated pairs).
        Tracking only: this is a list for typing picks in by hand, not a recommendation.`
     : "";
+  const used = usedLoad().slice().sort((a, b) => b.used_at.localeCompare(a.used_at));
+  document.getElementById("usedCount").textContent = used.length ? `(${used.length})` : "";
+  document.getElementById("usedBody").innerHTML = used.length ? used.map(u => `<tr><td>${u.game_date}</td><td>${esc(u.player)}</td>
+      <td>${esc(u.team)} v ${esc(u.opp)}</td><td>${esc(LABELS[u.category] || u.category)}</td>
+      <td><span class="${u.side}" style="font-weight:700">${u.side.toUpperCase()}</span> ${u.line}</td>
+      <td>${time(u.used_at)}</td><td><button class="x unuse" data-at="${u.used_at}" data-k="${esc(u.k)}" title="Unmark">×</button></td></tr>`).join("")
+    : `<tr><td colspan="7" class="empty">Nothing marked as used yet.</td></tr>`;
   slipBadge();
 }
 
@@ -117,8 +133,17 @@ document.addEventListener("click", e => {
   const items = slipLoad();
   const side = e.target.closest(".side-btn"), x = e.target.closest(".x");
   if (side) { const s = items[side.dataset.i]; s.side = s.side === "over" ? "under" : "over"; slipSave(items); render(); }
+  const un = e.target.closest(".unuse");
+  if (un) { usedSave(usedLoad().filter(u => !(u.k === un.dataset.k && u.used_at === un.dataset.at))); render(); return; }
   if (x) { items.splice(x.dataset.i, 1); slipSave(items); render(); }
 });
+document.getElementById("usedBtn").addEventListener("click", () => {
+  const items = slipLoad(), b = document.getElementById("usedBtn");
+  if (!items.length) return;
+  usedMark(items); slipSave([]); render();
+  b.textContent = `Marked ${items.length} as used`; setTimeout(() => b.textContent = "Mark slip as used", 2000);
+});
+document.getElementById("clearUsedBtn").addEventListener("click", () => { usedSave([]); render(); });
 document.getElementById("clearBtn").addEventListener("click", () => { slipSave([]); render(); });
 document.getElementById("pruneBtn").addEventListener("click", () => { slipSave(slipLoad().filter(s => !started(s))); render(); });
 ["optMatch", "optProb"].forEach(id => document.getElementById(id).addEventListener("change", render));
