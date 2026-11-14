@@ -9,6 +9,9 @@ Grade archived picks against finished games in data/history.
     are the ones graded.
   * data/graded_results.csv is append-only; reruns skip keys already logged.
   * Every row also stores what a blind Over and a blind Under on that line would have done.
+  * Each book is graded into its own log from its own snapshots (PrizePicks: data/graded_results.csv,
+    Underdog: data/underdog/graded_results.csv). Underdog rows also keep the picked side's payout
+    multiplier and line type (standard / goblin / demon) and which sides were sold.
 
     python grade.py
 """
@@ -20,12 +23,13 @@ from datetime import date
 
 import pandas as pd
 
-from common import GRADED_PATH, HIST_DIR, SNAP_DIR
+from common import BOOKS, GRADED_PATH, HIST_DIR, SNAP_DIR
 
 FIELDS = ["game_date", "nhl_game_id", "nhl_id", "category", "player", "team", "opp", "position",
           "line", "odds_type", "adjusted_odds", "headline", "model_mean", "p_over", "p_under",
           "side", "prob", "actual", "toi_sec", "result", "blind_over", "blind_under",
           "snapshot_at", "model_version", "pp_proj_id"]
+UD_FIELDS = FIELDS + ["line_type", "mult", "mult_over", "mult_under", "sides"]
 
 
 def key_of(r):
@@ -38,15 +42,30 @@ def outcome(actual, line, side):
     return "hit" if (actual > line) == (side == "over") else "miss"
 
 
-def load_logged():
-    if not os.path.exists(GRADED_PATH):
+def load_logged(graded_path=GRADED_PATH):
+    if not os.path.exists(graded_path):
         return set()
-    with open(GRADED_PATH, newline="", encoding="utf-8") as f:
+    with open(graded_path, newline="", encoding="utf-8") as f:
         return {key_of(r) for r in csv.DictReader(f)}
 
 
 def main():
-    snaps = sorted(glob.glob(os.path.join(SNAP_DIR, "*.json")))
+    for book in BOOKS.values():
+        if book["key"] != "prizepicks":
+            print(f"--- {book['label']} ---")
+            try:
+                grade_book(book)
+            except Exception as e:   # a second book must never break the first
+                print(f"{book['label']} grading failed (PrizePicks unaffected): {e!r}")
+        else:
+            grade_book(book)
+    return 0
+
+
+def grade_book(book):
+    snap_dir, graded_path = book["snap_dir"], book["graded"]
+    fields = UD_FIELDS if book["key"] == "underdog" else FIELDS
+    snaps = sorted(glob.glob(os.path.join(snap_dir, "*.json")))
     if not snaps:
         print("no snapshots yet")
         return 0
@@ -61,7 +80,7 @@ def main():
             if k not in first or s["generated_at"] < first[k][1]:
                 first[k] = (pk, s["generated_at"], s.get("model_version"))
 
-    logged = load_logged()
+    logged = load_logged(graded_path)
     todo = {k: v for k, v in first.items() if k not in logged}
     if not todo:
         print(f"nothing new to grade ({len(first)} picks archived, all logged)")
@@ -88,7 +107,9 @@ def main():
     new_rows, pending = [], 0
     for k, (pk, snap_at, mver) in sorted(todo.items()):
         gid, pid, cat = k[1], k[2], k[3]
-        row = {f: pk.get(f, "") for f in FIELDS}
+        row = {f: pk.get(f, "") for f in fields}
+        if isinstance(row.get("sides"), list):
+            row["sides"] = "+".join(row["sides"])
         row.update(nhl_game_id=gid, nhl_id=pid, snapshot_at=snap_at, model_version=mver or "")
         if gid not in final_games:
             if (date.today() - date.fromisoformat(k[0])).days > 3:   # postponed / never played
@@ -109,10 +130,10 @@ def main():
         new_rows.append(row)
 
     if new_rows:
-        exists = os.path.exists(GRADED_PATH)
-        os.makedirs(os.path.dirname(GRADED_PATH), exist_ok=True)
-        with open(GRADED_PATH, "a", newline="", encoding="utf-8") as f:
-            w = csv.DictWriter(f, fieldnames=FIELDS)
+        exists = os.path.exists(graded_path)
+        os.makedirs(os.path.dirname(graded_path), exist_ok=True)
+        with open(graded_path, "a", newline="", encoding="utf-8") as f:
+            w = csv.DictWriter(f, fieldnames=fields)
             if not exists:
                 w.writeheader()
             w.writerows(new_rows)

@@ -1,7 +1,12 @@
 // Slip Builder storage, shared by every page. The slip lives only in this browser (localStorage);
-// it's a convenience list for typing picks into PrizePicks by hand, nothing is sent anywhere.
+// it's a convenience list for typing picks into PrizePicks or Underdog by hand, nothing is sent anywhere.
+// Every item remembers its book ("prizepicks" or "underdog"); the two are never the same prop.
 const SLIP_KEY = "nhlSlip";
 const SLIP_MAX = 6;   // PrizePicks' largest entry size
+const bookOf = p => p.book === "underdog" ? "underdog" : "prizepicks";
+const bookName = p => bookOf(p) === "underdog" ? "Underdog" : "PrizePicks";
+// Underdog calls the sides Higher / Lower
+const sideWord = (side, p) => bookOf(p) === "underdog" ? (side === "over" ? "Higher" : "Lower") : (side === "over" ? "Over" : "Under");
 
 function slipLoad() {
   try { return JSON.parse(localStorage.getItem(SLIP_KEY)) || []; } catch (e) { return []; }
@@ -17,7 +22,7 @@ function slipToggle(p) {
   const items = slipLoad(), key = slipKey(p);
   const i = items.findIndex(s => s.key === key);
   if (i >= 0) items.splice(i, 1);
-  else items.push({key, pp_proj_id: p.pp_proj_id, player: p.player, team: p.team, opp: p.opp, category: p.category,
+  else items.push({key, book: bookOf(p), sides: p.sides, mult: p.mult, pp_proj_id: p.pp_proj_id, player: p.player, team: p.team, opp: p.opp, category: p.category,
                    line: p.line, side: p.side, model_side: p.side, m: p.model_mean, prob: p.prob, prob_cal: p.prob_cal,
                    start_time: p.start_time, game_date: p.game_date, added_at: new Date().toISOString()});
   slipSave(items);
@@ -60,8 +65,7 @@ function applyBoard(props, board) {
 // "Opened Under 23.5 → side switched (projection 23.4 unchanged)", or "" if the line never moved.
 function moveNote(p) {
   if (p.open_line == null || Number(p.open_line) === Number(p.line)) return "";
-  const S = s => s === "over" ? "Over" : "Under";
-  return `Opened ${S(p.open_side)} ${p.open_line}` + (p.open_side !== p.side
+  return `Opened ${sideWord(p.open_side, p)} ${p.open_line}` + (p.open_side !== p.side
     ? ` → side switched (projection ${Number(p.model_mean).toFixed(1)} unchanged)` : "");
 }
 
@@ -89,7 +93,7 @@ function segmented(sel) {
 // ("Mark slip as used"), shown as a USED tag on the Props page. Browser-only like the slip itself;
 // keyed by date + player + prop so a moved line still counts as the same prop. Kept 3 days.
 const USED_KEY = "nhlUsed";
-const usedKey = p => `${p.game_date}|${p.player}|${p.category}`;
+const usedKey = p => `${bookOf(p) === "underdog" ? "ud|" : ""}${p.game_date}|${p.player}|${p.category}`;
 function usedLoad() {
   let u = [];
   try { u = JSON.parse(localStorage.getItem(USED_KEY)) || []; } catch (e) {}
@@ -100,7 +104,7 @@ function usedSave(u) { try { localStorage.setItem(USED_KEY, JSON.stringify(u)); 
 const usedGet = p => usedLoad().filter(x => x.k === usedKey(p));   // every time this prop was used
 function usedMark(items) {
   const u = usedLoad(), at = new Date().toISOString();
-  items.forEach(s => u.push({k: usedKey(s), game_date: s.game_date, player: s.player, team: s.team, opp: s.opp,
+  items.forEach(s => u.push({k: usedKey(s), book: bookOf(s), game_date: s.game_date, player: s.player, team: s.team, opp: s.opp,
                              category: s.category, line: s.line, side: s.side, used_at: at}));
   usedSave(u);
 }
@@ -108,6 +112,6 @@ function usedMark(items) {
 function usedTag(p) {
   const u = usedGet(p);
   if (!u.length) return "";
-  const t = u.map(x => `${x.side === "over" ? "Over" : "Under"} ${x.line}, ${new Date(x.used_at).toLocaleString([], {weekday: "short", hour: "numeric", minute: "2-digit"})}`).join("\n");
+  const t = u.map(x => `${sideWord(x.side, x)} ${x.line}, ${new Date(x.used_at).toLocaleString([], {weekday: "short", hour: "numeric", minute: "2-digit"})}`).join("\n");
   return ` <span class="used-tag" title="Used in a slip:\n${t}">USED${u.length > 1 ? " ×" + u.length : ""}</span>`;
 }

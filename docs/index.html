@@ -27,6 +27,10 @@
             font-size: 15px; line-height: 1; cursor: pointer; padding: 0; }
   .addbtn:hover { border-color: var(--good); }
   .addbtn.in { background: #1a4620; color: var(--good); border-color: #1a4620; }
+  .lt { padding: 1px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; letter-spacing: .04em; margin-left: 4px; }
+  .lt-goblin { background: #1a3a2a; color: #56d364; }
+  .lt-demon { background: #3a1a1a; color: #ff7b72; }
+  .lt-unknown { background: #262c36; color: #8b98a5; }
   .tiptext { color: #8b98a5; font-size: 12px; line-height: 1.5; margin: 8px 0 12px; padding: 10px 12px; background: #1c2733; border-radius: 6px; }
 </style>
 </head>
@@ -49,9 +53,12 @@
 </div>
 
 <div class="propsel">
+  <label>Book: <select id="bookSelect"><option value="prizepicks">PrizePicks</option><option value="underdog">Underdog</option></select></label>
   <label>Prop: <select id="propSelect"></select></label>
   <label><select id="dateSelect"></select></label>
   <label><select id="teamSelect"></select></label>
+  <label id="typeWrap" style="display:none"><select id="typeSelect"><option value="">All line types</option>
+    <option value="standard">Standard</option><option value="goblin">Goblin</option><option value="demon">Demon</option></select></label>
   <span style="display:flex;align-items:center;gap:6px">Probabilities: <select id="calMode"><option value="cal">Calibrated</option><option value="raw">Raw model</option></select></span>
 </div>
 
@@ -78,6 +85,20 @@
 
 <script>
 let DATA = null;
+let BOOK = "prizepicks";
+try { if (localStorage.getItem("nhlBook") === "underdog") BOOK = "underdog"; } catch (e) {}
+const UD = () => BOOK === "underdog";
+const BOOKNAME = () => UD() ? "Underdog" : "PrizePicks";
+// Underdog calls the sides Higher / Lower
+const sideName = (side, p) => (p && p.book === "underdog") ? (side === "over" ? "Higher" : "Lower") : (side === "over" ? "Over" : "Under");
+// Underdog only: the picked side's payout, a GOBLIN / DEMON tag when it isn't the standard payout,
+// and a note when Underdog sells only one side of the line.
+function payoutNote(p) {
+  if (p.book !== "underdog") return "";
+  const t = p.line_type && p.line_type !== "standard" ? `<span class="lt lt-${p.line_type}">${p.line_type.toUpperCase()}</span>` : "";
+  const one = (p.sides || []).length === 1 ? ` <span class="src">${sideName(p.sides[0], p)} only</span>` : "";
+  return ` <span class="src" title="Payout multiplier of the picked side; ×1 is Underdog's standard payout">${p.mult != null ? "×" + p.mult : ""}</span>${t}${one}`;
+}
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 let RAW = false;
 try { RAW = localStorage.getItem("nhlProbMode") === "raw"; } catch (e) {}
@@ -103,7 +124,7 @@ document.addEventListener("click", e => {
   const ps = b.dataset.keys.split(",").map(k => SHOWN[k]).filter(Boolean);
   const inSlip = ps.every(slipHas);
   ps.forEach(p => { if (slipHas(p) === inSlip) slipToggle(p); });   // pair: add both, or remove both
-  renderTable();
+  if (DATA) renderTable();
 });
 
 function renderPairs(day, team, breakeven) {
@@ -152,23 +173,24 @@ function renderTable() {
   document.getElementById("propsTable").classList.toggle("show-sh", DATA.picks.some(p => p.category === cat && p.shadow));
   const tbody = document.getElementById("propsBody");
   // Ranked by the model's own confidence (highest P(side) first) so the most lopsided lines float to the top.
+  const ltype = UD() ? document.getElementById("typeSelect").value : "";
   const rows = DATA.picks.filter(p => !p.skip_reason && p.category === cat && (!day || p.game_date === day)
-      && (!team || p.team === team))
+      && (!team || p.team === team) && (!ltype || p.line_type === ltype))
     .sort(team ? ((a, b) => (a.tier_rank || "Z").localeCompare(b.tier_rank || "Z", undefined, {numeric: true}))
                : ((a, b) => P(b) - P(a)));
   const tierCell = p => p.tier ? `<span class="tier tier-${p.tier}" title="${p.recent_toi} min avg, last 10 games">${esc(p.tier_rank)} · ${p.tier}</span>` : "";
   tbody.innerHTML = rows.length ? rows.map(p => `<tr>
       <td>${esc(p.player)}${usedTag(p)}</td><td>${tierCell(p)}</td><td>${esc(p.team)} v ${esc(p.opp)}</td><td>${time(p.start_time)}</td>
-      <td>${p.line} <span class="src">(prizepicks)</span>${moveNote(p) ? `<span class="moved">${esc(moveNote(p))}</span>` : ""}</td>
+      <td>${p.line} <span class="src">(${BOOKNAME().toLowerCase()})</span>${payoutNote(p)}${moveNote(p) ? `<span class="moved">${esc(moveNote(p))}</span>` : ""}</td>
       <td class="num">${p.model_mean.toFixed(2)}</td>
       <td class="num" title="${RAW ? "calibrated" : "raw model"} ${(P2(p) * 100).toFixed(1)}%">${(P(p) * 100).toFixed(1)}%</td>
-      <td class="${p.side}">${p.side === "over" ? "Over" : "Under"}</td>
+      <td class="${p.side}">${sideName(p.side, p)}</td>
       <td class="sh">${p.shadow ? `<span class="${p.shadow.side}">${p.shadow.side === "over" ? "Over" : "Under"}</span>
         ${((RAW ? p.shadow.prob : p.shadow.prob_cal) * 100).toFixed(1)}% <span class="src">${p.shadow.mean.toFixed(2)}</span>${p.shadow.side !== p.side ? ' <span class="src">≠</span>' : ""}` : "—"}</td>
       <td>${P(p) >= breakeven ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
       <td>${addBtn([p])}</td>
     </tr>`).join("")
-    : `<tr><td colspan="11" class="empty">No priced PrizePicks lines for this prop right now.</td></tr>`;
+    : `<tr><td colspan="11" class="empty">No priced ${BOOKNAME()} lines for this selection right now.</td></tr>`;
 
   const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day) && (!team || p.team === team));
   const why = {};
@@ -176,39 +198,66 @@ function renderTable() {
   document.getElementById("notes").innerHTML = (rows.length ? `${rows.length} lines. ${RAW
       ? "Model P(Side) is the RAW model chance its side wins, ignoring pushes (hover for calibrated). The raw model has been overconfident on graded picks, so CLEARS here is optimistic. "
       : "Model P(Side) is the calibrated chance its side wins, ignoring pushes (hover for the raw model %): the raw model was overconfident, so its distance from 50% is scaled down. "}` : "")
-    + `Only standard two-way lines are priced; goblins and demons (Over-only) never are. `
-    + `When a line moves, its probability is recomputed from the same projection; if the line crosses the projection the side switches.`
+    + (UD()
+      ? `Every Underdog line is priced, whatever it pays: the small number after the line is the picked side's payout multiplier
+         as Underdog's feed gives it (×1 = the standard payout, below ×1 pays less, above ×1 pays more), and GOBLIN / DEMON mark
+         sides paying less / more than standard. Most Underdog lines are tilted this way: the likelier side usually pays less. The model can only pick a side Underdog sells, so a
+         "Higher only" line can show a chance below 50%. Underdog picks are tracked separately from PrizePicks (Results → Underdog). `
+      : `Only standard two-way lines are priced; goblins and demons (Over-only) never are. `
+        + `When a line moves, its probability is recomputed from the same projection; if the line crosses the projection the side switches.`)
     + Object.entries(why).map(([r, s]) => `<br><b>Not priced: ${esc(r.replace(/_/g, " "))}</b> — ${[...s].slice(0, 40).map(esc).join(", ")}${s.size > 40 ? " …" : ""}`).join("");
 }
 
-fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(async json => {
-  const board = await loadBoard();
-  const nLive = applyBoard(json, board);
-  DATA = json;
-  const labels = json.labels || {};
-  document.getElementById("meta").textContent =
-    `Slate ${json.slate_dates.join(", ")} — updated ${new Date(json.generated_at).toLocaleString()} · history through ${json.history_through}` +
-    (board && new Date(board.updated_at) > new Date(json.generated_at)
-      ? ` · lines rechecked ${new Date(board.updated_at).toLocaleTimeString([], {hour: "numeric", minute: "2-digit"})}${nLive ? ` (${nLive} moved and repriced)` : ""}` : "");
-  // headline props first, then experimental, then anything recorded but not priced
-  const cats = [...new Set(json.picks.map(p => p.category))];
-  const priced = c => json.picks.some(p => p.category === c && !p.skip_reason);
-  const headline = c => json.picks.some(p => p.category === c && p.headline);
-  cats.sort((a, b) => (priced(b) - priced(a)) || (headline(b) - headline(a)) || (labels[a] || a).localeCompare(labels[b] || b));
-  document.getElementById("propSelect").innerHTML = cats.map(c =>
-    `<option value="${c}">${esc(labels[c] || c)}${priced(c) && !headline(c) ? " (experimental)" : ""}</option>` +
-    (c === "toi" && priced(c) ? `<option value="toi_pairs">Time On Ice: correlated pairs (experimental)</option>` : "")).join("");
-  const dates = [...new Set(json.picks.map(p => p.game_date))].sort();
-  document.getElementById("dateSelect").innerHTML = (dates.length > 1 ? `<option value="">All dates</option>` : "") +
-    dates.map(d => `<option value="${d}">${d}</option>`).join("");
-  const teams = [...new Set(json.picks.map(p => p.team))].sort();
-  document.getElementById("teamSelect").innerHTML = `<option value="">All teams</option>` +
-    teams.map(t => `<option value="${t}">${esc(t)}</option>`).join("");
-  renderTable();
-}).catch(() => { document.getElementById("meta").textContent = "Couldn't load props.json yet — run the Action."; });
+function loadBook() {
+  const file = UD() ? "data/props_underdog.json" : "data/props.json";
+  document.getElementById("typeWrap").style.display = UD() ? "" : "none";
+  document.querySelector(".breakeven .hint").style.display = UD() ? "none" : "";
+  fetch(file, {cache: "no-store"}).then(r => r.json()).then(async json => {
+    const board = UD() ? null : await loadBoard();   // live repricing exists for PrizePicks only
+    const nLive = applyBoard(json, board);
+    json.picks.forEach(p => { p.book = p.book || BOOK; });
+    DATA = json;
+    const labels = json.labels || {};
+    document.getElementById("meta").textContent =
+      `${BOOKNAME()} · slate ${json.slate_dates.join(", ")} — updated ${new Date(json.generated_at).toLocaleString()} · history through ${json.history_through}` +
+      (board && new Date(board.updated_at) > new Date(json.generated_at)
+        ? ` · lines rechecked ${new Date(board.updated_at).toLocaleTimeString([], {hour: "numeric", minute: "2-digit"})}${nLive ? ` (${nLive} moved and repriced)` : ""}` : "");
+    // headline props first, then experimental, then anything recorded but not priced
+    const cats = [...new Set(json.picks.map(p => p.category))];
+    const priced = c => json.picks.some(p => p.category === c && !p.skip_reason);
+    const headline = c => json.picks.some(p => p.category === c && p.headline);
+    cats.sort((a, b) => (priced(b) - priced(a)) || (headline(b) - headline(a)) || (labels[a] || a).localeCompare(labels[b] || b));
+    const keep = document.getElementById("propSelect").value;
+    document.getElementById("propSelect").innerHTML = cats.map(c =>
+      `<option value="${c}">${esc(labels[c] || c)}${priced(c) && !headline(c) ? " (experimental)" : ""}</option>` +
+      (c === "toi" && priced(c) ? `<option value="toi_pairs">Time On Ice: correlated pairs (experimental)</option>` : "")).join("");
+    if (cats.includes(keep)) document.getElementById("propSelect").value = keep;   // same prop when switching books
+    const dates = [...new Set(json.picks.map(p => p.game_date))].sort();
+    document.getElementById("dateSelect").innerHTML = (dates.length > 1 ? `<option value="">All dates</option>` : "") +
+      dates.map(d => `<option value="${d}">${d}</option>`).join("");
+    const teams = [...new Set(json.picks.map(p => p.team))].sort();
+    document.getElementById("teamSelect").innerHTML = `<option value="">All teams</option>` +
+      teams.map(t => `<option value="${t}">${esc(t)}</option>`).join("");
+    renderTable();
+  }).catch(() => {
+    DATA = null;
+    document.getElementById("propsBody").innerHTML = "";
+    document.getElementById("notes").innerHTML = "";
+    document.getElementById("meta").textContent = UD()
+      ? "No Underdog lines yet — they appear after the next model run that finds NHL lines on the Underdog board."
+      : "Couldn't load props.json yet — run the Action.";
+  });
+}
+document.getElementById("bookSelect").value = BOOK;
+document.getElementById("bookSelect").addEventListener("change", e => {
+  BOOK = e.target.value;
+  try { localStorage.setItem("nhlBook", BOOK); } catch (err) {}
+  loadBook();
+});
+loadBook();
 
-["propSelect", "dateSelect", "teamSelect"].forEach(id => document.getElementById(id).addEventListener("change", renderTable));
-document.getElementById("breakeven").addEventListener("input", renderTable);
+["propSelect", "dateSelect", "teamSelect", "typeSelect"].forEach(id => document.getElementById(id).addEventListener("change", () => DATA && renderTable()));
+document.getElementById("breakeven").addEventListener("input", () => DATA && renderTable());
 document.getElementById("calMode").value = RAW ? "raw" : "cal";
 segmented(document.getElementById("calMode"));
 document.getElementById("calMode").addEventListener("change", e => {

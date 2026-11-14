@@ -33,16 +33,16 @@ def _pos_ok(pp_pos, nhl_pos):
     return pp_pos == nhl_pos
 
 
-def load_map():
-    if not os.path.exists(PLAYER_MAP_PATH):
+def load_map(map_path=PLAYER_MAP_PATH):
+    if not os.path.exists(map_path):
         return {}
-    with open(PLAYER_MAP_PATH, newline="", encoding="utf-8") as f:
+    with open(map_path, newline="", encoding="utf-8") as f:
         return {r["pp_player_id"]: r for r in csv.DictReader(f)}
 
 
-def save_map(mp):
-    os.makedirs(os.path.dirname(PLAYER_MAP_PATH), exist_ok=True)
-    with open(PLAYER_MAP_PATH, "w", newline="", encoding="utf-8") as f:
+def save_map(mp, map_path=PLAYER_MAP_PATH):
+    os.makedirs(os.path.dirname(map_path), exist_ok=True)
+    with open(map_path, "w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)
         w.writeheader()
         for k in sorted(mp, key=lambda k: (mp[k]["pp_team"], mp[k]["pp_name"])):
@@ -113,9 +113,11 @@ def match_one(name, team, pos, rosters, aliases, hist):
     return "", "", "unmatched"
 
 
-def resolve(rows, cfg, verbose=True):
-    """rows: parsed board rows. Returns {pp_player_id: nhl_id or ''} and updates the saved map."""
-    mp = load_map()
+def resolve(rows, cfg, verbose=True, map_path=PLAYER_MAP_PATH):
+    """rows: parsed board rows. Returns {pp_player_id: nhl_id or ''} and updates the saved map.
+    map_path: each book keeps its own map (Underdog: data/underdog/player_map.csv), so the
+    one-board-player-per-NHL-player rule is checked within a book, never across books."""
+    mp = load_map(map_path)
     today = date.today().isoformat()
     need = {}
     for r in rows:
@@ -161,7 +163,7 @@ def resolve(rows, cfg, verbose=True):
             for e in sorted(new, key=lambda e: (e["method"], e["pp_team"])):
                 if e["method"] not in ("exact",):
                     print(f"   {e['method']:<26} {e['pp_name']} ({e['pp_team']}, {e['pp_pos']}) -> {e['nhl_name'] or '-'} {e['nhl_id']}")
-    save_map(mp)
+    save_map(mp, map_path)
     return {pid: (mp.get(pid) or {}).get("nhl_id", "") for pid in {r["pp_player_id"] for r in rows}}
 
 

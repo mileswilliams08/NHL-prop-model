@@ -41,10 +41,15 @@
   <a href="slip.html">Slip Builder<span id="slipCount"></span></a>
 </nav>
 <div class="meta" id="meta">Loading...</div>
+<div class="show">Book: <div class="seg" id="booktabs">
+  <button type="button" data-book="prizepicks" class="on">PrizePicks</button><button type="button" data-book="underdog">Underdog</button></div></div>
 <div class="show" id="calbar" style="display:none">Probabilities:
   <select id="calmode"><option value="cal">Calibrated</option><option value="raw">Raw model</option></select>
   <span class="caveat" id="calnote" style="margin:0"></span></div>
-<div class="show">Grade at: <div class="seg" id="linetabs">
+<div class="show" id="typebar" style="display:none">Line type: <div class="seg" id="typetabs">
+  <button type="button" data-t="" class="on">All</button><button type="button" data-t="standard">Standard</button>
+  <button type="button" data-t="goblin">Goblin</button><button type="button" data-t="demon">Demon</button></div></div>
+<div class="show" id="linebar">Grade at: <div class="seg" id="linetabs">
   <button type="button" data-mode="open" class="on">Opening line</button><button type="button" data-mode="close">Closing line</button></div></div>
 <div class="caveat" id="linenote"></div>
 <div id="content"></div>
@@ -153,12 +158,13 @@ function render(data) {
     <div class="caveat">Based on the side the model picked; pushes excluded. Small samples swing a lot — treat anything under ~30 picks as noise.</div>
 
     <h2>Model vs. blind picks (the market test)</h2>
-    <div class="caveat">Same PrizePicks lines, three ways to pick: the model's side, or ignore the model and take every line
+    <div class="caveat">Same ${BOOK === "underdog" ? "Underdog" : "PrizePicks"} lines, three ways to pick: the model's side, or ignore the model and take every line
       Over (or every line Under). The model only adds value if it beats the better blind side. The slope regresses
       (actual − line) on (model mean − line): 1 means the model's disagreement with the line is fully real, 0 means none.</div>
     ${show("mk", head, {prob: false})}
     <div id="mk-out"></div>
 
+    <div class="pp-only">
     <h2>Line movement (closing line check)</h2>
     <div class="caveat">Compares each pick's line with the last PrizePicks line seen before puck drop. "Toward model" means the line
       later rose on an Over pick or fell on an Under pick — the market came around to the model's side. That only means something
@@ -193,6 +199,7 @@ function render(data) {
       clears 33.3%. "Estimated" is what the Props page predicted (leg × leg × lift) — if actual tracks it, the lifts hold up on real lines.</div>
     <div class="show">Show: <select id="pr-date"></select></div>
     <div id="pr-out"></div>
+    </div>
 
     <h2>Experimental props</h2>
     <div class="caveat">New props still being validated. Their results are shown only here and are not counted in any other number on this page.</div>
@@ -310,7 +317,7 @@ function render(data) {
     document.getElementById("rec-out").innerHTML = rows.length ? `<table><thead><tr><th>Date</th><th>Player</th><th>Matchup</th><th>Prop</th>
         <th class="num">Line</th><th>Pick</th><th class="num">Model prob</th><th class="num">Actual</th><th>Result</th></tr></thead><tbody>
       ${rows.map(p => `<tr><td>${p.d}</td><td>${esc(p.pl)}</td><td>${esc(p.tm)} v ${esc(p.op)}</td>
-        <td>${esc(L(p.c))}${p.hd ? "" : " (experimental)"}</td><td class="num">${p.l}</td><td class="${p.s}">${p.s}</td>
+        <td>${esc(L(p.c))}${p.hd ? "" : " (experimental)"}</td><td class="num">${p.l}${p.t ? ` <span class="caveat" style="margin:0">${p.mu != null ? "×" + p.mu : ""}${p.t !== "standard" ? " " + p.t : ""}</span>` : ""}</td><td class="${p.s}">${BOOK === "underdog" ? (p.s === "over" ? "higher" : "lower") : p.s}</td>
         <td class="num">${pct(p.p)}</td><td class="num">${p.a}</td><td>${tag(p.x)}</td></tr>`).join("")}</tbody></table>`
       : `<div class="empty">No graded picks for this selection.</div>`;
   };
@@ -507,6 +514,9 @@ function render(data) {
 
 let DATA = null;
 let RAWMODE = false;
+let BOOK = "prizepicks";      // which book's graded picks the page shows; the two are never mixed
+try { if (localStorage.getItem("nhlBook") === "underdog") BOOK = "underdog"; } catch (e) {}
+let LTYPE = "";               // Underdog only: standard / goblin / demon filter ("" = all)
 let LINEMODE = "open";
 try { if (localStorage.getItem("nhlLineMode") === "close") LINEMODE = "close"; } catch (e) {}
 
@@ -529,7 +539,20 @@ function redraw() {
   const raw = document.getElementById("calmode").value === "raw";
   RAWMODE = raw || !DATA.picks.some(p => p.pr != null);   // results built before calibration = raw %
   let picks = DATA.picks, note = "";
-  if (LINEMODE === "close") {
+  const ud = BOOK === "underdog";
+  document.body.classList.toggle("ud", ud);
+  document.getElementById("typebar").style.display = ud ? "" : "none";
+  document.getElementById("linebar").style.display = ud ? "none" : "";
+  document.querySelectorAll("#booktabs button").forEach(b => b.classList.toggle("on", b.dataset.book === BOOK));
+  document.querySelectorAll("#typetabs button").forEach(b => b.classList.toggle("on", b.dataset.t === LTYPE));
+  if (ud) {
+    const n = t => DATA.picks.filter(p => p.t === t).length;
+    if (LTYPE) picks = picks.filter(p => p.t === LTYPE);
+    note = `<b>Underdog:</b> graded separately from PrizePicks, at the first Underdog line a model run priced that day. Every line is
+      tracked whatever it pays: ${n("standard")} standard (×1), ${n("goblin")} goblin (the picked side pays less than standard), ${n("demon")} demon (pays more)`
+      + (n("unknown") ? `, ${n("unknown")} unknown` : "") + `. The model can only take a side Underdog sells, so one-sided lines can be
+      picks below 50%. Goblins and demons pay differently, so judge each type against its own breakeven.`;
+  } else if (LINEMODE === "close") {
     const c = atClosing(picks);
     picks = c.out;
     note = `<b>Closing line:</b> every hit-rate section grades each pick at the last line seen before puck drop, with the side
@@ -549,24 +572,49 @@ document.getElementById("linetabs").addEventListener("click", e => {
   try { localStorage.setItem("nhlLineMode", LINEMODE); } catch (err) {}
   if (DATA) redraw();
 });
-fetch("data/results.json", {cache: "no-store"}).then(r => r.json()).then(data => {
-  DATA = data;
-  const c = data.calibration;
-  if (c && data.picks.some(p => p.pr != null)) {
-    document.getElementById("calbar").style.display = "";
-    document.getElementById("calnote").textContent = `Calibrated = 50% + ${c.k_used} × (model % − 50%), because the raw model was overconfident.` +
+try { if (localStorage.getItem("nhlProbMode") === "raw") document.getElementById("calmode").value = "raw"; } catch (e) {}
+segmented(document.getElementById("calmode"));
+document.getElementById("calmode").addEventListener("change", e => {
+  try { localStorage.setItem("nhlProbMode", e.target.value); } catch (err) {}
+  if (DATA) redraw();
+});
+
+function loadResults() {
+  const file = BOOK === "underdog" ? "data/results_underdog.json" : "data/results.json";
+  fetch(file, {cache: "no-store"}).then(r => r.json()).then(data => {
+    DATA = data;
+    const c = data.calibration;
+    const has = c && data.picks.some(p => p.pr != null);
+    document.getElementById("calbar").style.display = has ? "" : "none";
+    if (has) document.getElementById("calnote").textContent = `Calibrated = 50% + ${c.k_used} × (model % − 50%), because the raw model was overconfident.` +
       (c.k_fit != null ? ` Current best fit on ${c.n} graded picks: ${c.k_fit} (95% ${c.k_lo}–${c.k_hi}).` : "") +
       " Sides and hit rates are identical either way; only the stated % changes.";
-    try { if (localStorage.getItem("nhlProbMode") === "raw") document.getElementById("calmode").value = "raw"; } catch (e) {}
-    segmented(document.getElementById("calmode"));
-    document.getElementById("calmode").addEventListener("change", e => {
-      try { localStorage.setItem("nhlProbMode", e.target.value); } catch (err) {}
-      redraw();
-    });
-  }
-  redraw();
-})
-  .catch(() => { document.getElementById("meta").textContent = "No results yet."; });
+    redraw();
+  }).catch(() => {
+    DATA = null;
+    document.querySelectorAll("#booktabs button").forEach(b => b.classList.toggle("on", b.dataset.book === BOOK));
+    ["calbar", "typebar", "linebar"].forEach(id => document.getElementById(id).style.display = "none");
+    document.getElementById("linenote").innerHTML = "";
+    document.getElementById("content").innerHTML = `<div class="empty">${BOOK === "underdog"
+      ? "No Underdog results yet. They show up here after Underdog lines have been priced and those games are final."
+      : "No results yet."}</div>`;
+    document.getElementById("meta").textContent = BOOK === "underdog" ? "Underdog" : "No results yet.";
+  });
+}
+document.getElementById("booktabs").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b || b.dataset.book === BOOK) return;
+  BOOK = b.dataset.book;
+  try { localStorage.setItem("nhlBook", BOOK); } catch (err) {}
+  loadResults();
+});
+document.getElementById("typetabs").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b || b.dataset.t === LTYPE) return;
+  LTYPE = b.dataset.t;
+  if (DATA) redraw();
+});
+loadResults();
 </script>
 </body>
 </html>

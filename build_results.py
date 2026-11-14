@@ -20,15 +20,15 @@ import pandas as pd
 import model
 import movement
 import pairs
-from common import EXCLUDED_PATH, GRADED_PATH, load_config, norm_name, path, write_json
+from common import BOOKS, EXCLUDED_PATH, GRADED_PATH, load_config, norm_name, path, write_json
 
 BUCKETS = [(0.50, 0.55), (0.55, 0.60), (0.60, 0.65), (0.65, 0.70), (0.70, 0.80), (0.80, 1.01)]
 
 
-def load_graded():
-    if not os.path.exists(GRADED_PATH):
+def load_graded(graded_path=GRADED_PATH):
+    if not os.path.exists(graded_path):
         return pd.DataFrame()
-    df = pd.read_csv(GRADED_PATH, dtype={"nhl_id": str, "nhl_game_id": str})
+    df = pd.read_csv(graded_path, dtype={"nhl_id": str, "nhl_game_id": str})
     for c in ("line", "model_mean", "p_over", "p_under", "prob", "actual"):
         df[c] = pd.to_numeric(df[c], errors="coerce")
     return df
@@ -175,8 +175,50 @@ def add_closing_results(moves, graded, k):
               f"{f('xc'):.1%}; side changed on {flips}")
 
 
+def build_underdog(cfg):
+    """data/underdog/graded_results.csv -> docs/data/results_underdog.json. Same compact pick rows as
+    PrizePicks plus t (line type of the picked side: standard / goblin / demon / unknown), mu (its
+    payout multiplier) and sd (sides Underdog sold). No line-movement, pairs or LightGBM sections."""
+    book = BOOKS["underdog"]
+    out = path("docs", "data", book["results_json"])
+    labels = {c: v["label"] for c, v in cfg["props"].items()}
+    df = load_graded(book["graded"])
+    k_used = (cfg.get("calibration") or {}).get("shrink", 1.0)
+    base = {"generated_at": pd.Timestamp.now("UTC").isoformat(), "book": "underdog", "labels": labels,
+            "moves": [], "pairs": [], "shadow": [], "calibration": {"k_used": k_used}}
+    if df.empty:
+        if os.path.isdir(book["snap_dir"]):   # only once Underdog has been priced at least once
+            write_json(out, base | {"picks": [], "voids": 0, "excluded": 0})
+            print("no graded Underdog picks yet; wrote an empty results_underdog.json")
+        return
+    df = classify(df, cfg)
+    voids = int((df["result"] == "void").sum())
+    df = df[df["result"] != "void"]
+    df, n_ex = apply_exclusions(df)
+    df["line_type"] = df["line_type"].fillna("unknown").replace("", "unknown")
+    df["mult"] = pd.to_numeric(df["mult"], errors="coerce")
+    code = {"hit": "h", "miss": "m", "push": "p"}
+    picks = [{"d": r.game_date, "pl": r.player, "tm": r.team, "op": r.opp, "c": r.category,
+              "l": r.line, "m": round(r.model_mean, 3), "s": r.side, "p": round(0.5 + k_used * (r.prob - 0.5), 4),
+              "pr": round(r.prob, 4), "a": round(float(r.actual), 2), "x": code[r.result], "ox": code[r.blind_over],
+              "ux": code[r.blind_under], "hd": 1 if r.headline else 0, "adj": 0, "v": r.model_version,
+              "t": r.line_type, "mu": None if pd.isna(r.mult) else round(float(r.mult), 3),
+              "sd": "" if pd.isna(r.sides) else str(r.sides)}
+             for r in df.itertuples()]
+    write_json(out, base | {"picks": picks, "voids": voids, "excluded": n_ex})
+    print(f"results_underdog.json: {len(picks)} graded picks ({voids} voids, {n_ex} excluded not shown)")
+    for t, sub in df.groupby("line_type"):
+        print_summary(f"UNDERDOG {t} / headline", sub[sub["headline"]])
+        for cat, s2 in sub[~sub["headline"]].groupby("category"):
+            print_summary(f"UNDERDOG {t} / experimental {cat}", s2)
+
+
 def main():
     cfg = load_config()
+    try:
+        build_underdog(cfg)
+    except Exception as e:   # a second book must never break the first
+        print(f"Underdog results build failed (PrizePicks unaffected): {e!r}")
     df = load_graded()
     try:
         moves = movement.build_moves(cfg, exclusion_keys())

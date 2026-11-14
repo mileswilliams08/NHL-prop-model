@@ -123,5 +123,38 @@
       "hits"
     ],
     "note": "LightGBM challenger (gbm.py). Priced and graded beside the official model; never shown as the official pick."
+  },
+  "underdog": {
+    "enabled": true,
+    "stat_types": {
+      "Shots on Goal": "sog",
+      "Shots": "sog",
+      "Saves": "saves",
+      "Goalie Saves": "saves",
+      "Faceoffs Won": "faceoffs",
+      "Faceoff Wins": "faceoffs",
+      "Blocked Shots": "blocks",
+      "Blocks": "blocks",
+      "Hits": "hits",
+      "Time On Ice": "toi"
+    },
+    "team_map": {
+      "TB": "TBL",
+      "NJ": "NJD",
+      "LA": "LAK",
+      "SJ": "SJS",
+      "VEG": "VGK",
+      "VGS": "VGK",
+      "UTAH": "UTA",
+      "MON": "MTL",
+      "WAS": "WSH",
+      "CLB": "CBJ",
+      "NAS": "NSH",
+      "CAL": "CGY",
+      "WIN": "WPG"
+    },
+    "standard_multiplier": null,
+    "multiplier_tolerance": 0.005,
+    "note": "Underdog pick'em board (underdog.py). standard_multiplier null = auto (the most common payout multiplier on the whole board). A side paying less than standard is a goblin, more is a demon; all are priced and graded, tagged by type."
   }
 }

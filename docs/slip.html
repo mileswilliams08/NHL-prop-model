@@ -18,6 +18,7 @@
   .side-btn.over { color: var(--good); } .side-btn.under { color: var(--accent); }
   .x { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; }
   .x:hover { color: var(--bad); }
+  .booktag { background: #262c36; color: #8b98a5; border-radius: 4px; padding: 1px 5px; font-size: 10px; font-weight: 700; }
   .flag { color: var(--warn); font-size: 11px; }
   .warns div { color: var(--warn); font-size: 13px; margin: 4px 0; }
   .opts { color: var(--muted); font-size: 13px; margin-bottom: 10px; }
@@ -36,7 +37,7 @@
 
 <div class="table-wrap">
 <table>
-  <thead><tr><th>#</th><th>Player</th><th>Matchup</th><th>Start</th><th>Prop</th><th>Line</th><th>Side</th>
+  <thead><tr><th>#</th><th>Player</th><th>Matchup</th><th>Start</th><th>Prop</th><th>Line</th><th>Book</th><th>Side</th>
     <th class="num">Model P(Side)</th><th></th><th></th></tr></thead>
   <tbody id="slipBody"></tbody>
 </table>
@@ -70,7 +71,8 @@ let RAW = false;
 try { RAW = localStorage.getItem("nhlProbMode") === "raw"; } catch (e) {}
 let LABELS = {"sog": "Shots On Goal", "hits": "Hits", "blocks": "Blocked Shots", "toi": "Time On Ice",
               "saves": "Goalie Saves", "faceoffs": "Faceoffs Won"};
-let BOARD = null;   // current props.json picks by projection id (null until loaded)
+let BOARD = null;   // current picks from both books by line id (null until loaded)
+let UD_LOADED = false;
 
 // Chance the chosen side wins. Stored probs are for the model's side; the other side is 1 - that (pushes ignored).
 const sideProb = s => { const p = RAW ? s.prob : (s.prob_cal ?? s.prob); return s.side === s.model_side ? p : 1 - p; };
@@ -79,10 +81,11 @@ const started = s => new Date(s.start_time) <= new Date();
 function status(s) {
   const f = [];
   if (started(s)) f.push("game started");
-  else if (BOARD && s.pp_proj_id && !BOARD[s.pp_proj_id]) f.push("not on the board right now");
+  else if (BOARD && s.pp_proj_id && !BOARD[s.pp_proj_id] && (bookOf(s) === "prizepicks" || UD_LOADED)) f.push("not on the board right now");
+  if (s.sides && s.sides.length === 1 && s.sides[0] !== s.side) f.push(`Underdog only sells ${sideWord(s.sides[0], s)} on this line`);
   if (usedGet(s).length) f.push("already used in a slip");
   if (s.was_line != null) f.push(`line moved ${s.was_line} → ${s.line}`);
-  if (s.side !== s.model_side) f.push(`model now picks ${s.model_side === "over" ? "Over" : "Under"}` +
+  if (s.side !== s.model_side) f.push(`model now picks ${sideWord(s.model_side, s)}` +
     (s.m != null ? ` (projection ${Number(s.m).toFixed(1)} unchanged)` : ""));
   return f.join(" · ");
 }
@@ -92,23 +95,27 @@ function render() {
   document.getElementById("slipBody").innerHTML = items.length ? items.map((s, i) => `<tr>
       <td>${i + 1}</td><td>${esc(s.player)}</td><td>${esc(s.team)} v ${esc(s.opp)}</td><td>${time(s.start_time)}</td>
       <td>${esc(LABELS[s.category] || s.category)}</td><td>${s.line}</td>
-      <td><button class="side-btn ${s.side}" data-i="${i}" title="Click to switch Over/Under">${s.side === "over" ? "OVER" : "UNDER"}</button></td>
+      <td><span class="booktag">${bookOf(s) === "underdog" ? "UD" : "PP"}</span></td>
+      <td><button class="side-btn ${s.side}" data-i="${i}" title="Click to switch sides">${sideWord(s.side, s).toUpperCase()}</button></td>
       <td class="num">${(sideProb(s) * 100).toFixed(1)}%</td>
       <td class="flag">${esc(status(s))}</td>
       <td><button class="x" data-i="${i}" title="Remove">×</button></td></tr>`).join("")
-    : `<tr><td colspan="10" class="empty">Your slip is empty. Use the + button on the Props page to add picks.</td></tr>`;
+    : `<tr><td colspan="11" class="empty">Your slip is empty. Use the + button on the Props page to add picks.</td></tr>`;
 
   const matchup = document.getElementById("optMatch").checked, withP = document.getElementById("optProb").checked;
   document.getElementById("slipText").textContent = items.length ? "Props in this slip:\n" + items.map((s, i) =>
-      `${i + 1}. ${s.player} - ${s.side.toUpperCase()} ${s.line} ${LABELS[s.category] || s.category}` +
+      `${i + 1}. ${s.player} - ${sideWord(s.side, s).toUpperCase()} ${s.line} ${LABELS[s.category] || s.category}` +
       (matchup ? ` (${s.team} v ${s.opp})` : "") + (withP ? ` [${(sideProb(s) * 100).toFixed(1)}%]` : "")).join("\n") : "";
 
   const w = [];
-  if (items.length > SLIP_MAX) w.push(`${items.length} picks: PrizePicks entries max out at ${SLIP_MAX}.`);
-  if (items.length === 1) w.push("PrizePicks entries need at least 2 picks.");
-  if (items.length >= 2 && new Set(items.map(s => s.team)).size < 2) w.push("All picks are from one team: PrizePicks usually requires at least two different teams.");
+  const books = [...new Set(items.map(bookOf))];
+  const site = books.length === 1 ? bookName(items[0]) : "PrizePicks and Underdog";
+  if (books.length > 1) w.push("This slip mixes PrizePicks and Underdog picks: they can't go in the same entry.");
+  if (items.length > SLIP_MAX) w.push(`${items.length} picks: entries usually max out at ${SLIP_MAX}.`);
+  if (items.length === 1) w.push(`${site} entries need at least 2 picks.`);
+  if (items.length >= 2 && new Set(items.map(s => s.team)).size < 2) w.push(`All picks are from one team: ${site} usually requires at least two different teams.`);
   const dupes = [...new Set(items.map(s => s.player).filter((p, i, a) => a.indexOf(p) !== i))];
-  if (dupes.length) w.push(`Same player more than once (${dupes.map(esc).join(", ")}): PrizePicks won't allow that in one entry.`);
+  if (dupes.length) w.push(`Same player more than once (${dupes.map(esc).join(", ")}): that usually isn't allowed in one entry.`);
   const old = items.filter(started).length;
   if (old) w.push(`${old} pick${old > 1 ? "s are" : " is"} from a game that already started.`);
   document.getElementById("warns").innerHTML = w.map(x => `<div>⚠ ${x}</div>`).join("");
@@ -123,7 +130,7 @@ function render() {
   document.getElementById("usedCount").textContent = used.length ? `(${used.length})` : "";
   document.getElementById("usedBody").innerHTML = used.length ? used.map(u => `<tr><td>${u.game_date}</td><td>${esc(u.player)}</td>
       <td>${esc(u.team)} v ${esc(u.opp)}</td><td>${esc(LABELS[u.category] || u.category)}</td>
-      <td><span class="${u.side}" style="font-weight:700">${u.side.toUpperCase()}</span> ${u.line}</td>
+      <td><span class="${u.side}" style="font-weight:700">${sideWord(u.side, u).toUpperCase()}</span> ${u.line} <span class="booktag">${bookOf(u) === "underdog" ? "UD" : "PP"}</span></td>
       <td>${time(u.used_at)}</td><td><button class="x unuse" data-at="${u.used_at}" data-k="${esc(u.k)}" title="Unmark">×</button></td></tr>`).join("")
     : `<tr><td colspan="7" class="empty">Nothing marked as used yet.</td></tr>`;
   slipBadge();
@@ -164,20 +171,27 @@ render();
 // Refresh lines and model probabilities from the current board (lines move during the day).
 fetch("data/props.json", {cache: "no-store"}).then(r => r.json()).then(async json => {
   applyBoard(json, await loadBoard());   // current lines from the 30-minute tracker, if newer
+  json.picks.forEach(p => { p.book = "prizepicks"; });
+  try {   // Underdog picks, if that book has been priced
+    const ud = await (await fetch("data/props_underdog.json", {cache: "no-store"})).json();
+    ud.picks.forEach(p => { p.book = "underdog"; });
+    json.picks = json.picks.concat(ud.picks);
+    UD_LOADED = true;
+  } catch (e) {}
   LABELS = Object.assign(LABELS, json.labels || {});
   BOARD = {};
   json.picks.filter(p => !p.skip_reason && p.pp_proj_id).forEach(p => BOARD[p.pp_proj_id] = p);
   const items = slipLoad();
   const byName = {};
-  json.picks.filter(p => !p.skip_reason).forEach(p => byName[`${p.game_date}|${p.player}|${p.category}`] = p);
+  json.picks.filter(p => !p.skip_reason).forEach(p => byName[`${p.book}|${p.game_date}|${p.player}|${p.category}`] = p);
   items.forEach(s => {
     // same projection id, or (if PrizePicks re-posted the line under a new id) same player, prop and date
-    const p = BOARD[s.pp_proj_id] || byName[`${s.game_date}|${s.player}|${s.category}`];
+    const p = BOARD[s.pp_proj_id] || byName[`${bookOf(s)}|${s.game_date}|${s.player}|${s.category}`];
     if (!p) return;
     if (p.pp_proj_id !== s.pp_proj_id) { s.pp_proj_id = p.pp_proj_id; s.key = slipKey(p); }
     if (p.line !== s.line) { s.was_line = s.was_line ?? s.line; s.line = p.line; }
     if (s.was_line === s.line) delete s.was_line;
-    Object.assign(s, {prob: p.prob, prob_cal: p.prob_cal, model_side: p.side, start_time: p.start_time, m: p.model_mean});
+    Object.assign(s, {prob: p.prob, prob_cal: p.prob_cal, model_side: p.side, start_time: p.start_time, m: p.model_mean, sides: p.sides, mult: p.mult});
   });
   slipSave(items);
   render();

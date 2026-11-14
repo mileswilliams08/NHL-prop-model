@@ -26,8 +26,21 @@ PLAYER_MAP_PATH = path("data", "player_map.csv")    # PrizePicks player id -> NH
 ALIASES_PATH = path("data", "player_aliases.csv")   # manual overrides for the map
 DOCS_DATA = path("docs", "data")
 
+# Each book is tracked on its own: separate snapshots, graded log, player map and site files, so
+# PrizePicks and Underdog numbers never mix. Everything else (history, model) is shared.
+UD_DIR = path("data", "underdog")
+BOOKS = {
+    "prizepicks": {"key": "prizepicks", "label": "PrizePicks", "snap_dir": SNAP_DIR, "graded": GRADED_PATH,
+                   "player_map": PLAYER_MAP_PATH, "props_json": "props.json", "results_json": "results.json"},
+    "underdog": {"key": "underdog", "label": "Underdog", "snap_dir": os.path.join(UD_DIR, "snapshots"),
+                 "graded": os.path.join(UD_DIR, "graded_results.csv"),
+                 "player_map": os.path.join(UD_DIR, "player_map.csv"),
+                 "props_json": "props_underdog.json", "results_json": "results_underdog.json"},
+}
+
 NHL_BASE = "https://api-web.nhle.com/v1"
 PP_BOARD_URL = "https://partner-api.prizepicks.com/projections"
+UD_BOARD_URL = "https://api.underdogfantasy.com/v1/over_under_lines"
 USER_AGENT = "nhl-prop-model/1.0 (read-only research project; github.com/mileswilliams08)"
 
 
