@@ -146,6 +146,11 @@ def main():
     print(f"\nsaved {saved} pages to {os.path.relpath(day_dir, HERE)}"
           + (f"; robots.txt disallowed {skipped}" if skipped else "")
           + (f"; failed {failed}" if failed else ""))
+    try:   # refresh the local tables (dfo_data/lines.csv, goalies.csv)
+        import dfo_parse
+        dfo_parse.main(verbose=a.inspect)
+    except Exception as e:
+        print(f"parse step failed (pages are still saved): {e!r}")
     return 0
 
 
