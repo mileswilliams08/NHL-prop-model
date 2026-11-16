@@ -96,6 +96,45 @@ def print_summary(name, sub):
         print(f"   slope (actual-line) on (mean-line): {s[0]:.2f} +/- {1.96 * s[1]:.2f} (95% CI)")
 
 
+_TIER_CACHE = {}
+
+
+def tier_lookup():
+    """(game_date, nhl_game_id, nhl_id) -> "Top" / "Mid" / "Depth" for the Results page Tier filter.
+    The tier stored on the pick when it was made (earliest snapshot) wins; older picks, made before
+    tiers were stored, and Underdog picks get the same rule rebuilt from history (pairs.pregame_ranks:
+    rank in the team's ice-time order over the previous 10 games)."""
+    if "map" in _TIER_CACHE:
+        return _TIER_CACHE["map"]
+    import tiers
+    out = {}
+    try:
+        for (d, gid, pid, cat), (pk, _) in movement._earliest_picks().items():
+            if pk.get("tier"):
+                out[(d, gid, pid)] = pk["tier"]
+    except Exception as e:
+        print(f"tier lookup from snapshots failed: {e!r}")
+    _TIER_CACHE["ranks"] = pairs.pregame_ranks()
+    _TIER_CACHE["map"] = out
+    _TIER_CACHE["tier"] = tiers._tier
+    return out
+
+
+def tier_for(d, gid, pid, cat):
+    """Tier label for one graded row; "Goalie" for saves, "" when unknown."""
+    if cat == "saves":
+        return "Goalie"
+    try:
+        gid, pid = str(int(float(gid))), str(int(float(pid)))
+    except (TypeError, ValueError):
+        return ""
+    t = tier_lookup().get((str(d), gid, pid))
+    if t:
+        return t
+    rk = _TIER_CACHE["ranks"].get((gid, pid))
+    return _TIER_CACHE["tier"](rk[0], int(rk[1:])) if rk else ""
+
+
 def build_shadow(graded, k):
     """Official vs LightGBM shadow pick on the same line, from each pick's earliest snapshot."""
     res = {(str(r.game_date), str(r.nhl_game_id), str(r.nhl_id), r.category): r for r in graded.itertuples()}
@@ -112,7 +151,8 @@ def build_shadow(graded, k):
                     "p": round(0.5 + k * (float(r.prob) - 0.5), 4), "pr": round(float(r.prob), 4), "m": round(float(r.model_mean), 3),
                     "ss": sh["side"], "sx": sx, "sp": round(0.5 + k * (sh["prob"] - 0.5), 4), "spr": sh["prob"],
                     "sm": sh["mean"], "ox": {"hit": "h", "miss": "m", "push": "p"}.get(r.blind_over, "p"),
-                    "ux": {"hit": "h", "miss": "m", "push": "p"}.get(r.blind_under, "p"), "v": sh.get("model")})
+                    "ux": {"hit": "h", "miss": "m", "push": "p"}.get(r.blind_under, "p"), "v": sh.get("model"),
+                    "tr": tier_for(key[0], key[1], key[2], key[3])})
     if out:
         dec = [o for o in out if o["x"] != "p"]
         cur = sum(o["x"] == "h" for o in dec) / max(1, len(dec))
@@ -203,7 +243,8 @@ def build_underdog(cfg):
               "pr": round(r.prob, 4), "a": round(float(r.actual), 2), "x": code[r.result], "ox": code[r.blind_over],
               "ux": code[r.blind_under], "hd": 1 if r.headline else 0, "adj": 0, "v": r.model_version,
               "t": r.line_type, "mu": None if pd.isna(r.mult) else round(float(r.mult), 3),
-              "sd": "" if pd.isna(r.sides) else str(r.sides)}
+              "sd": "" if pd.isna(r.sides) else str(r.sides),
+              "tr": tier_for(r.game_date, r.nhl_game_id, r.nhl_id, r.category)}
              for r in df.itertuples()]
     write_json(out, base | {"picks": picks, "voids": voids, "excluded": n_ex})
     print(f"results_underdog.json: {len(picks)} graded picks ({voids} voids, {n_ex} excluded not shown)")
@@ -289,8 +330,10 @@ def main():
               "l": r.line, "m": round(r.model_mean, 3), "s": r.side, "p": round(0.5 + k_used * (r.prob - 0.5), 4), "pr": round(r.prob, 4),
               "a": round(float(r.actual), 2), "x": code[r.result], "ox": code[r.blind_over], "ux": code[r.blind_under],
               "hd": 1 if r.headline else 0, "adj": 1 if str(r.adjusted_odds).lower() == "true" else 0,
-              "v": r.model_version}
+              "v": r.model_version, "tr": tier_for(r.game_date, r.nhl_game_id, r.nhl_id, r.category)}
              for r in df.itertuples()] + cpicks
+    for m in moves:   # line-movement / closing-line rows get the same tier label
+        m["tr"] = tier_for(m["d"], m.get("g"), m.get("id"), m["c"])
     voids += cvoids
     write_json(path("docs", "data", "results.json"),
                {"generated_at": pd.Timestamp.now("UTC").isoformat(), "voids": voids, "excluded": n_ex,

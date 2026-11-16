@@ -41,3 +41,4 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 .used-tag { background: #2a2140; color: #b39ddb; border-radius: 4px; padding: 1px 6px; font-size: 10px; font-weight: 700;
             letter-spacing: .04em; vertical-align: middle; cursor: help; }
 body.ud .pp-only { display: none; }   /* Results: sections that only exist for PrizePicks */
+body.lg #content > :not(.exp-sec) { display: none; }   /* Results: LightGBM tab shows only its own section */
