@@ -7,3 +7,6 @@ venv/
 data/raw/
 probe_out/
 *.tmp
+
+# Daily Faceoff pages: personal measurement study, never committed (dfo_collect.py)
+dfo_data/
