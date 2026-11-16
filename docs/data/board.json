@@ -1,249 +1,6 @@
 {
- "updated_at": "2026-11-15T20:58Z",
+ "updated_at": "2026-11-16T00:54Z",
  "lines": {
-  "2026-11-15|58024|toi": {
-   "line": 25.0,
-   "side": "over",
-   "prob": 0.5075,
-   "prob_cal": 0.5029,
-   "p_over": 0.5075,
-   "p_under": 0.4925,
-   "pp_proj_id": "16992441"
-  },
-  "2026-11-15|218272|toi": {
-   "line": 24.75,
-   "side": "under",
-   "prob": 0.5268,
-   "prob_cal": 0.5104,
-   "p_over": 0.4732,
-   "p_under": 0.5268,
-   "pp_proj_id": "16992443"
-  },
-  "2026-11-15|57827|toi": {
-   "line": 24.0,
-   "side": "under",
-   "prob": 0.5611,
-   "prob_cal": 0.5238,
-   "p_over": 0.4389,
-   "p_under": 0.5611,
-   "pp_proj_id": "16992442"
-  },
-  "2026-11-15|272084|saves": {
-   "line": 23.5,
-   "side": "under",
-   "prob": 0.5423,
-   "prob_cal": 0.5165,
-   "p_over": 0.4577,
-   "p_under": 0.5423,
-   "pp_proj_id": "17019657"
-  },
-  "2026-11-15|286542|saves": {
-   "line": 22.5,
-   "side": "under",
-   "prob": 0.5768,
-   "prob_cal": 0.5299,
-   "p_over": 0.4232,
-   "p_under": 0.5768,
-   "pp_proj_id": "17019659"
-  },
-  "2026-11-15|268079|toi": {
-   "line": 18.75,
-   "side": "under",
-   "prob": 0.6244,
-   "prob_cal": 0.5485,
-   "p_over": 0.3756,
-   "p_under": 0.6244,
-   "pp_proj_id": "16992444"
-  },
-  "2026-11-15|57828|faceoffs": {
-   "line": 7.5,
-   "side": "over",
-   "prob": 0.537,
-   "prob_cal": 0.5144,
-   "p_over": 0.537,
-   "p_under": 0.463,
-   "pp_proj_id": "16992994"
-  },
-  "2026-11-15|268079|faceoffs": {
-   "line": 6.5,
-   "side": "over",
-   "prob": 0.5795,
-   "prob_cal": 0.531,
-   "p_over": 0.5795,
-   "p_under": 0.4205,
-   "pp_proj_id": "16992993"
-  },
-  "2026-11-15|237359|hits": {
-   "line": 3.0,
-   "side": "under",
-   "prob": 0.6015,
-   "prob_cal": 0.5396,
-   "p_over": 0.3287,
-   "p_under": 0.4961,
-   "pp_proj_id": "16996417"
-  },
-  "2026-11-15|57828|sog": {
-   "line": 3.0,
-   "side": "over",
-   "prob": 0.5099,
-   "prob_cal": 0.5038,
-   "p_over": 0.4073,
-   "p_under": 0.3915,
-   "pp_proj_id": "17021754"
-  },
-  "2026-11-15|348453|hits": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.6598,
-   "prob_cal": 0.5623,
-   "p_over": 0.3402,
-   "p_under": 0.6598,
-   "pp_proj_id": "16996415"
-  },
-  "2026-11-15|240350|hits": {
-   "line": 2.5,
-   "side": "under",
-   "prob": 0.6515,
-   "prob_cal": 0.5591,
-   "p_over": 0.3485,
-   "p_under": 0.6515,
-   "pp_proj_id": "16996418"
-  },
-  "2026-11-15|305122|hits": {
-   "line": 2.5,
-   "side": "over",
-   "prob": 0.5064,
-   "prob_cal": 0.5025,
-   "p_over": 0.5064,
-   "p_under": 0.4936,
-   "pp_proj_id": "16996419"
-  },
-  "2026-11-15|348376|hits": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.6147,
-   "prob_cal": 0.5447,
-   "p_over": 0.298,
-   "p_under": 0.4754,
-   "pp_proj_id": "16996420"
-  },
-  "2026-11-15|218085|sog": {
-   "line": 2.0,
-   "side": "over",
-   "prob": 0.502,
-   "prob_cal": 0.5008,
-   "p_over": 0.3761,
-   "p_under": 0.3731,
-   "pp_proj_id": "17021755"
-  },
-  "2026-11-15|218271|sog": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.6359,
-   "prob_cal": 0.553,
-   "p_over": 0.2728,
-   "p_under": 0.4765,
-   "pp_proj_id": "17021756"
-  },
-  "2026-11-15|218221|sog": {
-   "line": 2.0,
-   "side": "under",
-   "prob": 0.5497,
-   "prob_cal": 0.5194,
-   "p_over": 0.3364,
-   "p_under": 0.4107,
-   "pp_proj_id": "17021757"
-  },
-  "2026-11-15|237359|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5382,
-   "prob_cal": 0.5149,
-   "p_over": 0.5382,
-   "p_under": 0.4618,
-   "pp_proj_id": "17006196"
-  },
-  "2026-11-15|89321|blocks": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5999,
-   "prob_cal": 0.539,
-   "p_over": 0.5999,
-   "p_under": 0.4001,
-   "pp_proj_id": "17006235"
-  },
-  "2026-11-15|348258|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5624,
-   "prob_cal": 0.5244,
-   "p_over": 0.4376,
-   "p_under": 0.5624,
-   "pp_proj_id": "17006255"
-  },
-  "2026-11-15|93845|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5086,
-   "prob_cal": 0.5034,
-   "p_over": 0.4914,
-   "p_under": 0.5086,
-   "pp_proj_id": "17008988"
-  },
-  "2026-11-15|185311|blocks": {
-   "line": 1.5,
-   "side": "under",
-   "prob": 0.5384,
-   "prob_cal": 0.515,
-   "p_over": 0.4616,
-   "p_under": 0.5384,
-   "pp_proj_id": "17023539"
-  },
-  "2026-11-15|268079|hits": {
-   "line": 0.5,
-   "side": "over",
-   "prob": 0.5743,
-   "prob_cal": 0.529,
-   "p_over": 0.5743,
-   "p_under": 0.4257,
-   "pp_proj_id": "16996413"
-  },
-  "2026-11-15|57827|hits": {
-   "line": 0.5,
-   "side": "over",
-   "prob": 0.5644,
-   "prob_cal": 0.5251,
-   "p_over": 0.5644,
-   "p_under": 0.4356,
-   "pp_proj_id": "16996416"
-  },
-  "2026-11-15|218221|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.5961,
-   "prob_cal": 0.5375,
-   "p_over": 0.4039,
-   "p_under": 0.5961,
-   "pp_proj_id": "17022049"
-  },
-  "2026-11-15|218222|blocks": {
-   "line": 0.5,
-   "side": "under",
-   "prob": 0.6027,
-   "prob_cal": 0.5401,
-   "p_over": 0.3973,
-   "p_under": 0.6027,
-   "pp_proj_id": "17022050"
-  },
-  "2026-11-15|270379|saves": {
-   "line": 26.5,
-   "side": "under",
-   "prob": 0.5735,
-   "prob_cal": 0.5287,
-   "p_over": 0.4265,
-   "p_under": 0.5735,
-   "pp_proj_id": "17019663"
-  },
   "2026-11-15|234697|saves": {
    "line": 22.5,
    "side": "over",
@@ -263,12 +20,12 @@
    "pp_proj_id": "16993161"
   },
   "2026-11-15|218240|toi": {
-   "line": 18.75,
+   "line": 19.0,
    "side": "under",
-   "prob": 0.5122,
-   "prob_cal": 0.5048,
-   "p_over": 0.4878,
-   "p_under": 0.5122,
+   "prob": 0.5516,
+   "prob_cal": 0.5201,
+   "p_over": 0.4484,
+   "p_under": 0.5516,
    "pp_proj_id": "16993160"
   },
   "2026-11-15|218292|hits": {
@@ -370,15 +127,6 @@
    "p_under": 0.5304,
    "pp_proj_id": "17009386"
   },
-  "2026-11-15|218355|blocks": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5298,
-   "prob_cal": 0.5116,
-   "p_over": 0.5298,
-   "p_under": 0.4702,
-   "pp_proj_id": "17023757"
-  },
   "2026-11-15|294810|blocks": {
    "line": 1.5,
    "side": "over",
@@ -424,15 +172,6 @@
    "p_under": 0.5679,
    "pp_proj_id": "16994234"
   },
-  "2026-11-15|348868|saves": {
-   "line": 23.5,
-   "side": "under",
-   "prob": 0.5721,
-   "prob_cal": 0.5281,
-   "p_over": 0.4279,
-   "p_under": 0.5721,
-   "pp_proj_id": "17019665"
-  },
   "2026-11-15|216027|saves": {
    "line": 23.5,
    "side": "under",
@@ -442,13 +181,22 @@
    "p_under": 0.5686,
    "pp_proj_id": "17022811"
   },
-  "2026-11-15|57952|faceoffs": {
-   "line": 8.5,
+  "2026-11-15|348868|saves": {
+   "line": 23.0,
    "side": "under",
-   "prob": 0.6449,
-   "prob_cal": 0.5565,
+   "prob": 0.544,
+   "prob_cal": 0.5172,
+   "p_over": 0.4279,
+   "p_under": 0.5106,
+   "pp_proj_id": "17019652"
+  },
+  "2026-11-15|57952|faceoffs": {
+   "line": 8.0,
+   "side": "under",
+   "prob": 0.5968,
+   "prob_cal": 0.5378,
    "p_over": 0.3551,
-   "p_under": 0.6449,
+   "p_under": 0.5258,
    "pp_proj_id": "16994286"
   },
   "2026-11-15|58484|faceoffs": {
@@ -604,15 +352,6 @@
    "p_under": 0.4749,
    "pp_proj_id": "17009373"
   },
-  "2026-11-15|303128|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5025,
-   "prob_cal": 0.501,
-   "p_over": 0.5025,
-   "p_under": 0.4975,
-   "pp_proj_id": "17021014"
-  },
   "2026-11-15|218696|hits": {
    "line": 0.5,
    "side": "over",
@@ -677,20 +416,20 @@
    "pp_proj_id": "16996035"
   },
   "2026-11-15|311689|saves": {
-   "line": 18.5,
+   "line": 19.5,
    "side": "over",
-   "prob": 0.6109,
-   "prob_cal": 0.5433,
-   "p_over": 0.6109,
-   "p_under": 0.3891,
-   "pp_proj_id": "17024839"
+   "prob": 0.5449,
+   "prob_cal": 0.5175,
+   "p_over": 0.5449,
+   "p_under": 0.4551,
+   "pp_proj_id": "17028738"
   },
   "2026-11-15|58181|faceoffs": {
-   "line": 9.5,
+   "line": 10.0,
    "side": "over",
-   "prob": 0.6012,
-   "prob_cal": 0.5395,
-   "p_over": 0.6012,
+   "prob": 0.5558,
+   "prob_cal": 0.5218,
+   "p_over": 0.4991,
    "p_under": 0.3988,
    "pp_proj_id": "16995667"
   },
@@ -911,12 +650,12 @@
    "pp_proj_id": "16996073"
   },
   "2026-11-15|348310|toi": {
-   "line": 22.0,
+   "line": 21.75,
    "side": "over",
-   "prob": 0.5192,
-   "prob_cal": 0.5075,
-   "p_over": 0.5192,
-   "p_under": 0.4808,
+   "prob": 0.5585,
+   "prob_cal": 0.5228,
+   "p_over": 0.5585,
+   "p_under": 0.4415,
    "pp_proj_id": "16996074"
   },
   "2026-11-15|218086|toi": {
