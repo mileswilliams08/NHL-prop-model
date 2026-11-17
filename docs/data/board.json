@@ -1,59 +1,50 @@
 {
- "updated_at": "2026-11-16T06:17Z",
+ "updated_at": "2026-11-17T07:48Z",
  "lines": {
-  "2026-11-16|218685|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.572,
-   "prob_cal": 0.5281,
-   "p_over": 0.572,
-   "p_under": 0.428,
-   "pp_proj_id": "17022800"
-  },
-  "2026-11-16|348499|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5376,
-   "prob_cal": 0.5147,
-   "p_over": 0.5376,
-   "p_under": 0.4624,
-   "pp_proj_id": "17022801"
-  },
-  "2026-11-16|267670|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5321,
-   "prob_cal": 0.5125,
-   "p_over": 0.5321,
-   "p_under": 0.4679,
-   "pp_proj_id": "17023215"
-  },
-  "2026-11-16|218267|sog": {
-   "line": 1.5,
-   "side": "over",
-   "prob": 0.5015,
-   "prob_cal": 0.5006,
-   "p_over": 0.5015,
-   "p_under": 0.4985,
-   "pp_proj_id": "17023216"
-  },
-  "2026-11-16|218657|sog": {
+  "2026-11-17|305209|sog": {
    "line": 1.5,
    "side": "under",
-   "prob": 0.5011,
-   "prob_cal": 0.5004,
-   "p_over": 0.4989,
-   "p_under": 0.5011,
-   "pp_proj_id": "17023676"
+   "prob": 0.5131,
+   "prob_cal": 0.5051,
+   "p_over": 0.4869,
+   "p_under": 0.5131,
+   "pp_proj_id": "17062874"
   },
-  "2026-11-16|219459|sog": {
+  "2026-11-17|347843|sog": {
+   "line": 1.5,
+   "side": "over",
+   "prob": 0.5157,
+   "prob_cal": 0.5061,
+   "p_over": 0.5157,
+   "p_under": 0.4843,
+   "pp_proj_id": "17053037"
+  },
+  "2026-11-17|218246|sog": {
+   "line": 3.5,
+   "side": "under",
+   "prob": 0.6182,
+   "prob_cal": 0.5461,
+   "p_over": 0.3818,
+   "p_under": 0.6182,
+   "pp_proj_id": "17065025"
+  },
+  "2026-11-17|268295|sog": {
+   "line": 2.5,
+   "side": "under",
+   "prob": 0.5139,
+   "prob_cal": 0.5054,
+   "p_over": 0.4861,
+   "p_under": 0.5139,
+   "pp_proj_id": "17067348"
+  },
+  "2026-11-17|218232|sog": {
    "line": 1.5,
    "side": "under",
-   "prob": 0.5196,
-   "prob_cal": 0.5077,
-   "p_over": 0.4804,
-   "p_under": 0.5196,
-   "pp_proj_id": "17025023"
+   "prob": 0.5091,
+   "prob_cal": 0.5035,
+   "p_over": 0.4909,
+   "p_under": 0.5091,
+   "pp_proj_id": "17066909"
   }
  }
 }
