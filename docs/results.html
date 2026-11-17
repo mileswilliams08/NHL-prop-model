@@ -74,6 +74,18 @@ function summarize(codes) {
   const hits = dec.filter(c => c === "h").length;
   return {n: dec.length, hits, pushes, rate: dec.length ? hits / dec.length : null};
 }
+// Rank ranges (rank in team ice time over the last 10 games, as shown on the Props page). The last range of
+// each position also takes the rare higher ranks (F16+, D8+).
+const RANKS = [["__all__", "All ranks"], ["F-1-3", "F1-F3"], ["F-4-9", "F4-F9"], ["F-10-99", "F10-F15"],
+               ["D-1-2", "D1-D2"], ["D-3-4", "D3-D4"], ["D-5-99", "D5-D7"]];
+const RANK_OPTS = RANKS.map(([k, l]) => `<option value="${k}">${l}</option>`).join("");
+function inRank(rk, key) {
+  if (!key || key === "__all__") return true;
+  if (!rk) return false;
+  const [pos, lo, hi] = key.split("-");
+  const n = parseInt(rk.slice(1));
+  return rk[0] === pos && n >= +lo && n <= +hi;
+}
 function inProb(p, key) {
   if (key === "__all__") return true;
   if (key === "80+") return p >= 0.8;
@@ -126,14 +138,15 @@ function render(data) {
   const propOpts = rows => `<option value="__all__">All props</option>` +
     [...new Set(rows.map(p => p.c))].map(c => `<option value="${c}">${esc(L(c))}</option>`).join("");
   const PROB_OPTS = PROBS.map(([k, l]) => `<option value="${k}">${l}</option>`).join("");
-  const show = (id, rows, {prop = true, prob = true} = {}) => `<div class="show">Show:
+  const show = (id, rows, {prop = true, prob = true, rank = false} = {}) => `<div class="show">Show:
       <select id="${id}-date">${DATE_OPTS}</select>
       ${prop ? `<select id="${id}-prop">${propOpts(rows)}</select>` : ""}
-      ${prob ? `<select id="${id}-prob">${PROB_OPTS}</select>` : ""}</div>`;
+      ${prob ? `<select id="${id}-prob">${PROB_OPTS}</select>` : ""}
+      ${rank ? `<select id="${id}-rank">${RANK_OPTS}</select>` : ""}</div>`;
   const filt = (id, rows) => {
     const v = k => (document.getElementById(`${id}-${k}`) || {}).value || "__all__";
     return rows.filter(p => inDate(p.d, v("date"), latest) && (v("prop") === "__all__" || p.c === v("prop"))
-      && inProb(p.p, v("prob")));
+      && inProb(p.p, v("prob")) && inRank(p.rk, v("rank")));
   };
 
   content.innerHTML = `
@@ -210,7 +223,7 @@ function render(data) {
       ? `Every graded pick the LightGBM challenger priced (Time On Ice and Hits), graded with LightGBM's own side and probability on the
          same PrizePicks line as the official model. It is tracked only; the official picks never use it. Compare with the PrizePicks tab.`
       : "New props still being validated. Their results are shown only here and are not counted in any other number on this page."}</div>
-    ${show("exp", exp)}
+    ${show("exp", exp, {rank: true})}
     <div id="exp-out"></div>
     </div>
 
@@ -290,6 +303,7 @@ function render(data) {
 
   const drawExp = () => {
     const rows = filt("exp", exp);
+    const byRank = (document.getElementById("exp-rank") || {}).value && document.getElementById("exp-rank").value !== "__all__";
     if (!rows.length) { document.getElementById("exp-out").innerHTML = `<div class="empty">No graded experimental picks for this selection yet.</div>`; return; }
     const s = summarize(rows.map(p => p.x));
     let h = `<div class="overall-card">
@@ -299,10 +313,17 @@ function render(data) {
         <div><div class="big">${s.pushes}</div><div class="sub">pushes (excluded above)</div></div></div>
       <div class="table-wrap"><table><thead><tr><th>Prop</th><th class="num">N</th><th class="num">Hit rate</th><th class="num">Blind Over</th>
         <th class="num">Blind Under</th><th class="num">Over N</th><th class="num">Over hit rate</th><th class="num">Under N</th><th class="num">Under hit rate</th></tr></thead><tbody>`;
+    // a rank range selected: one row per prop and exact rank (F1, F2, F3 ...); otherwise one row per prop
+    const groups = [];
     for (const c of [...new Set(rows.map(p => p.c))]) {
-      const r = rows.filter(p => p.c === c), t = summarize(r.map(p => p.x));
+      if (!byRank) { groups.push([L(c), rows.filter(p => p.c === c)]); continue; }
+      const rks = [...new Set(rows.filter(p => p.c === c).map(p => p.rk))].sort((a, b) => parseInt(a.slice(1)) - parseInt(b.slice(1)));
+      rks.forEach(k => groups.push([`${L(c)} · ${k}`, rows.filter(p => p.c === c && p.rk === k)]));
+    }
+    for (const [label, r] of groups) {
+      const t = summarize(r.map(p => p.x));
       const o = summarize(r.filter(p => p.s === "over").map(p => p.x)), u = summarize(r.filter(p => p.s === "under").map(p => p.x));
-      h += `<tr><td>${esc(L(c))}</td><td class="num">${t.n}</td><td class="num">${pct(t.rate)}</td>
+      h += `<tr><td>${esc(label)}</td><td class="num">${t.n}</td><td class="num">${pct(t.rate)}</td>
         <td class="num">${pct(summarize(r.map(p => p.ox)).rate)}</td><td class="num">${pct(summarize(r.map(p => p.ux)).rate)}</td>
         <td class="num">${o.n}</td><td class="num">${pct(o.rate)}</td><td class="num">${u.n}</td><td class="num">${pct(u.rate)}</td></tr>`;
     }
@@ -560,7 +581,7 @@ function redraw() {
   if (lg) {
     // LightGBM's own pick on each line it priced, in the same shape as a graded pick
     picks = (DATA.shadow || []).map(r => ({d: r.d, pl: r.pl, tm: r.tm, op: "", c: r.c, l: r.l, m: r.sm, s: r.ss,
-      p: r.sp, pr: r.spr, a: r.a, x: r.sx, ox: r.ox, ux: r.ux, hd: 0, adj: 0, v: r.v, tr: r.tr}));
+      p: r.sp, pr: r.spr, a: r.a, x: r.sx, ox: r.ox, ux: r.ux, hd: 0, adj: 0, v: r.v, tr: r.tr, rk: r.rk}));
     note = `<b>LightGBM (shadow):</b> the challenger model's own picks, graded on the official model's PrizePicks lines.`;
   } else if (ud) {
     const n = t => DATA.picks.filter(p => p.t === t).length;

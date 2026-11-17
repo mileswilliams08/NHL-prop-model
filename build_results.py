@@ -111,7 +111,7 @@ def tier_lookup():
     try:
         for (d, gid, pid, cat), (pk, _) in movement._earliest_picks().items():
             if pk.get("tier"):
-                out[(d, gid, pid)] = pk["tier"]
+                out[(d, gid, pid)] = (pk["tier"], pk.get("tier_rank") or "")
     except Exception as e:
         print(f"tier lookup from snapshots failed: {e!r}")
     _TIER_CACHE["ranks"] = pairs.pregame_ranks()
@@ -120,19 +120,29 @@ def tier_lookup():
     return out
 
 
-def tier_for(d, gid, pid, cat):
-    """Tier label for one graded row; "Goalie" for saves, "" when unknown."""
+def tier_info(d, gid, pid, cat):
+    """(tier label, exact rank like "F3" / "D5") for one graded row; ("Goalie", "") for saves, ("", "") unknown."""
     if cat == "saves":
-        return "Goalie"
+        return "Goalie", ""
     try:
         gid, pid = str(int(float(gid))), str(int(float(pid)))
     except (TypeError, ValueError):
-        return ""
+        return "", ""
     t = tier_lookup().get((str(d), gid, pid))
-    if t:
-        return t
     rk = _TIER_CACHE["ranks"].get((gid, pid))
-    return _TIER_CACHE["tier"](rk[0], int(rk[1:])) if rk else ""
+    if t:
+        return t[0], t[1] or rk or ""
+    return (_TIER_CACHE["tier"](rk[0], int(rk[1:])), rk) if rk else ("", "")
+
+
+def tier_fields(d, gid, pid, cat):
+    """{"tr": tier, "rk": rank} for a results row (Tier filter / rank breakdown on the Results page)."""
+    t, r = tier_info(d, gid, pid, cat)
+    return {"tr": t, "rk": r}
+
+
+def tier_for(d, gid, pid, cat):
+    return tier_info(d, gid, pid, cat)[0]
 
 
 def build_shadow(graded, k):
@@ -152,7 +162,7 @@ def build_shadow(graded, k):
                     "ss": sh["side"], "sx": sx, "sp": round(0.5 + k * (sh["prob"] - 0.5), 4), "spr": sh["prob"],
                     "sm": sh["mean"], "ox": {"hit": "h", "miss": "m", "push": "p"}.get(r.blind_over, "p"),
                     "ux": {"hit": "h", "miss": "m", "push": "p"}.get(r.blind_under, "p"), "v": sh.get("model"),
-                    "tr": tier_for(key[0], key[1], key[2], key[3])})
+                    **tier_fields(key[0], key[1], key[2], key[3])})
     if out:
         dec = [o for o in out if o["x"] != "p"]
         cur = sum(o["x"] == "h" for o in dec) / max(1, len(dec))
@@ -244,7 +254,7 @@ def build_underdog(cfg):
               "ux": code[r.blind_under], "hd": 1 if r.headline else 0, "adj": 0, "v": r.model_version,
               "t": r.line_type, "mu": None if pd.isna(r.mult) else round(float(r.mult), 3),
               "sd": "" if pd.isna(r.sides) else str(r.sides),
-              "tr": tier_for(r.game_date, r.nhl_game_id, r.nhl_id, r.category)}
+              **tier_fields(r.game_date, r.nhl_game_id, r.nhl_id, r.category)}
              for r in df.itertuples()]
     write_json(out, base | {"picks": picks, "voids": voids, "excluded": n_ex})
     print(f"results_underdog.json: {len(picks)} graded picks ({voids} voids, {n_ex} excluded not shown)")
@@ -330,7 +340,7 @@ def main():
               "l": r.line, "m": round(r.model_mean, 3), "s": r.side, "p": round(0.5 + k_used * (r.prob - 0.5), 4), "pr": round(r.prob, 4),
               "a": round(float(r.actual), 2), "x": code[r.result], "ox": code[r.blind_over], "ux": code[r.blind_under],
               "hd": 1 if r.headline else 0, "adj": 1 if str(r.adjusted_odds).lower() == "true" else 0,
-              "v": r.model_version, "tr": tier_for(r.game_date, r.nhl_game_id, r.nhl_id, r.category)}
+              "v": r.model_version, **tier_fields(r.game_date, r.nhl_game_id, r.nhl_id, r.category)}
              for r in df.itertuples()] + cpicks
     for m in moves:   # line-movement / closing-line rows get the same tier label
         m["tr"] = tier_for(m["d"], m.get("g"), m.get("id"), m["c"])
