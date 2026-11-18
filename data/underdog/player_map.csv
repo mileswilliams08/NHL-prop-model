@@ -82,7 +82,7 @@ ud:368593dc-f3d4-4748-acf7-346b80bf78e0,Brock Nelson,COL,,8475754,Brock Nelson,e
 ud:db77b9cd-1212-4871-948f-9bd16db85139,Devon Toews,COL,,8478038,Devon Toews,exact,2026-11-14,2026-11-18
 ud:60d200c4-d0cc-4aa9-ace6-083eab603383,Gabriel Landeskog,COL,,8476455,Gabriel Landeskog,exact,2026-11-14,2026-11-18
 ud:81aff1fb-6355-4331-9ab4-0783f0bcc1f1,Jaden Schwartz,COL,,8475768,Jaden Schwartz,exact,2026-11-14,2026-11-18
-ud:a86f4317-3468-4ffe-85db-b6447d52ea20,Mackenzie Blackwood,COL,G,8478406,Mackenzie Blackwood,exact,2026-11-14,2026-11-14
+ud:a86f4317-3468-4ffe-85db-b6447d52ea20,Mackenzie Blackwood,COL,G,8478406,Mackenzie Blackwood,exact,2026-11-14,2026-11-18
 ud:e1f28393-be05-4bc9-afd1-13048e3b9d83,Martin Necas,COL,,8480039,Martin Necas,exact,2026-11-14,2026-11-18
 ud:977357ad-a9b5-4082-89b9-a799c794094b,Nazem Kadri,COL,,8475172,Nazem Kadri,exact,2026-11-14,2026-11-18
 ud:4e8e3ef3-23dd-4aec-beff-5ba4f44d3f7f,Sam Malinski,COL,,8484258,Sam Malinski,exact,2026-11-14,2026-11-18
@@ -167,7 +167,7 @@ ud:d2bf4b0f-992f-437f-9e35-cfd5483d49f6,Alex Newhook,MTL,,8481618,Alex Newhook,e
 ud:5273d1fb-15fe-4de7-be28-7b1c170f0c22,Alexandre Carrier,MTL,,8478851,Alexandre Carrier,exact,2026-11-14,2026-11-18
 ud:20bc1c94-67e0-4a51-b7e4-24abdfdd4d63,Alexandre Texier,MTL,,8480074,Alexandre Texier,exact,2026-11-14,2026-11-18
 ud:5ca1a296-9a94-482a-93f8-561315e37230,Cole Caufield,MTL,,8481540,Cole Caufield,exact,2026-11-14,2026-11-18
-ud:5bcfa21a-0a8d-4dc0-9786-b7c31865dfb8,Jacob Fowler,MTL,G,8484170,Jacob Fowler,exact,2026-11-16,2026-11-16
+ud:5bcfa21a-0a8d-4dc0-9786-b7c31865dfb8,Jacob Fowler,MTL,G,8484170,Jacob Fowler,exact,2026-11-16,2026-11-18
 ud:d9cf98d9-fe00-4b3b-a8ea-01f89da7ae22,Jakub Dobes,MTL,G,8482487,Jakub Dobes,exact,2026-11-14,2026-11-14
 ud:739c21d6-3340-427d-9a76-8b933d0c8c6a,Juraj Slafkovský,MTL,,8483515,Juraj Slafkovský,exact,2026-11-14,2026-11-18
 ud:715d03a8-17e3-4952-a901-1263b44006ea,Kaiden Guhle,MTL,,8482087,Kaiden Guhle,exact,2026-11-14,2026-11-18
@@ -327,6 +327,7 @@ ud:db5da7a2-a438-45da-bcc9-33c335c6cb30,Logan Cooley,UTA,,8483431,Logan Cooley,e
 ud:132a2e42-3e9b-4f6d-beda-089df879f758,MacKenzie Weegar,UTA,,8477346,MacKenzie Weegar,exact,2026-11-14,2026-11-18
 ud:ac862f43-2775-468b-b21a-2827e63c0480,Michael Carcone,UTA,,8479619,Michael Carcone,exact,2026-11-14,2026-11-18
 ud:b194a4f1-1751-43fc-94aa-76f54987e003,Mikhail Sergachev,UTA,,8479410,Mikhail Sergachev,exact,2026-11-14,2026-11-18
+ud:56e22044-6b25-4ede-95c4-cece76a61d75,Sebastian Cossa,UTA,G,8482657,Sebastian Cossa,exact,2026-11-18,2026-11-18
 ud:be33e229-b055-48f1-bf3c-729c02597909,Vincent Trocheck,UTA,,8476389,Vincent Trocheck,exact,2026-11-14,2026-11-18
 ud:86eff8b4-c7f6-41b8-aa7a-1d03c39c9c24,Brock Boeser,VAN,,8478444,Brock Boeser,exact,2026-11-15,2026-11-16
 ud:d27de586-24cd-4090-981f-9127338e3b5b,Elias Pettersson,VAN,,,,ambiguous,2026-11-15,2026-11-16
