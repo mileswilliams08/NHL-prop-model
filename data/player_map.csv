@@ -52,7 +52,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 348308,Olen Zellweger,BUF,D,8482803,Olen Zellweger,exact,2026-10-29,2026-11-12
 92131,Owen Power,BUF,D,8482671,Owen Power,exact,2026-10-17,2026-11-12
 175663,Peyton Krebs,BUF,F,8481522,Peyton Krebs,exact,2026-11-11,2026-11-17
-218218,Rasmus Dahlin,BUF,D,8480839,Rasmus Dahlin,exact,2026-10-24,2026-11-17
+218218,Rasmus Dahlin,BUF,D,8480839,Rasmus Dahlin,exact,2026-10-24,2026-11-18
 215149,Ryan McLeod,BUF,F,8480802,Ryan McLeod,exact,2026-10-21,2026-10-27
 218270,Tage Thompson,BUF,F,8479420,Tage Thompson,exact,2026-10-17,2026-11-17
 268825,Tyson Kozak,BUF,F,8482896,Tyson Kozak,exact,2026-10-24,2026-11-11
@@ -133,7 +133,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 216400,Tyler Bertuzzi,CHI,F,8477479,Tyler Bertuzzi,exact,2026-10-17,2026-11-14
 218699,Wyatt Kaiser,CHI,D,8482176,Wyatt Kaiser,exact,2026-10-17,2026-11-05
 218244,Artturi Lehkonen,COL,F,8477476,Artturi Lehkonen,exact,2026-10-20,2026-11-18
-268525,Brent Burns,COL,D,8470613,Brent Burns,exact,2026-10-31,2026-11-14
+268525,Brent Burns,COL,D,8470613,Brent Burns,exact,2026-10-31,2026-11-18
 303277,Brett Kulak,COL,D,8476967,Brett Kulak,exact,2026-10-28,2026-11-03
 231244,Brock Nelson,COL,F,8475754,Brock Nelson,exact,2026-10-20,2026-11-18
 218286,Cale Makar,COL,D,8480069,Cale Makar,exact,2026-10-18,2026-11-12
@@ -575,7 +575,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 282922,Elias Salomonsson,WPG,D,8483510,Elias Salomonsson,exact,2026-10-30,2026-11-05
 218264,Gabriel Vilardi,WPG,F,8480014,Gabriel Vilardi,exact,2026-10-17,2026-11-17
 218262,Josh Morrissey,WPG,D,8477504,Josh Morrissey,exact,2026-11-10,2026-11-17
-218261,Kyle Connor,WPG,F,8478398,Kyle Connor,exact,2026-10-17,2026-11-17
+218261,Kyle Connor,WPG,F,8478398,Kyle Connor,exact,2026-10-17,2026-11-18
 348323,Mario Ferraro,WPG,D,8479983,Mario Ferraro,exact,2026-10-17,2026-11-10
 218324,Mark Scheifele,WPG,F,8476460,Mark Scheifele,exact,2026-10-17,2026-11-17
 87697,Morgan Barron,WPG,F,8480289,Morgan Barron,exact,2026-10-27,2026-11-03
