@@ -1,7 +1,7 @@
 pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 leg|Cutter Gauthier|ANA,Cutter Gauthier,ANA,,8483445,Cutter Gauthier,exact,2026-11-15,2026-11-15
 leg|Ville Husso|ANA,Ville Husso,ANA,G,8478024,Ville Husso,exact,2026-11-15,2026-11-15
-leg|David Pastrnak|BOS,David Pastrnak,BOS,,8477956,David Pastrnak,exact,2026-11-14,2026-11-14
+leg|David Pastrnak|BOS,David Pastrnak,BOS,,8477956,David Pastrnak,exact,2026-11-14,2026-11-18
 leg|Jeremy Swayman|BOS,Jeremy Swayman,BOS,G,8480280,Jeremy Swayman,exact,2026-11-14,2026-11-14
 leg|Michael DiPietro|BOS,Michael DiPietro,BOS,G,8480022,Michael DiPietro,exact,2026-11-17,2026-11-17
 leg|Alex Lyon|BUF,Alex Lyon,BUF,G,8479312,Alex Lyon,exact,2026-11-14,2026-11-17
@@ -13,10 +13,13 @@ leg|Devin Cooley|CGY,Devin Cooley,CGY,G,8482445,Devin Cooley,exact,2026-11-15,20
 leg|Dustin Wolf|CGY,Dustin Wolf,CGY,G,8481692,Dustin Wolf,exact,2026-11-17,2026-11-17
 leg|Spencer Knight|CHI,Spencer Knight,CHI,G,8481519,Spencer Knight,exact,2026-11-17,2026-11-17
 leg|Mackenzie Blackwood|COL,Mackenzie Blackwood,COL,G,8478406,Mackenzie Blackwood,exact,2026-11-14,2026-11-14
+leg|Martin Necas|COL,Martin Necas,COL,,8480039,Martin Necas,exact,2026-11-18,2026-11-18
 leg|Casey DeSmith|DAL,Casey DeSmith,DAL,G,8479193,Casey DeSmith,exact,2026-11-15,2026-11-15
 leg|Jake Oettinger|DAL,Jake Oettinger,DAL,G,8479979,Jake Oettinger,exact,2026-11-14,2026-11-17
 leg|Jason Robertson|DAL,Jason Robertson,DAL,,8480027,Jason Robertson,exact,2026-11-14,2026-11-15
+leg|Alex DeBrincat|DET,Alex DeBrincat,DET,,8479337,Alex DeBrincat,exact,2026-11-18,2026-11-18
 leg|Daniil Tarasov|DET,Daniil Tarasov,DET,G,8480193,Daniil Tarasov,exact,2026-11-14,2026-11-14
+leg|Viktor Arvidsson|DET,Viktor Arvidsson,DET,,8478042,Viktor Arvidsson,exact,2026-11-18,2026-11-18
 leg|Devon Levi|EDM,Devon Levi,EDM,G,8482221,Devon Levi,exact,2026-11-14,2026-11-17
 leg|Leon Draisaitl|EDM,Leon Draisaitl,EDM,,8477934,Leon Draisaitl,exact,2026-11-15,2026-11-15
 leg|Tristan Jarry|EDM,Tristan Jarry,EDM,G,8477465,Tristan Jarry,exact,2026-11-15,2026-11-15
@@ -31,8 +34,8 @@ leg|Cole Caufield|MTL,Cole Caufield,MTL,,8481540,Cole Caufield,exact,2026-11-14,
 leg|Jacob Fowler|MTL,Jacob Fowler,MTL,G,8484170,Jacob Fowler,exact,2026-11-16,2026-11-16
 leg|Jakub Dobes|MTL,Jakub Dobes,MTL,G,8482487,Jakub Dobes,exact,2026-11-14,2026-11-14
 leg|Connor Hellebuyck|NJ,Connor Hellebuyck,NJ,G,8476945,Connor Hellebuyck,exact,2026-11-14,2026-11-14
-leg|Jack Hughes|NJ,Jack Hughes,NJ,,8481559,Jack Hughes,exact,2026-11-14,2026-11-14
-leg|Timo Meier|NJ,Timo Meier,NJ,,8478414,Timo Meier,exact,2026-11-14,2026-11-14
+leg|Jack Hughes|NJ,Jack Hughes,NJ,,8481559,Jack Hughes,exact,2026-11-14,2026-11-18
+leg|Timo Meier|NJ,Timo Meier,NJ,,8478414,Timo Meier,exact,2026-11-14,2026-11-18
 leg|Filip Forsberg|NSH,Filip Forsberg,NSH,,8476887,Filip Forsberg,exact,2026-11-15,2026-11-15
 leg|Ilya Sorokin|NYI,Ilya Sorokin,NYI,G,8478009,Ilya Sorokin,exact,2026-11-17,2026-11-17
 leg|Joonas Korpisalo|NYR,Joonas Korpisalo,NYR,G,8476914,Joonas Korpisalo,exact,2026-11-16,2026-11-16
