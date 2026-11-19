@@ -1,7 +1,7 @@
 pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 348910,A.J. Greer,ANA,F,8478421,A.J. Greer,exact,2026-10-20,2026-11-03
 218287,Alex Killorn,ANA,F,8473986,Alex Killorn,exact,2026-10-20,2026-11-15
-268295,Beckett Sennecke,ANA,F,8484762,Beckett Sennecke,exact,2026-10-19,2026-11-17
+268295,Beckett Sennecke,ANA,F,8484762,Beckett Sennecke,exact,2026-10-19,2026-11-19
 215935,Cutter Gauthier,ANA,F,8483445,Cutter Gauthier,exact,2026-10-19,2026-11-19
 272312,Drew Helleson,ANA,D,8481563,Drew Helleson,exact,2026-11-05,2026-11-15
 218355,Jackson LaCombe,ANA,D,8481605,Jackson LaCombe,exact,2026-10-19,2026-11-19
@@ -9,7 +9,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 349006,Judd Caulfield,ANA,F,8481538,Judd Caulfield,exact,2026-10-27,2026-11-19
 360351,Laurent Brossoit,ANA,G,8476316,Laurent Brossoit,exact,2026-11-01,2026-11-12
 173423,Leo Carlsson,ANA,F,8484153,Leo Carlsson,exact,2026-10-19,2026-11-15
-218441,Lukas Dostal,ANA,G,8480843,Lukas Dostal,exact,2026-10-20,2026-11-06
+218441,Lukas Dostal,ANA,G,8480843,Lukas Dostal,exact,2026-10-20,2026-11-19
 267739,Mikael Granlund,ANA,F,8475798,Mikael Granlund,exact,2026-10-19,2026-11-19
 268892,Nikita Nesterenko,ANA,F,8481754,Nikita Nesterenko,exact,2026-10-27,2026-11-19
 348960,Noah Warren,ANA,D,8483521,Noah Warren,exact,2026-11-17,2026-11-17
@@ -155,7 +155,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 216027,Casey DeSmith,DAL,G,8479193,Casey DeSmith,exact,2026-10-27,2026-11-15
 268013,Colin Blackwell,DAL,F,8476278,Colin Blackwell,exact,2026-10-25,2026-11-17
 218700,Esa Lindell,DAL,D,8476902,Esa Lindell,exact,2026-10-17,2026-11-19
-218688,Jake Oettinger,DAL,G,8479979,Jake Oettinger,exact,2026-10-17,2026-11-17
+218688,Jake Oettinger,DAL,G,8479979,Jake Oettinger,exact,2026-10-17,2026-11-19
 58486,Jamie Benn,DAL,F,8473994,Jamie Benn,exact,2026-11-05,2026-11-15
 218696,Jason Robertson,DAL,F,8480027,Jason Robertson,exact,2026-10-17,2026-11-17
 64471,Joel Kiviranta,DAL,F,8481641,Joel Kiviranta,exact,2026-10-27,2026-10-27
@@ -164,7 +164,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 230680,Mikko Rantanen,DAL,F,8478420,Mikko Rantanen,exact,2026-10-17,2026-11-19
 58482,Miro Heiskanen,DAL,D,8480036,Miro Heiskanen,exact,2026-10-19,2026-11-19
 58673,Radek Faksa,DAL,F,8476889,Radek Faksa,exact,2026-11-17,2026-11-19
-58484,Roope Hintz,DAL,F,8478449,Roope Hintz,exact,2026-10-17,2026-11-15
+58484,Roope Hintz,DAL,F,8478449,Roope Hintz,exact,2026-10-17,2026-11-19
 140703,Thomas Harley,DAL,D,8481581,Thomas Harley,exact,2026-10-17,2026-11-19
 305576,Tyler Myers,DAL,D,8474574,Tyler Myers,exact,2026-10-27,2026-10-27
 58488,Tyler Seguin,DAL,F,8475794,Tyler Seguin,exact,2026-10-20,2026-11-19
@@ -197,7 +197,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 57828,Leon Draisaitl,EDM,F,8477934,Leon Draisaitl,exact,2026-10-17,2026-11-19
 348257,Mathieu Joseph,EDM,F,8478472,Mathieu Joseph,exact,2026-10-24,2026-11-09
 360349,Matt Tomkins,EDM,G,8477035,Matt Tomkins,exact,2026-11-01,2026-11-05
-125451,Mattias Ekholm,EDM,D,8475218,Mattias Ekholm,exact,2026-10-20,2026-11-17
+125451,Mattias Ekholm,EDM,D,8475218,Mattias Ekholm,exact,2026-10-20,2026-11-19
 286720,Max Jones,EDM,F,8479368,Max Jones,exact,2026-11-09,2026-11-19
 58026,Ryan Nugent-Hopkins,EDM,F,8476454,Ryan Nugent-Hopkins,exact,2026-10-22,2026-11-14
 348258,Ryan Shea,EDM,D,8478854,Ryan Shea,exact,2026-10-26,2026-11-17
@@ -230,14 +230,14 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 221574,Brandt Clarke,LA,D,8482730,Brandt Clarke,exact,2026-10-22,2026-11-19
 272315,Cody Ceci,LA,D,8476879,Cody Ceci,exact,2026-11-17,2026-11-17
 267800,Corey Perry,LA,F,8470621,Corey Perry,exact,2026-11-04,2026-11-10
-218122,Darcy Kuemper,LA,G,8475311,Darcy Kuemper,exact,2026-10-20,2026-11-17
+218122,Darcy Kuemper,LA,G,8475311,Darcy Kuemper,exact,2026-10-20,2026-11-19
 57763,Drew Doughty,LA,D,8474563,Drew Doughty,exact,2026-10-20,2026-11-19
 348294,Erik Gustafsson,LA,D,8476979,Erik Gustafsson,exact,2026-10-26,2026-11-10
 348295,Erik Haula,LA,F,8475287,Erik Haula,exact,2026-10-20,2026-11-17
 217672,Joel Edmundson,LA,D,8476441,Joel Edmundson,exact,2026-10-22,2026-11-04
 86990,Kevin Fiala,LA,F,8477942,Kevin Fiala,exact,2026-11-12,2026-11-14
 348297,Mats Zuccarello,LA,F,8475692,Mats Zuccarello,exact,2026-10-22,2026-11-17
-59496,Mikey Anderson,LA,D,8479998,Mikey Anderson,exact,2026-10-24,2026-11-14
+59496,Mikey Anderson,LA,D,8479998,Mikey Anderson,exact,2026-10-24,2026-11-19
 86998,Quinton Byfield,LA,F,8482124,Quinton Byfield,exact,2026-10-17,2026-11-19
 267635,Samuel Helenius,LA,F,8482726,Samuel Helenius,exact,2026-10-20,2026-11-19
 305206,Scott Laughton,LA,F,8476872,Scott Laughton,exact,2026-10-26,2026-11-17
@@ -261,8 +261,8 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 58157,Ryan Hartman,MIN,F,8477451,Ryan Hartman,exact,2026-10-20,2026-11-17
 271547,Tyler Pitlick,MIN,F,8475752,Tyler Pitlick,exact,2026-11-07,2026-11-07
 226491,Yakov Trenin,MIN,F,8478508,Yakov Trenin,exact,2026-10-18,2026-11-19
-171835,Alex Newhook,MTL,F,8481618,Alex Newhook,exact,2026-10-17,2026-11-16
-267913,Alexandre Carrier,MTL,D,8478851,Alexandre Carrier,exact,2026-10-23,2026-11-14
+171835,Alex Newhook,MTL,F,8481618,Alex Newhook,exact,2026-10-17,2026-11-19
+267913,Alexandre Carrier,MTL,D,8478851,Alexandre Carrier,exact,2026-10-23,2026-11-19
 282765,Alexandre Texier,MTL,F,8480074,Alexandre Texier,exact,2026-10-20,2026-11-18
 218293,Arber Xhekaj,MTL,D,8482964,Arber Xhekaj,exact,2026-11-12,2026-11-19
 348177,Chris Kreider,MTL,F,8475184,Chris Kreider,exact,2026-10-20,2026-10-23
@@ -276,7 +276,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218267,Lane Hutson,MTL,D,8483457,Lane Hutson,exact,2026-10-17,2026-11-19
 218353,Mike Matheson,MTL,D,8476875,Mike Matheson,exact,2026-10-17,2026-11-14
 218322,Nick Suzuki,MTL,F,8480018,Nick Suzuki,exact,2026-10-17,2026-11-19
-267670,Noah Dobson,MTL,D,8480865,Noah Dobson,exact,2026-10-17,2026-11-18
+267670,Noah Dobson,MTL,D,8480865,Noah Dobson,exact,2026-10-17,2026-11-19
 267671,Oliver Kapanen,MTL,F,8482775,Oliver Kapanen,exact,2026-10-27,2026-10-27
 287948,Phillip Danault,MTL,F,8476479,Phillip Danault,exact,2026-11-10,2026-11-18
 267720,Zachary Bolduc,MTL,F,8482737,Zachary Bolduc,exact,2026-10-27,2026-11-19
@@ -379,7 +379,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 354435,Cole Knuble,PHI,F,8483787,Cole Knuble,exact,2026-10-24,2026-10-24
 272084,Dan Vladar,PHI,G,8478435,Dan Vladar,exact,2026-10-17,2026-11-15
 287617,Denver Barkey,PHI,F,8484142,Denver Barkey,exact,2026-11-17,2026-11-17
-185311,Jamie Drysdale,PHI,D,8482142,Jamie Drysdale,exact,2026-10-17,2026-11-17
+185311,Jamie Drysdale,PHI,D,8482142,Jamie Drysdale,exact,2026-10-17,2026-11-19
 349247,Joseph Woll,PHI,G,8479361,Joseph Woll,exact,2026-10-19,2026-11-19
 218271,Matvei Michkov,PHI,F,8484387,Matvei Michkov,exact,2026-10-17,2026-11-19
 349872,Michael Bunting,PHI,F,8478047,Michael Bunting,exact,2026-11-19,2026-11-19
@@ -475,7 +475,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218705,Anthony Cirelli,TB,F,8478519,Anthony Cirelli,exact,2026-10-17,2026-11-19
 218695,Brandon Hagel,TB,F,8479542,Brandon Hagel,exact,2026-10-17,2026-11-17
 57951,Brayden Point,TB,F,8478010,Brayden Point,exact,2026-10-17,2026-11-08
-273511,Charle-Edouard D'Astous,TB,D,8480426,Charle-Edouard D'Astous,exact,2026-10-29,2026-11-14
+273511,Charle-Edouard D'Astous,TB,D,8480426,Charle-Edouard D'Astous,exact,2026-10-29,2026-11-19
 222723,Conor Geekie,TB,F,8483447,Conor Geekie,exact,2026-11-05,2026-11-17
 350062,Dennis Hildeby,TB,G,8483710,Dennis Hildeby,exact,2026-11-07,2026-11-07
 184433,Emil Lilleberg,TB,D,8482929,Emil Lilleberg,exact,2026-10-29,2026-11-03
@@ -538,9 +538,9 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 360790,Jacob Quillan,VAN,F,8484901,Jacob Quillan,exact,2026-11-15,2026-11-19
 215519,Jake DeBrusk,VAN,F,8478498,Jake DeBrusk,exact,2026-10-17,2026-11-19
 348256,Jamie Oleksiak,VAN,D,8476467,Jamie Oleksiak,exact,2026-10-17,2026-11-16
-219459,Jonathan Lekkerimäki,VAN,F,8483476,Jonathan Lekkerimäki,exact,2026-10-17,2026-11-15
+219459,Jonathan Lekkerimäki,VAN,F,8483476,Jonathan Lekkerimäki,exact,2026-10-17,2026-11-19
 218715,Kevin Lankinen,VAN,G,8480947,Kevin Lankinen,exact,2026-10-30,2026-11-15
-349287,Leevi Meriläinen,VAN,G,8482447,Leevi Meriläinen,exact,2026-10-20,2026-11-13
+349287,Leevi Meriläinen,VAN,G,8482447,Leevi Meriläinen,exact,2026-10-20,2026-11-19
 286558,Liam Ohgren,VAN,F,8483499,Liam Ohgren,exact,2026-11-09,2026-11-16
 268365,Linus Karlsson,VAN,F,8481024,Linus Karlsson,exact,2026-10-20,2026-11-09
 60583,Luke Schenn,VAN,D,8474568,Luke Schenn,exact,2026-10-20,2026-11-16
@@ -576,7 +576,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 89328,Cole Perfetti,WPG,F,8482149,Cole Perfetti,exact,2026-10-20,2026-11-19
 357294,Dawson Mercer,WPG,F,,,conflict(8482110),2026-10-27,2026-11-17
 62488,Dylan DeMelo,WPG,D,8476331,Dylan DeMelo,exact,2026-10-17,2026-11-10
-93174,Dylan Samberg,WPG,D,8480049,Dylan Samberg,exact,2026-10-20,2026-11-14
+93174,Dylan Samberg,WPG,D,8480049,Dylan Samberg,exact,2026-10-20,2026-11-19
 282922,Elias Salomonsson,WPG,D,8483510,Elias Salomonsson,exact,2026-10-30,2026-11-05
 218264,Gabriel Vilardi,WPG,F,8480014,Gabriel Vilardi,exact,2026-10-17,2026-11-19
 218262,Josh Morrissey,WPG,D,8477504,Josh Morrissey,exact,2026-11-10,2026-11-19
