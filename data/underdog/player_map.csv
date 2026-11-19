@@ -53,7 +53,7 @@ ud:dc891149-b8c5-47e7-ba34-1433c6029c54,Shayne Gostisbehere,CAR,,8476906,Shayne 
 ud:7e2966e7-bcb7-4c11-9739-5ac030600724,Taylor Hall,CAR,,8475791,Taylor Hall,exact,2026-11-19,2026-11-19
 ud:aa5bbb3c-e931-4b9f-a111-f53380a81b17,William Carrier,CAR,,8477478,William Carrier,exact,2026-11-19,2026-11-19
 ud:b107278a-ccef-4852-bca2-e1a515c54b12,Adam Fantilli,CBJ,,8484166,Adam Fantilli,exact,2026-11-14,2026-11-19
-ud:b398ee0d-dffd-4d45-a127-b9d799aba5d0,Cam Talbot,CBJ,G,8475660,Cam Talbot,exact,2026-11-17,2026-11-17
+ud:b398ee0d-dffd-4d45-a127-b9d799aba5d0,Cam Talbot,CBJ,G,8475660,Cam Talbot,exact,2026-11-17,2026-11-19
 ud:b1496112-2e12-4779-a187-a01cb0ff4f76,Charlie Coyle,CBJ,,8475745,Charlie Coyle,exact,2026-11-14,2026-11-19
 ud:615f3248-8651-47fc-8ad0-70432321e05f,Cole Sillinger,CBJ,,8482705,Cole Sillinger,exact,2026-11-14,2026-11-19
 ud:e712bc1e-9c94-4edc-aec4-ef8bdfa11313,Dmitri Voronkov,CBJ,,8481716,Dmitri Voronkov,exact,2026-11-14,2026-11-19
@@ -66,10 +66,10 @@ ud:0f54dd76-0591-459e-ab98-dcdd5ca82d11,Matthew Knies,CBJ,,8482720,Matthew Knies
 ud:465cb1fc-d87f-4827-98f6-c7dd35d23f0b,Valeri Nichushkin,CBJ,,8477501,Valeri Nichushkin,exact,2026-11-14,2026-11-19
 ud:5fc21cd1-fd44-4093-8197-6a2bc0542c32,Zach Werenski,CBJ,,8478460,Zach Werenski,exact,2026-11-14,2026-11-19
 ud:019a391c-aace-4f42-b031-af310d902843,Adam Klapka,CGY,,8483609,Adam Klapka,exact,2026-11-15,2026-11-19
-ud:3ea1e191-f576-4534-b578-24be4791f6e3,Aydar Suniev,CGY,,8484234,Aydar Suniev,exact,2026-11-17,2026-11-17
+ud:3ea1e191-f576-4534-b578-24be4791f6e3,Aydar Suniev,CGY,,8484234,Aydar Suniev,exact,2026-11-17,2026-11-19
 ud:c7834b61-7f57-459b-a1d3-98400cdd3463,Devin Cooley,CGY,G,8482445,Devin Cooley,exact,2026-11-15,2026-11-15
-ud:7b15a71b-5bbf-4a25-9a4a-21ad947d2e37,Dustin Wolf,CGY,G,8481692,Dustin Wolf,exact,2026-11-14,2026-11-17
-ud:636eaa1b-e2d3-4614-937d-bdcbd8d65eb3,Jacob Middleton,CGY,,8478136,Jake Middleton,lastname,2026-11-14,2026-11-17
+ud:7b15a71b-5bbf-4a25-9a4a-21ad947d2e37,Dustin Wolf,CGY,G,8481692,Dustin Wolf,exact,2026-11-14,2026-11-19
+ud:636eaa1b-e2d3-4614-937d-bdcbd8d65eb3,Jacob Middleton,CGY,,8478136,Jake Middleton,lastname,2026-11-14,2026-11-19
 ud:3d7121e1-8a9c-4515-b6ab-900bbedc9823,Joel Farabee,CGY,,8480797,Joel Farabee,exact,2026-11-14,2026-11-19
 ud:a86fd1fb-44fb-44f4-ad69-865b5e37b65f,Joel Hanley,CGY,,8477810,Joel Hanley,exact,2026-11-14,2026-11-14
 ud:87637b2a-3196-4358-b104-1ebf0dde85cb,Jonathan Castagna,CGY,,8484154,Jonathan Castagna,exact,2026-11-15,2026-11-15
@@ -104,6 +104,7 @@ ud:a86f4317-3468-4ffe-85db-b6447d52ea20,Mackenzie Blackwood,COL,G,8478406,Macken
 ud:e1f28393-be05-4bc9-afd1-13048e3b9d83,Martin Necas,COL,,8480039,Martin Necas,exact,2026-11-14,2026-11-19
 ud:977357ad-a9b5-4082-89b9-a799c794094b,Nazem Kadri,COL,,8475172,Nazem Kadri,exact,2026-11-14,2026-11-19
 ud:4e8e3ef3-23dd-4aec-beff-5ba4f44d3f7f,Sam Malinski,COL,,8484258,Sam Malinski,exact,2026-11-14,2026-11-19
+ud:b7d1d221-12fa-44cf-8fae-41c2d1045937,Scott Wedgewood,COL,G,8475809,Scott Wedgewood,exact,2026-11-19,2026-11-19
 ud:4fddaccc-1847-45a2-baa7-b8ea4abc37fa,T.J. Hughes,COL,,8486171,T.J. Hughes,exact,2026-11-14,2026-11-19
 ud:f5582e2e-73b4-4943-bf78-45d1dea5ba78,Arttu Hyry,DAL,,8484938,Arttu Hyry,exact,2026-11-14,2026-11-19
 ud:7e12db37-e745-43c4-a237-9ac89f5ab4bb,Casey DeSmith,DAL,G,8479193,Casey DeSmith,exact,2026-11-15,2026-11-15
@@ -133,7 +134,7 @@ ud:f789da62-e10c-4c02-ac97-628712fa4cbe,Viktor Arvidsson,DET,,8478042,Viktor Arv
 ud:3c5af446-d528-4801-9112-5c59dd215ac2,Colton Dach,EDM,,8482703,Colton Dach,exact,2026-11-14,2026-11-19
 ud:d81ea5b3-9553-47fa-ac7f-fa68faf170a7,Connor McDavid,EDM,,8478402,Connor McDavid,exact,2026-11-14,2026-11-19
 ud:41f77780-fc2f-4a95-bf62-8cae9da78e31,Connor Murphy,EDM,,8476473,Connor Murphy,exact,2026-11-14,2026-11-17
-ud:25324f52-6c01-4351-8f2a-821abfabc9a3,Devon Levi,EDM,G,8482221,Devon Levi,exact,2026-11-14,2026-11-17
+ud:25324f52-6c01-4351-8f2a-821abfabc9a3,Devon Levi,EDM,G,8482221,Devon Levi,exact,2026-11-14,2026-11-19
 ud:9c34b168-1a29-4dd7-911a-be53eb23d22d,Evan Bouchard,EDM,,8480803,Evan Bouchard,exact,2026-11-14,2026-11-19
 ud:eca0a077-6aec-4052-a27a-ceae20a78fd1,Kasperi Kapanen,EDM,,8477953,Kasperi Kapanen,exact,2026-11-14,2026-11-19
 ud:79c9abb3-77fa-4c0d-9cea-5b9c8fcb457e,Leon Draisaitl,EDM,,8477934,Leon Draisaitl,exact,2026-11-14,2026-11-19
@@ -172,7 +173,7 @@ ud:778bc4c5-25f2-481d-b5ba-ae9bedd3c081,Bobby Brink,MIN,,8481553,Bobby Brink,exa
 ud:9d49d9d9-897b-457a-8764-8c415d6ec09d,Brock Faber,MIN,,8482122,Brock Faber,exact,2026-11-14,2026-11-19
 ud:df9b2a20-93cc-4f80-9252-97ccb0568dad,Danila Yurov,MIN,,8483525,Danila Yurov,exact,2026-11-17,2026-11-19
 ud:b0807437-c4c7-4ed6-b7e0-76b3f773573d,Jared Spurgeon,MIN,,8474716,Jared Spurgeon,exact,2026-11-14,2026-11-19
-ud:6860448a-757e-45c8-9694-e865940a5d3e,Jesper Wallstedt,MIN,G,8482661,Jesper Wallstedt,exact,2026-11-14,2026-11-17
+ud:6860448a-757e-45c8-9694-e865940a5d3e,Jesper Wallstedt,MIN,G,8482661,Jesper Wallstedt,exact,2026-11-14,2026-11-19
 ud:46d51ad1-2ef7-4815-8db9-8cd4542f1b57,Joel Eriksson Ek,MIN,,8478493,Joel Eriksson Ek,exact,2026-11-14,2026-11-19
 ud:877eaeda-3957-49f0-a26e-2183cc88a184,Jonas Brodin,MIN,,8476463,Jonas Brodin,exact,2026-11-14,2026-11-19
 ud:ce1926eb-2d38-48bc-89dd-e56f7954e1e9,Kirill Kaprizov,MIN,,8478864,Kirill Kaprizov,exact,2026-11-14,2026-11-19
@@ -186,7 +187,7 @@ ud:5273d1fb-15fe-4de7-be28-7b1c170f0c22,Alexandre Carrier,MTL,,8478851,Alexandre
 ud:20bc1c94-67e0-4a51-b7e4-24abdfdd4d63,Alexandre Texier,MTL,,8480074,Alexandre Texier,exact,2026-11-14,2026-11-19
 ud:5ca1a296-9a94-482a-93f8-561315e37230,Cole Caufield,MTL,,8481540,Cole Caufield,exact,2026-11-14,2026-11-19
 ud:5bcfa21a-0a8d-4dc0-9786-b7c31865dfb8,Jacob Fowler,MTL,G,8484170,Jacob Fowler,exact,2026-11-16,2026-11-18
-ud:d9cf98d9-fe00-4b3b-a8ea-01f89da7ae22,Jakub Dobes,MTL,G,8482487,Jakub Dobes,exact,2026-11-14,2026-11-14
+ud:d9cf98d9-fe00-4b3b-a8ea-01f89da7ae22,Jakub Dobes,MTL,G,8482487,Jakub Dobes,exact,2026-11-14,2026-11-19
 ud:739c21d6-3340-427d-9a76-8b933d0c8c6a,Juraj Slafkovský,MTL,,8483515,Juraj Slafkovský,exact,2026-11-14,2026-11-19
 ud:715d03a8-17e3-4952-a901-1263b44006ea,Kaiden Guhle,MTL,,8482087,Kaiden Guhle,exact,2026-11-14,2026-11-18
 ud:6414e950-cd1d-4858-8350-83d99240edcc,Lane Hutson,MTL,,8483457,Lane Hutson,exact,2026-11-14,2026-11-19
@@ -233,7 +234,7 @@ ud:a1c4be9e-a07a-4692-9cbd-ed6b1b4410f6,Mathew Barzal,NYI,,8478445,Mathew Barzal
 ud:3c49bef6-2831-4d02-b725-ef837489c533,Matias Maccelli,NYI,,8481711,Matias Maccelli,exact,2026-11-17,2026-11-17
 ud:916198d4-8115-4d85-a38b-fa7130fe82f9,Matthew Schaefer,NYI,,8485366,Matthew Schaefer,exact,2026-11-14,2026-11-19
 ud:da2c0e04-0cbd-43f3-ac68-323377195324,Ryan Pulock,NYI,,8477506,Ryan Pulock,exact,2026-11-17,2026-11-19
-ud:86a33e7d-c57e-4fd1-a422-9478ab4f7d97,Semyon Varlamov,NYI,G,8473575,Semyon Varlamov,exact,2026-11-14,2026-11-14
+ud:86a33e7d-c57e-4fd1-a422-9478ab4f7d97,Semyon Varlamov,NYI,G,8473575,Semyon Varlamov,exact,2026-11-14,2026-11-19
 ud:556cc956-ef69-4ef2-bb08-94a711017961,Simon Holmstrom,NYI,,8481601,Simon Holmstrom,exact,2026-11-14,2026-11-19
 ud:54665cbf-eff3-4392-aea9-45a926e2b8e2,Tony DeAngelo,NYI,,8477950,Tony DeAngelo,exact,2026-11-17,2026-11-17
 ud:f6bdded1-9d19-4c1a-8189-bc2f4fb05d8a,Victor Eklund,NYI,,8485388,Victor Eklund,exact,2026-11-14,2026-11-19
@@ -266,7 +267,7 @@ ud:f746ad38-c12a-42f2-9d01-234035897c73,Christian Dvorak,PHI,,8477989,Christian 
 ud:e7ab1cc3-cbb9-4b5a-8dc8-36c8e00cd391,Dan Vladar,PHI,G,8478435,Dan Vladar,exact,2026-11-15,2026-11-15
 ud:29a70fef-1c9b-446b-b22f-ce6a4ef9a393,Denver Barkey,PHI,,8484142,Denver Barkey,exact,2026-11-17,2026-11-17
 ud:f28f8a20-403c-423b-a7e1-60e569a4b5cb,Jamie Drysdale,PHI,,8482142,Jamie Drysdale,exact,2026-11-14,2026-11-17
-ud:2ea0f036-8ad3-4759-9f70-b7097f6af13c,Joseph Woll,PHI,G,8479361,Joseph Woll,exact,2026-11-14,2026-11-17
+ud:2ea0f036-8ad3-4759-9f70-b7097f6af13c,Joseph Woll,PHI,G,8479361,Joseph Woll,exact,2026-11-14,2026-11-19
 ud:9ffb9a75-b38a-406c-a7c2-46eb777b7f1f,Matvei Michkov,PHI,,8484387,Matvei Michkov,exact,2026-11-14,2026-11-19
 ud:7ea4d383-f006-4c8c-aab9-e17a9ff77ee5,Nick Seeler,PHI,,8476372,Nick Seeler,exact,2026-11-14,2026-11-17
 ud:950253ec-1b9a-442d-b258-644bcda22ee9,Noah Cates,PHI,,8480220,Noah Cates,exact,2026-11-17,2026-11-17
@@ -296,6 +297,7 @@ ud:a561d4a3-36bd-490c-9d1f-606561b592ad,Jordan Eberle,SEA,,8474586,Jordan Eberle
 ud:e3464051-5760-4048-b24b-64edf3c72d11,Mackie Samoskevich,SEA,,8482713,Mackie Samoskevich,exact,2026-11-19,2026-11-19
 ud:8cf68dea-d3b0-4b05-8455-696de47b6f64,Matthew Wood,SEA,,8484241,Matthew Wood,exact,2026-11-19,2026-11-19
 ud:1089cc30-035a-405a-af6e-fba52a398c6c,Matty Beniers,SEA,,8482665,Matty Beniers,exact,2026-11-19,2026-11-19
+ud:244c5e07-a81e-430e-b1f5-232a06a57d86,Philipp Grubauer,SEA,G,8475831,Philipp Grubauer,exact,2026-11-19,2026-11-19
 ud:ed02b370-e5f0-464d-b6e9-93da82ad4cd8,Vince Dunn,SEA,,8478407,Vince Dunn,exact,2026-11-19,2026-11-19
 ud:80bc5f6b-1db0-49cd-9a07-bf8cc90a96a8,Alex Nedeljkovic,SJS,G,8477968,Alex Nedeljkovic,exact,2026-11-15,2026-11-15
 ud:5ddb5ba4-6ced-4ff2-bc74-169179d21d60,Collin Graf,SJS,,8484911,Collin Graf,exact,2026-11-17,2026-11-17
@@ -315,7 +317,7 @@ ud:a193bd5b-8dd8-49a9-aa4e-3436969fe362,Connor McMichael,STL,,8481580,Connor McM
 ud:c062c4f9-dee0-4ed4-8e8a-28aa2c620282,Dylan Holloway,STL,,8482077,Dylan Holloway,exact,2026-11-14,2026-11-19
 ud:3408a8d9-899e-40ab-822b-58e173a3f8ab,Jake Neighbours,STL,,8482089,Jake Neighbours,exact,2026-11-14,2026-11-19
 ud:6d8e075c-6b13-4b77-ada8-e996ad860983,Jimmy Snuggerud,STL,,8483516,Jimmy Snuggerud,exact,2026-11-14,2026-11-19
-ud:2e961b46-b41c-4421-a71d-835932cfd2c8,Joel Hofer,STL,G,8480981,Joel Hofer,exact,2026-11-14,2026-11-14
+ud:2e961b46-b41c-4421-a71d-835932cfd2c8,Joel Hofer,STL,G,8480981,Joel Hofer,exact,2026-11-14,2026-11-19
 ud:51c38f63-1d5c-42d6-8a63-9aff0432399e,Jonatan Berggren,STL,,8481013,Jonatan Berggren,exact,2026-11-17,2026-11-17
 ud:4d957dae-9a0f-4873-8d11-6b21009fe818,Jordan Binnington,STL,G,8476412,Jordan Binnington,exact,2026-11-17,2026-11-17
 ud:58107065-2a92-4b3b-a78a-a6420bd870f8,Logan Mailloux,STL,,8482733,Logan Mailloux,exact,2026-11-14,2026-11-17
