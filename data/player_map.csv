@@ -248,7 +248,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 348295,Erik Haula,LA,F,8475287,Erik Haula,exact,2026-10-20,2026-11-21
 217672,Joel Edmundson,LA,D,8476441,Joel Edmundson,exact,2026-10-22,2026-11-21
 86990,Kevin Fiala,LA,F,8477942,Kevin Fiala,exact,2026-11-12,2026-11-21
-348297,Mats Zuccarello,LA,F,8475692,Mats Zuccarello,exact,2026-10-22,2026-11-21
+348297,Mats Zuccarello,LA,F,8475692,Mats Zuccarello,exact,2026-10-22,2026-11-23
 59496,Mikey Anderson,LA,D,8479998,Mikey Anderson,exact,2026-10-24,2026-11-23
 86998,Quinton Byfield,LA,F,8482124,Quinton Byfield,exact,2026-10-17,2026-11-23
 267635,Samuel Helenius,LA,F,8482726,Samuel Helenius,exact,2026-10-20,2026-11-23
@@ -450,7 +450,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 268019,Freddy Gaudreau,SEA,F,8477919,Frederick Gaudreau,lastname,2026-11-19,2026-11-23
 286721,Jacob Melanson,SEA,F,8482874,Jacob Melanson,exact,2026-11-21,2026-11-23
 218243,Jared McCann,SEA,F,8477955,Jared McCann,exact,2026-10-20,2026-10-24
-88019,Joey Daccord,SEA,G,8478916,Joey Daccord,exact,2026-11-04,2026-11-14
+88019,Joey Daccord,SEA,G,8478916,Joey Daccord,exact,2026-11-04,2026-11-23
 57897,Jordan Eberle,SEA,F,8474586,Jordan Eberle,exact,2026-10-17,2026-11-21
 224583,Kaapo Kakko,SEA,F,8481554,Kaapo Kakko,exact,2026-10-20,2026-10-22
 348315,Mackie Samoskevich,SEA,F,8482713,Mackie Samoskevich,exact,2026-10-20,2026-11-23

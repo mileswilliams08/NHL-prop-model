@@ -13,7 +13,7 @@ leg|Sebastian Aho|CAR,Sebastian Aho,CAR,,8478427,Sebastian Aho,exact,2026-11-22,
 leg|Cam Talbot|CBJ,Cam Talbot,CBJ,G,8475660,Cam Talbot,exact,2026-11-17,2026-11-23
 leg|Jet Greaves|CBJ,Jet Greaves,CBJ,G,8482982,Jet Greaves,exact,2026-11-14,2026-11-14
 leg|Zach Werenski|CBJ,Zach Werenski,CBJ,,8478460,Zach Werenski,exact,2026-11-14,2026-11-23
-leg|Devin Cooley|CGY,Devin Cooley,CGY,G,8482445,Devin Cooley,exact,2026-11-15,2026-11-15
+leg|Devin Cooley|CGY,Devin Cooley,CGY,G,8482445,Devin Cooley,exact,2026-11-15,2026-11-23
 leg|Dustin Wolf|CGY,Dustin Wolf,CGY,G,8481692,Dustin Wolf,exact,2026-11-17,2026-11-19
 leg|Matt Coronato|CGY,Matt Coronato,CGY,,8482679,Matt Coronato,exact,2026-11-23,2026-11-23
 leg|Frank Nazar|CHI,Frank Nazar,CHI,,8483493,Frank Nazar,exact,2026-11-22,2026-11-22
@@ -37,6 +37,7 @@ leg|Jacob Markstrom|FLA,Jacob Markstrom,FLA,G,8474593,Jacob Markstrom,exact,2026
 leg|Alex Laferriere|LA,Alex Laferriere,LA,,8482155,Alex Laferriere,exact,2026-11-14,2026-11-14
 leg|Artemi Panarin|LA,Artemi Panarin,LA,,8478550,Artemi Panarin,exact,2026-11-23,2026-11-23
 leg|Darcy Kuemper|LA,Darcy Kuemper,LA,G,8475311,Darcy Kuemper,exact,2026-11-17,2026-11-17
+leg|Filip Gustavsson|MIN,Filip Gustavsson,MIN,G,8479406,Filip Gustavsson,exact,2026-11-23,2026-11-23
 leg|Jesper Wallstedt|MIN,Jesper Wallstedt,MIN,G,8482661,Jesper Wallstedt,exact,2026-11-14,2026-11-21
 leg|Matt Boldy|MIN,Matt Boldy,MIN,,8481557,Matt Boldy,exact,2026-11-14,2026-11-19
 leg|Cole Caufield|MTL,Cole Caufield,MTL,,8481540,Cole Caufield,exact,2026-11-14,2026-11-23
@@ -47,13 +48,13 @@ leg|Jack Hughes|NJ,Jack Hughes,NJ,,8481559,Jack Hughes,exact,2026-11-14,2026-11-
 leg|Timo Meier|NJ,Timo Meier,NJ,,8478414,Timo Meier,exact,2026-11-14,2026-11-21
 leg|Filip Forsberg|NSH,Filip Forsberg,NSH,,8476887,Filip Forsberg,exact,2026-11-15,2026-11-15
 leg|Bo Horvat|NYI,Bo Horvat,NYI,,8477500,Bo Horvat,exact,2026-11-19,2026-11-23
-leg|Ilya Sorokin|NYI,Ilya Sorokin,NYI,G,8478009,Ilya Sorokin,exact,2026-11-17,2026-11-21
+leg|Ilya Sorokin|NYI,Ilya Sorokin,NYI,G,8478009,Ilya Sorokin,exact,2026-11-17,2026-11-23
 leg|Mathew Barzal|NYI,Mathew Barzal,NYI,,8478445,Mathew Barzal,exact,2026-11-23,2026-11-23
 leg|Semyon Varlamov|NYI,Semyon Varlamov,NYI,G,8473575,Semyon Varlamov,exact,2026-11-19,2026-11-19
 leg|Dylan Garand|NYR,Dylan Garand,NYR,G,8482193,Dylan Garand,exact,2026-11-22,2026-11-22
 leg|Joonas Korpisalo|NYR,Joonas Korpisalo,NYR,G,8476914,Joonas Korpisalo,exact,2026-11-16,2026-11-16
 leg|Mika Zibanejad|NYR,Mika Zibanejad,NYR,,8476459,Mika Zibanejad,exact,2026-11-22,2026-11-22
-leg|Linus Ullmark|OTT,Linus Ullmark,OTT,G,8476999,Linus Ullmark,exact,2026-11-14,2026-11-17
+leg|Linus Ullmark|OTT,Linus Ullmark,OTT,G,8476999,Linus Ullmark,exact,2026-11-14,2026-11-23
 leg|Ridly Greig|OTT,Ridly Greig,OTT,,8482092,Ridly Greig,exact,2026-11-23,2026-11-23
 leg|Samuel Ersson|OTT,Samuel Ersson,OTT,G,8481035,Samuel Ersson,exact,2026-11-19,2026-11-19
 leg|Dan Vladar|PHI,Dan Vladar,PHI,G,8478435,Dan Vladar,exact,2026-11-15,2026-11-21
@@ -62,13 +63,13 @@ leg|Arturs Silovs|PIT,Arturs Silovs,PIT,G,8481668,Arturs Silovs,exact,2026-11-19
 leg|Sergei Murashov|PIT,Sergei Murashov,PIT,G,8483703,Sergei Murashov,exact,2026-11-14,2026-11-14
 leg|Bobby McMann|SEA,Bobby McMann,SEA,,8482259,Bobby McMann,exact,2026-11-23,2026-11-23
 leg|Macklin Celebrini|SJ,Macklin Celebrini,SJ,,8484801,Macklin Celebrini,exact,2026-11-14,2026-11-21
-leg|Yaroslav Askarov|SJ,Yaroslav Askarov,SJ,G,8482137,Yaroslav Askarov,exact,2026-11-14,2026-11-17
+leg|Yaroslav Askarov|SJ,Yaroslav Askarov,SJ,G,8482137,Yaroslav Askarov,exact,2026-11-14,2026-11-23
 leg|Jake Neighbours|STL,Jake Neighbours,STL,,8482089,Jake Neighbours,exact,2026-11-22,2026-11-22
 leg|Jimmy Snuggerud|STL,Jimmy Snuggerud,STL,,8483516,Jimmy Snuggerud,exact,2026-11-22,2026-11-22
 leg|Joel Hofer|STL,Joel Hofer,STL,G,8480981,Joel Hofer,exact,2026-11-14,2026-11-22
 leg|Andrei Vasilevskiy|TB,Andrei Vasilevskiy,TB,G,8476883,Andrei Vasilevskiy,exact,2026-11-14,2026-11-14
 leg|Nikita Kucherov|TB,Nikita Kucherov,TB,,8476453,Nikita Kucherov,exact,2026-11-19,2026-11-22
-leg|Anthony Stolarz|TOR,Anthony Stolarz,TOR,G,8476932,Anthony Stolarz,exact,2026-11-14,2026-11-21
+leg|Anthony Stolarz|TOR,Anthony Stolarz,TOR,G,8476932,Anthony Stolarz,exact,2026-11-14,2026-11-23
 leg|Auston Matthews|TOR,Auston Matthews,TOR,,8479318,Auston Matthews,exact,2026-11-19,2026-11-19
 leg|John Tavares|TOR,John Tavares,TOR,,8475166,John Tavares,exact,2026-11-23,2026-11-23
 leg|Sergei Bobrovsky|TOR,Sergei Bobrovsky,TOR,G,8475683,Sergei Bobrovsky,exact,2026-11-17,2026-11-17
@@ -76,7 +77,7 @@ leg|William Nylander|TOR,William Nylander,TOR,,8477939,William Nylander,exact,20
 leg|Clayton Keller|UTA,Clayton Keller,UTA,,8479343,Clayton Keller,exact,2026-11-14,2026-11-14
 leg|Karel Vejmelka|UTA,Karel Vejmelka,UTA,G,8478872,Karel Vejmelka,exact,2026-11-14,2026-11-14
 leg|Logan Cooley|UTA,Logan Cooley,UTA,,8483431,Logan Cooley,exact,2026-11-23,2026-11-23
-leg|Sebastian Cossa|UTA,Sebastian Cossa,UTA,G,8482657,Sebastian Cossa,exact,2026-11-18,2026-11-21
+leg|Sebastian Cossa|UTA,Sebastian Cossa,UTA,G,8482657,Sebastian Cossa,exact,2026-11-18,2026-11-23
 leg|Filip Chytil|VAN,Filip Chytil,VAN,,8480078,Filip Chytil,exact,2026-11-22,2026-11-22
 leg|Jake DeBrusk|VAN,Jake DeBrusk,VAN,,8478498,Jake DeBrusk,exact,2026-11-22,2026-11-22
 leg|Leevi Meriläinen|VAN,Leevi Meriläinen,VAN,G,8482447,Leevi Meriläinen,exact,2026-11-21,2026-11-21
@@ -84,6 +85,6 @@ leg|Adin Hill|VGK,Adin Hill,VGK,G,8478499,Adin Hill,exact,2026-11-17,2026-11-17
 leg|Carter Hart|VGK,Carter Hart,VGK,G,8479394,Carter Hart,exact,2026-11-21,2026-11-21
 leg|Kyle Connor|WPG,Kyle Connor,WPG,,8478398,Kyle Connor,exact,2026-11-19,2026-11-23
 leg|Nico Daws|WPG,Nico Daws,WPG,G,8482076,Nico Daws,exact,2026-11-19,2026-11-19
-leg|Stuart Skinner|WPG,Stuart Skinner,WPG,G,8479973,Stuart Skinner,exact,2026-11-17,2026-11-21
+leg|Stuart Skinner|WPG,Stuart Skinner,WPG,G,8479973,Stuart Skinner,exact,2026-11-17,2026-11-23
 leg|Charlie Lindgren|WSH,Charlie Lindgren,WSH,G,8479292,Charlie Lindgren,exact,2026-11-14,2026-11-21
 leg|Logan Thompson|WSH,Logan Thompson,WSH,G,8480313,Logan Thompson,exact,2026-11-19,2026-11-19
