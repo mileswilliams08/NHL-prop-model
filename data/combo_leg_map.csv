@@ -1,5 +1,5 @@
 pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
-leg|Cutter Gauthier|ANA,Cutter Gauthier,ANA,,8483445,Cutter Gauthier,exact,2026-11-15,2026-11-23
+leg|Cutter Gauthier|ANA,Cutter Gauthier,ANA,,8483445,Cutter Gauthier,exact,2026-11-15,2026-11-24
 leg|Ville Husso|ANA,Ville Husso,ANA,G,8478024,Ville Husso,exact,2026-11-15,2026-11-21
 leg|David Pastrnak|BOS,David Pastrnak,BOS,,8477956,David Pastrnak,exact,2026-11-14,2026-11-21
 leg|Jeremy Swayman|BOS,Jeremy Swayman,BOS,G,8480280,Jeremy Swayman,exact,2026-11-14,2026-11-21
@@ -37,7 +37,7 @@ leg|Jacob Markstrom|FLA,Jacob Markstrom,FLA,G,8474593,Jacob Markstrom,exact,2026
 leg|Alex Laferriere|LA,Alex Laferriere,LA,,8482155,Alex Laferriere,exact,2026-11-14,2026-11-14
 leg|Artemi Panarin|LA,Artemi Panarin,LA,,8478550,Artemi Panarin,exact,2026-11-23,2026-11-23
 leg|Darcy Kuemper|LA,Darcy Kuemper,LA,G,8475311,Darcy Kuemper,exact,2026-11-17,2026-11-17
-leg|Filip Gustavsson|MIN,Filip Gustavsson,MIN,G,8479406,Filip Gustavsson,exact,2026-11-23,2026-11-23
+leg|Filip Gustavsson|MIN,Filip Gustavsson,MIN,G,8479406,Filip Gustavsson,exact,2026-11-23,2026-11-24
 leg|Jesper Wallstedt|MIN,Jesper Wallstedt,MIN,G,8482661,Jesper Wallstedt,exact,2026-11-14,2026-11-21
 leg|Matt Boldy|MIN,Matt Boldy,MIN,,8481557,Matt Boldy,exact,2026-11-14,2026-11-19
 leg|Cole Caufield|MTL,Cole Caufield,MTL,,8481540,Cole Caufield,exact,2026-11-14,2026-11-23
@@ -61,9 +61,9 @@ leg|Dan Vladar|PHI,Dan Vladar,PHI,G,8478435,Dan Vladar,exact,2026-11-15,2026-11-
 leg|Joseph Woll|PHI,Joseph Woll,PHI,G,8479361,Joseph Woll,exact,2026-11-14,2026-11-19
 leg|Arturs Silovs|PIT,Arturs Silovs,PIT,G,8481668,Arturs Silovs,exact,2026-11-19,2026-11-19
 leg|Sergei Murashov|PIT,Sergei Murashov,PIT,G,8483703,Sergei Murashov,exact,2026-11-14,2026-11-14
-leg|Bobby McMann|SEA,Bobby McMann,SEA,,8482259,Bobby McMann,exact,2026-11-23,2026-11-23
+leg|Bobby McMann|SEA,Bobby McMann,SEA,,8482259,Bobby McMann,exact,2026-11-23,2026-11-24
 leg|Macklin Celebrini|SJ,Macklin Celebrini,SJ,,8484801,Macklin Celebrini,exact,2026-11-14,2026-11-21
-leg|Yaroslav Askarov|SJ,Yaroslav Askarov,SJ,G,8482137,Yaroslav Askarov,exact,2026-11-14,2026-11-23
+leg|Yaroslav Askarov|SJ,Yaroslav Askarov,SJ,G,8482137,Yaroslav Askarov,exact,2026-11-14,2026-11-24
 leg|Jake Neighbours|STL,Jake Neighbours,STL,,8482089,Jake Neighbours,exact,2026-11-22,2026-11-22
 leg|Jimmy Snuggerud|STL,Jimmy Snuggerud,STL,,8483516,Jimmy Snuggerud,exact,2026-11-22,2026-11-22
 leg|Joel Hofer|STL,Joel Hofer,STL,G,8480981,Joel Hofer,exact,2026-11-14,2026-11-22
