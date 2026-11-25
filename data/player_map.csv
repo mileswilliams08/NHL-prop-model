@@ -230,6 +230,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 348868,Akira Schmid,FLA,G,8481033,Akira Schmid,exact,2026-10-21,2026-11-15
 57952,Anton Lundell,FLA,F,8482113,Anton Lundell,exact,2026-10-21,2026-11-25
 352897,Bokondji Imama,FLA,F,8478147,Bokondji Imama,exact,2026-11-14,2026-11-25
+233634,Brad Marchand,FLA,F,8473419,Brad Marchand,exact,2026-11-25,2026-11-25
 346715,Brady Tkachuk,FLA,F,8480801,Brady Tkachuk,exact,2026-10-17,2026-11-25
 57848,Carter Verhaeghe,FLA,F,8477409,Carter Verhaeghe,exact,2026-10-17,2026-11-25
 306861,Cole Reinhardt,FLA,F,8481133,Cole Reinhardt,exact,2026-10-25,2026-11-21
@@ -511,7 +512,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218311,Dylan Holloway,STL,F,8482077,Dylan Holloway,exact,2026-10-17,2026-11-25
 218312,Jake Neighbours,STL,F,8482089,Jake Neighbours,exact,2026-10-24,2026-11-25
 268035,Jimmy Snuggerud,STL,F,8483516,Jimmy Snuggerud,exact,2026-10-17,2026-11-22
-218692,Joel Hofer,STL,G,8480981,Joel Hofer,exact,2026-10-20,2026-11-22
+218692,Joel Hofer,STL,G,8480981,Joel Hofer,exact,2026-10-20,2026-11-25
 287074,Jonatan Berggren,STL,F,8481013,Jonatan Berggren,exact,2026-10-27,2026-11-25
 218341,Jordan Binnington,STL,G,8476412,Jordan Binnington,exact,2026-10-17,2026-11-17
 349281,Justin Barron,STL,D,8482111,Justin Barron,exact,2026-11-25,2026-11-25
@@ -523,7 +524,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 268039,Pius Suter,STL,F,8480459,Pius Suter,exact,2026-11-25,2026-11-25
 58601,Robert Thomas,STL,F,8480023,Robert Thomas,exact,2026-10-17,2026-11-25
 346304,Ross Johnston,STL,F,8477527,Ross Johnston,exact,2026-11-05,2026-11-25
-218435,Andrei Vasilevskiy,TB,G,8476883,Andrei Vasilevskiy,exact,2026-10-20,2026-11-17
+218435,Andrei Vasilevskiy,TB,G,8476883,Andrei Vasilevskiy,exact,2026-10-20,2026-11-25
 218705,Anthony Cirelli,TB,F,8478519,Anthony Cirelli,exact,2026-10-17,2026-11-25
 218695,Brandon Hagel,TB,F,8479542,Brandon Hagel,exact,2026-10-17,2026-11-17
 57951,Brayden Point,TB,F,8478010,Brayden Point,exact,2026-10-17,2026-11-25
@@ -541,7 +542,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 280222,Max Crozier,TB,D,8481719,Max Crozier,exact,2026-11-05,2026-11-05
 218231,Nikita Kucherov,TB,F,8476453,Nikita Kucherov,exact,2026-10-17,2026-11-25
 268023,Pontus Holmberg,TB,F,8480995,Pontus Holmberg,exact,2026-10-31,2026-11-22
-64498,Ryan McDonagh,TB,D,8474151,Ryan McDonagh,exact,2026-10-23,2026-11-11
+64498,Ryan McDonagh,TB,D,8474151,Ryan McDonagh,exact,2026-10-23,2026-11-25
 363245,Sam O'Reilly,TB,F,8484770,Sam O'Reilly,exact,2026-11-12,2026-11-22
 279581,Scott Sabourin,TB,F,8477149,Scott Sabourin,exact,2026-11-05,2026-11-25
 236104,Yanni Gourde,TB,F,8476826,Yanni Gourde,exact,2026-11-25,2026-11-25
