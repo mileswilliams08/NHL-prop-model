@@ -185,8 +185,8 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 140703,Thomas Harley,DAL,D,8481581,Thomas Harley,exact,2026-10-17,2026-11-25
 347280,Trey Taylor,DAL,D,8485468,Trey Taylor,exact,2026-11-22,2026-11-25
 305576,Tyler Myers,DAL,D,8474574,Tyler Myers,exact,2026-10-27,2026-10-27
-58488,Tyler Seguin,DAL,F,8475794,Tyler Seguin,exact,2026-10-20,2026-11-25
-124195,Wyatt Johnston,DAL,F,8482740,Wyatt Johnston,exact,2026-10-17,2026-11-25
+58488,Tyler Seguin,DAL,F,8475794,Tyler Seguin,exact,2026-10-20,2026-11-26
+124195,Wyatt Johnston,DAL,F,8482740,Wyatt Johnston,exact,2026-10-17,2026-11-26
 171511,Alex DeBrincat,DET,F,8479337,Alex DeBrincat,exact,2026-10-17,2026-11-25
 87159,Andrew Copp,DET,F,8477429,Andrew Copp,exact,2026-10-17,2026-11-25
 87726,Ben Chiarot,DET,D,8475279,Ben Chiarot,exact,2026-10-20,2026-11-21
@@ -345,11 +345,11 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 272313,Nick Perbix,NSH,D,8480246,Nick Perbix,exact,2026-11-05,2026-11-17
 347988,Nils Hoglander,NSH,F,8481535,Nils Hoglander,exact,2026-11-15,2026-11-20
 283448,Reid Schaefer,NSH,F,8483513,Reid Schaefer,exact,2026-11-21,2026-11-25
-58326,Roman Josi,NSH,D,8474600,Roman Josi,exact,2026-10-17,2026-11-25
+58326,Roman Josi,NSH,D,8474600,Roman Josi,exact,2026-10-17,2026-11-26
 347989,Ross Colton,NSH,F,8479525,Ross Colton,exact,2026-10-17,2026-11-25
 218086,Ryan O'Reilly,NSH,F,8475158,Ryan O'Reilly,exact,2026-10-17,2026-11-25
 360855,Shane Wright,NSH,F,8483524,Shane Wright,exact,2026-11-07,2026-11-17
-216156,Steven Stamkos,NSH,F,8474564,Steven Stamkos,exact,2026-10-17,2026-11-25
+216156,Steven Stamkos,NSH,F,8474564,Steven Stamkos,exact,2026-10-17,2026-11-26
 88684,Adam Pelech,NYI,D,8476917,Adam Pelech,exact,2026-10-17,2026-11-25
 218307,Bo Horvat,NYI,F,8477500,Bo Horvat,exact,2026-10-17,2026-11-25
 305209,Brayden Schenn,NYI,F,8475170,Brayden Schenn,exact,2026-10-17,2026-11-25
@@ -510,7 +510,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 346302,Connor McMichael,STL,F,8481580,Connor McMichael,exact,2026-10-20,2026-11-19
 274996,Dalibor Dvorsky,STL,F,8484164,Dalibor Dvorsky,exact,2026-10-17,2026-11-25
 218311,Dylan Holloway,STL,F,8482077,Dylan Holloway,exact,2026-10-17,2026-11-25
-218312,Jake Neighbours,STL,F,8482089,Jake Neighbours,exact,2026-10-24,2026-11-25
+218312,Jake Neighbours,STL,F,8482089,Jake Neighbours,exact,2026-10-24,2026-11-26
 268035,Jimmy Snuggerud,STL,F,8483516,Jimmy Snuggerud,exact,2026-10-17,2026-11-22
 218692,Joel Hofer,STL,G,8480981,Joel Hofer,exact,2026-10-20,2026-11-25
 287074,Jonatan Berggren,STL,F,8481013,Jonatan Berggren,exact,2026-10-27,2026-11-25
@@ -574,7 +574,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 218263,Dylan Guenther,UTA,F,8482699,Dylan Guenther,exact,2026-10-27,2026-11-25
 218308,Jack McBain,UTA,F,8480855,Jack McBain,exact,2026-10-17,2026-11-25
 272319,John Marino,UTA,D,8478507,John Marino,exact,2026-10-19,2026-10-19
-268546,Kailer Yamamoto,UTA,F,8479977,Kailer Yamamoto,exact,2026-10-27,2026-11-23
+268546,Kailer Yamamoto,UTA,F,8479977,Kailer Yamamoto,exact,2026-10-27,2026-11-26
 218436,Karel Vejmelka,UTA,G,8478872,Karel Vejmelka,exact,2026-10-17,2026-11-16
 268547,Kevin Stenlund,UTA,F,8478831,Kevin Stenlund,exact,2026-11-03,2026-11-25
 216053,Lawson Crouse,UTA,F,8478474,Lawson Crouse,exact,2026-10-17,2026-11-25
@@ -582,7 +582,7 @@ pp_player_id,pp_name,pp_team,pp_pos,nhl_id,nhl_name,method,first_seen,last_seen
 220958,Logan Cooley,UTA,F,8483431,Logan Cooley,exact,2026-10-17,2026-11-25
 305430,MacKenzie Weegar,UTA,D,8477346,MacKenzie Weegar,exact,2026-10-17,2026-11-25
 268548,Michael Carcone,UTA,F,8479619,Michael Carcone,exact,2026-11-18,2026-11-21
-218265,Mikhail Sergachev,UTA,D,8479410,Mikhail Sergachev,exact,2026-10-17,2026-11-25
+218265,Mikhail Sergachev,UTA,D,8479410,Mikhail Sergachev,exact,2026-10-17,2026-11-26
 215671,Nick Schmaltz,UTA,F,8477951,Nick Schmaltz,exact,2026-10-19,2026-11-12
 349323,Sebastian Cossa,UTA,G,8482657,Sebastian Cossa,exact,2026-10-19,2026-11-23
 348320,Vincent Trocheck,UTA,F,8476389,Vincent Trocheck,exact,2026-10-24,2026-11-25

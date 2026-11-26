@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-26T05:45:21.255134+00:00",
+ "generated_at": "2026-11-26T15:43:08.137284+00:00",
  "voids": 237,
  "excluded": 0,
  "labels": {
@@ -330947,5 +330947,12 @@
    "tr": "Top",
    "rk": "D1"
   }
- ]
+ ],
+ "challengers": {
+  "hits_light": {
+   "label": "Hits (light pull)",
+   "rows": [],
+   "note": "Hits with a lighter pull toward the position average (900 s of league-average ice time mixed in instead of 7200). Backtest (tuned on 2024-25, tested on 2025-26+): better fit on every check and removes the heavy-hitter under-projection. Tracked beside the official picks only, never replaces them; started 2026-11-19."
+  }
+ }
 }
