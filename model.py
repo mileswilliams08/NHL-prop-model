@@ -125,6 +125,20 @@ class Walker:
             mu *= self.opp_factor(opp) ** self.p["opp_beta"]
         return mu, n
 
+    def player_mu_prior(self, pid, opp, stat, prior_toi_sec):
+        """player_mu with a different pull toward the position average (prior_toi_sec = how many seconds
+        of league-average play are mixed into the player's own record). Used by challenger models."""
+        st = self.players.get(int(pid)) if pid not in (None, "") else None
+        if not st:
+            return None, 0
+        toi, n = self.player_toi(pid)
+        m = float(prior_toi_sec)
+        rate = (st["S"][stat] + m * self.rate_prior(st["pos"], stat)) / (st["T"] + m)
+        mu = rate * toi
+        if stat == "sog":
+            mu *= self.opp_factor(opp) ** self.p["opp_beta"]
+        return mu, n
+
     # ---------------------------------------------------------------- faceoffs
     def fo_parts(self, pid, opp):
         """(projected faceoffs taken, win rate vs this opponent, games of history) or None."""

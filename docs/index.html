@@ -53,7 +53,7 @@
 </div>
 
 <div class="propsel">
-  <label>Book: <select id="bookSelect"><option value="prizepicks">PrizePicks</option><option value="underdog">Underdog</option><option value="lgbm">LightGBM (shadow)</option></select></label>
+  <label>Book: <select id="bookSelect"><option value="prizepicks">PrizePicks</option><option value="underdog">Underdog</option><option value="lgbm">LightGBM (shadow)</option><option value="hits_light">Hits (light pull)</option></select></label>
   <label>Prop: <select id="propSelect"></select></label>
   <label><select id="dateSelect"></select></label>
   <label><select id="teamSelect"></select></label>
@@ -86,10 +86,18 @@
 <script>
 let DATA = null;
 let BOOK = "prizepicks";
-try { const b = localStorage.getItem("nhlBook"); if (b === "underdog" || b === "lgbm") BOOK = b; } catch (e) {}
+// Challenger models: their own pick on the PrizePicks lines they priced, stored on each pick under `field`.
+const CHALLENGERS = {
+  lgbm: {field: "shadow", name: "LightGBM (shadow)", props: "Time On Ice and Hits",
+         about: "LightGBM (shadow) is the challenger machine-learning model"},
+  hits_light: {field: "hits_light", name: "Hits (light pull)", props: "Hits",
+               about: "Hits (light pull) is the official hits model with a lighter pull toward the position average, which the backtest found fits heavy hitters better"},
+};
+try { const b = localStorage.getItem("nhlBook"); if (b === "underdog" || b in CHALLENGERS) BOOK = b; } catch (e) {}
 const UD = () => BOOK === "underdog";
-const LG = () => BOOK === "lgbm";   // LightGBM challenger's picks on the PrizePicks lines it priced (TOI, Hits)
-const BOOKNAME = () => UD() ? "Underdog" : LG() ? "LightGBM (shadow)" : "PrizePicks";
+const CH = () => CHALLENGERS[BOOK] || null;
+const LG = () => !!CH();   // any challenger book
+const BOOKNAME = () => UD() ? "Underdog" : LG() ? CH().name : "PrizePicks";
 // Underdog calls the sides Higher / Lower
 const sideName = (side, p) => (p && p.book === "underdog") ? (side === "over" ? "Higher" : "Lower") : (side === "over" ? "Over" : "Under");
 // Underdog only: the picked side's payout, a GOBLIN / DEMON tag when it isn't the standard payout,
@@ -194,7 +202,7 @@ function renderTable() {
       <td>${P(p) >= breakeven ? '<span class="bet-tag bet-yes">CLEARS</span>' : '<span class="bet-tag bet-no">PASS</span>'}</td>
       <td>${addBtn([p])}</td>
     </tr>`).join("")
-    : `<tr><td colspan="11" class="empty">${LG() ? "No LightGBM picks for this selection. LightGBM prices Time On Ice and Hits only."
+    : `<tr><td colspan="11" class="empty">${LG() ? `No ${CH().name} picks for this selection. It prices ${CH().props} only.`
         : `No priced ${BOOKNAME()} lines for this selection right now.`}</td></tr>`;
 
   const skipped = DATA.picks.filter(p => p.skip_reason && p.category === cat && (!day || p.game_date === day) && (!team || onTeam(p, team)));
@@ -204,9 +212,9 @@ function renderTable() {
       ? "Model P(Side) is the RAW model chance its side wins, ignoring pushes (hover for calibrated). The raw model has been overconfident on graded picks, so CLEARS here is optimistic. "
       : "Model P(Side) is the calibrated chance its side wins, ignoring pushes (hover for the raw model %): the raw model was overconfident, so its distance from 50% is scaled down. "}` : "")
     + (LG()
-      ? `LightGBM (shadow) is the challenger model: its own projection, side and probability on the same PrizePicks lines, Time On Ice
-         and Hits only. It's tracked, never the official pick (Results → LightGBM). The Official model column shows what the site's
-         model says on the same line; ≠ marks lines where the two disagree. LightGBM is priced at the morning model run's line, so
+      ? `${CH().about}: its own projection, side and probability on the same PrizePicks lines, ${CH().props} only.
+         It's tracked, never the official pick (Results → ${CH().name}). The Official model column shows what the site's
+         model says on the same line; ≠ marks lines where the two disagree. It's priced at the morning model run's line, so
          lines that moved since aren't repriced here. `
       : UD()
       ? `Every Underdog line is priced, whatever it pays: the small number after the line is the picked side's payout multiplier
@@ -225,15 +233,16 @@ function loadBook() {
   const file = UD() ? "data/props_underdog.json" : "data/props.json";
   document.getElementById("typeWrap").style.display = UD() ? "" : "none";
   document.querySelector(".breakeven .hint").style.display = UD() ? "none" : "";
-  document.querySelector("#propsTable th.sh").textContent = LG() ? "Official model" : "LightGBM (shadow)";
+  document.querySelector("#propsTable th.sh").textContent = LG() ? "Official model" : CHALLENGERS.lgbm.name;
   document.querySelector("#propsTable th.sh").title = LG() ? "The site's official pick on the same line" : "LightGBM challenger: tracked, never the official pick";
   fetch(file, {cache: "no-store"}).then(r => r.json()).then(async json => {
     const board = UD() || LG() ? null : await loadBoard();   // live repricing exists for official PrizePicks picks only
     const nLive = applyBoard(json, board);
     json.picks.forEach(p => { p.book = p.book || (UD() ? "underdog" : "prizepicks"); });
-    if (LG()) {   // swap: LightGBM's pick becomes the row, the official pick moves to the comparison column
-      json.picks = json.picks.filter(p => p.shadow && !p.skip_reason).map(p => Object.assign({}, p, {
-        model_mean: p.shadow.mean, side: p.shadow.side, prob: p.shadow.prob, prob_cal: p.shadow.prob_cal,
+    if (LG()) {   // swap: the challenger's pick becomes the row, the official pick moves to the comparison column
+      const f = CH().field;
+      json.picks = json.picks.filter(p => p[f] && !p.skip_reason).map(p => Object.assign({}, p, {
+        model_mean: p[f].mean, side: p[f].side, prob: p[f].prob, prob_cal: p[f].prob_cal,
         shadow: {mean: p.model_mean, side: p.side, prob: p.prob, prob_cal: p.prob_cal}}));
     }
     DATA = json;

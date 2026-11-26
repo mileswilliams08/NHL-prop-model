@@ -145,12 +145,13 @@ def tier_for(d, gid, pid, cat):
     return tier_info(d, gid, pid, cat)[0]
 
 
-def build_shadow(graded, k):
-    """Official vs LightGBM shadow pick on the same line, from each pick's earliest snapshot."""
+def build_shadow(graded, k, field="shadow", label="LightGBM"):
+    """Official vs a challenger's pick on the same line, from each pick's earliest snapshot. field = where the
+    challenger is stored on the pick ("shadow" = LightGBM, or a key from config "challengers")."""
     res = {(str(r.game_date), str(r.nhl_game_id), str(r.nhl_id), r.category): r for r in graded.itertuples()}
     out = []
     for key, (pk, _) in movement._earliest_picks().items():
-        sh = pk.get("shadow")
+        sh = pk.get(field)
         r = res.get(key)
         if not sh or r is None or r.result not in ("hit", "miss", "push"):
             continue
@@ -168,7 +169,7 @@ def build_shadow(graded, k):
         cur = sum(o["x"] == "h" for o in dec) / max(1, len(dec))
         shd = sum(o["sx"] == "h" for o in out if o["sx"] != "p") / max(1, sum(o["sx"] != "p" for o in out))
         dis = [o for o in out if o["s"] != o["ss"]]
-        print(f"SHADOW: {len(out)} graded picks with a LightGBM shadow; current {cur:.1%} vs LightGBM {shd:.1%}; "
+        print(f"{label.upper()}: {len(out)} graded picks; current {cur:.1%} vs {label} {shd:.1%}; "
               f"they disagreed on {len(dis)}")
     return out
 
@@ -322,6 +323,13 @@ def main():
     except Exception as e:   # the comparison is a bonus; never block the results page
         print(f"shadow comparison failed: {e}")
         shadow_rows = []
+    challengers = {}
+    for key, ch in (cfg.get("challengers") or {}).items():
+        try:
+            challengers[key] = {"label": ch.get("label", key), "rows": build_shadow(df, k_used, key, ch.get("label", key)),
+                                "note": ch.get("note", "")}
+        except Exception as e:
+            print(f"challenger {key} results failed: {e!r}")
     try:
         add_closing_results(moves, df, k_used)
     except Exception as e:   # bonus section; never block the results page
@@ -349,7 +357,7 @@ def main():
                {"generated_at": pd.Timestamp.now("UTC").isoformat(), "voids": voids, "excluded": n_ex,
                 "labels": {c: v["label"] for c, v in cfg["props"].items()}, "picks": picks,
                 "moves": moves, "calibration": cal, "pairs": pair_rows,
-                "shadow": shadow_rows})
+                "shadow": shadow_rows, "challengers": challengers})
     print(f"results.json: {len(picks)} graded picks ({voids} voids, {n_ex} excluded not shown)")
     print("LINE MOVEMENT headline: " + movement.summarize([m for m in moves if m["hd"]]))
     print("LINE MOVEMENT experimental: " + movement.summarize([m for m in moves if not m["hd"]]))

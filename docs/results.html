@@ -42,7 +42,7 @@
 </nav>
 <div class="meta" id="meta">Loading...</div>
 <div class="show">Book: <div class="seg" id="booktabs">
-  <button type="button" data-book="prizepicks" class="on">PrizePicks</button><button type="button" data-book="underdog">Underdog</button><button type="button" data-book="lgbm">LightGBM (shadow)</button></div></div>
+  <button type="button" data-book="prizepicks" class="on">PrizePicks</button><button type="button" data-book="underdog">Underdog</button><button type="button" data-book="lgbm">LightGBM (shadow)</button><button type="button" data-book="hits_light">Hits (light pull)</button></div></div>
 <div class="show">Tier: <div class="seg" id="tiertabs">
   <button type="button" data-tier="" class="on">All</button><button type="button" data-tier="Top">Top</button><button type="button" data-tier="Mid">Mid</button><button type="button" data-tier="Depth">Depth</button><button type="button" data-tier="Goalie">Goalie</button></div>
   <span class="caveat" style="margin:0">Rotation tier when the pick was made (rank in team ice time, last 10 games). Applies to every section except correlated pairs.</span></div>
@@ -218,10 +218,10 @@ function render(data) {
     </div>
 
     <div class="exp-sec">
-    <h2>${BOOK === "lgbm" ? "LightGBM (shadow) results" : "Experimental props"}</h2>
-    <div class="caveat">${BOOK === "lgbm"
-      ? `Every graded pick the LightGBM challenger priced (Time On Ice and Hits), graded with LightGBM's own side and probability on the
-         same PrizePicks line as the official model. It is tracked only; the official picks never use it. Compare with the PrizePicks tab.`
+    <h2>${CHB[BOOK] ? `${CHB[BOOK].name} results` : "Experimental props"}</h2>
+    <div class="caveat">${CHB[BOOK]
+      ? `${CHB[BOOK].about} Graded with its own side and probability on the same PrizePicks line as the official model. It is tracked
+         only; the official picks never use it. Compare with the PrizePicks tab (Experimental, same prop).`
       : "New props still being validated. Their results are shown only here and are not counted in any other number on this page."}</div>
     ${show("exp", exp, {rank: true})}
     <div id="exp-out"></div>
@@ -307,7 +307,7 @@ function render(data) {
     if (!rows.length) { document.getElementById("exp-out").innerHTML = `<div class="empty">No graded experimental picks for this selection yet.</div>`; return; }
     const s = summarize(rows.map(p => p.x));
     let h = `<div class="overall-card">
-        <div><div class="big">${pct(s.rate)}</div><div class="sub">${BOOK === "lgbm" ? "LightGBM hit rate" : "experimental hit rate"}</div></div>
+        <div><div class="big">${pct(s.rate)}</div><div class="sub">${CHB[BOOK] ? `${CHB[BOOK].short} hit rate` : "experimental hit rate"}</div></div>
         <div><div class="big">${s.n + s.pushes}</div><div class="sub">graded picks</div></div>
         <div><div class="big">${s.hits}</div><div class="sub">hits</div></div>
         <div><div class="big">${s.pushes}</div><div class="sub">pushes (excluded above)</div></div></div>
@@ -544,7 +544,15 @@ function render(data) {
 let DATA = null;
 let RAWMODE = false;
 let BOOK = "prizepicks";      // which book's graded picks the page shows; the two are never mixed
-try { const b = localStorage.getItem("nhlBook"); if (b === "underdog" || b === "lgbm") BOOK = b; } catch (e) {}
+// Challenger books: their own picks on the official PrizePicks lines (rows built by build_results.build_shadow)
+const CHB = {
+  lgbm: {name: "LightGBM (shadow)", short: "LightGBM", rows: d => d.shadow || [],
+         about: "Every graded pick the LightGBM challenger priced (Time On Ice and Hits)."},
+  hits_light: {name: "Hits (light pull)", short: "Light-pull", rows: d => ((d.challengers || {}).hits_light || {}).rows || [],
+               about: `Every graded Hits pick priced by the official hits model with a lighter pull toward the position average
+                 (tracked since Nov 19, 2026; the backtest found it fits heavy hitters better).`},
+};
+try { const b = localStorage.getItem("nhlBook"); if (b === "underdog" || b in CHB) BOOK = b; } catch (e) {}
 let LTYPE = "";               // Underdog only: standard / goblin / demon filter ("" = all)
 let TIER = "";                // "" = all, else Top / Mid / Depth / Goalie (every section except pairs)
 try { TIER = localStorage.getItem("nhlTier") || ""; } catch (e) {}
@@ -570,7 +578,7 @@ function redraw() {
   const raw = document.getElementById("calmode").value === "raw";
   RAWMODE = raw || !DATA.picks.some(p => p.pr != null);   // results built before calibration = raw %
   let picks = DATA.picks, note = "";
-  const ud = BOOK === "underdog", lg = BOOK === "lgbm";
+  const ud = BOOK === "underdog", lg = BOOK in CHB;
   document.body.classList.toggle("ud", ud);
   document.body.classList.toggle("lg", lg);
   document.getElementById("typebar").style.display = ud ? "" : "none";
@@ -580,9 +588,10 @@ function redraw() {
   document.querySelectorAll("#typetabs button").forEach(b => b.classList.toggle("on", b.dataset.t === LTYPE));
   if (lg) {
     // LightGBM's own pick on each line it priced, in the same shape as a graded pick
-    picks = (DATA.shadow || []).map(r => ({d: r.d, pl: r.pl, tm: r.tm, op: "", c: r.c, l: r.l, m: r.sm, s: r.ss,
+    picks = CHB[BOOK].rows(DATA).map(r => ({d: r.d, pl: r.pl, tm: r.tm, op: "", c: r.c, l: r.l, m: r.sm, s: r.ss,
       p: r.sp, pr: r.spr, a: r.a, x: r.sx, ox: r.ox, ux: r.ux, hd: 0, adj: 0, v: r.v, tr: r.tr, rk: r.rk}));
-    note = `<b>LightGBM (shadow):</b> the challenger model's own picks, graded on the official model's PrizePicks lines.`;
+    note = `<b>${CHB[BOOK].name}:</b> the challenger's own picks, graded on the official model's PrizePicks lines.` +
+      (picks.length ? "" : " No graded picks yet: they appear here the morning after its first priced games.");
   } else if (ud) {
     const n = t => DATA.picks.filter(p => p.t === t).length;
     if (LTYPE) picks = picks.filter(p => p.t === LTYPE);

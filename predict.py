@@ -81,6 +81,30 @@ def add_open_lines(picks, snap_dir=SNAP_DIR):
     print(f"  {n} picks' lines moved since the first model run of the day")
 
 
+def challenger_predictions(cfg, walker, picks):
+    """Challenger models (config "challengers"): priced beside the official pick on the same line and stored
+    on the pick under the challenger's key, e.g. pick["hits_light"] = {model, mean, side, prob, prob_cal}.
+    Tracked only (Props / Results books), never the official pick."""
+    counts = {}
+    for key, ch in (cfg.get("challengers") or {}).items():
+        if not ch.get("enabled"):
+            continue
+        n = 0
+        for p in picks:
+            if p["category"] != ch["prop"] or p.get("skip_reason") or p.get("side") is None or not p.get("nhl_id"):
+                continue
+            mu, _ = walker.player_mu_prior(p["nhl_id"], p["opp"], ch["prop"], ch["prior_toi_sec"])
+            if mu is None:
+                continue
+            po, pu, _ = model.line_probs(mu, p["line"], ch["nb_r"])
+            side, prob = model.pick_side(po, pu)
+            p[key] = {"model": ch["model"], "mean": round(mu, 4), "side": side, "prob": round(prob, 4),
+                      "prob_cal": round(model.calibrate(prob, cfg), 4)}
+            n += 1
+        counts[key] = n
+    return counts
+
+
 def pp_rows(cfg, cutoff):
     """PrizePicks board -> (all rows, rows in enabled props, eligible rows)."""
     enabled = {c for c, v in cfg["props"].items() if v["enabled"]}
@@ -330,6 +354,13 @@ def run_book(book, cfg, now, shared):
                     f"{k}: trained through {v['trained_through']}, {v['rounds']} rounds" for k, v in shadow_info.items()))
         except Exception as e:
             print(f"  shadow model failed (official picks unaffected): {e!r}")
+    if not ud:
+        try:
+            ch = challenger_predictions(cfg, walker, picks)
+            if ch:
+                print("  challengers:", ch)
+        except Exception as e:
+            print(f"  challenger models failed (official picks unaffected): {e!r}")
     stamp = now.strftime("%Y-%m-%dT%H%MZ")
     counts = ({"types": dict(Counter(t for r in cand for t in (r["type_over"], r["type_under"]) if t))} if ud else
               {"odds_types": {f"{k[0]}|adj={k[1]}": v for k, v in

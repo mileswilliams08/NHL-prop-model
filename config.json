@@ -183,5 +183,16 @@
       "rho_other": 0.04
     },
     "note": "Combo = sum of the legs' projections. Each leg uses its single-player model; the sum's spread is scaled for how much the legs move together (measured on 2024-26 games: opposing goalies -0.135, fit 2024-25 and checked out of sample on 2025-26; shooter pairs ~0). Points/Goals combos are not modeled."
+  },
+  "challengers": {
+    "hits_light": {
+      "enabled": true,
+      "model": "hits-light-1",
+      "label": "Hits (light pull)",
+      "prop": "hits",
+      "prior_toi_sec": 900,
+      "nb_r": 5.5,
+      "note": "Hits with a lighter pull toward the position average (900 s of league-average ice time mixed in instead of 7200). Backtest (tuned on 2024-25, tested on 2025-26+): better fit on every check and removes the heavy-hitter under-projection. Tracked beside the official picks only, never replaces them; started 2026-11-19."
+    }
   }
 }
